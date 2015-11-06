@@ -31,10 +31,11 @@ public:
 	void add_state(int);		//加上一個新的state，輸入一個state代號，他會加在目前的state vector的最後面
 
 	void set_cluebox_img(string);	//放在clue box的2D圖片路徑
+	Mat get_cluebox_img();
 	int current_img();				//return _current_img
 	void next_img();  				//將 _current_img + 1, 下次change image就會秀下一張圖
 	void add_img_path(string);		//add一個image(3D)路徑
-	Mat get_img(int);
+	string get_img(int);
 
 	int current_dialog();		//return _current_dialog
 	void next_dialog();			//將 _current_dialog + 1, 下次change dialog就會秀下一個對話
