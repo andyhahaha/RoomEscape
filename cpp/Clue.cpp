@@ -166,6 +166,17 @@ void Clue::set_cluebox_img(string path){
 	_cluebox_img = path;
 }
 
+Mat Clue::get_cluebox_img(){
+	Mat img = imread(_cluebox_img);
+
+	if (!img.data)
+	{
+		cout << "ERROR: Read clue box image failed!" << endl;
+		img.create(1, 1, CV_32F);
+	}
+	return img;
+}
+
 int Clue::current_img(){
 	return _current_img;
 }
@@ -178,15 +189,13 @@ void Clue::add_img_path(string path){
 	_img_path.push_back(path);
 }
 
-Mat Clue::get_img(int number){  	
-	Mat img = imread(_img_path[number]);
-
-	if (!img.data)
+string Clue::get_img(int number){  	
+	if (_img_path[number][0] == NULL)
 	{
-		cout << "ERROR: Read image" << number << "failed!" << endl;
-		img.create(1, 1, CV_32F);
+		cout << "ERROR: Image" << number << " undefined!" << endl;
+		return NULL;
 	}
-	return img;
+	return _img_path[number];
 }
 
 int Clue::current_dialog(){
