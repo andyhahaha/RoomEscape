@@ -90,7 +90,7 @@ void ClueBox::DelItem(int index){
 	_clue_number = sizeof(_clue_vector) / sizeof(_clue_vector[0]);
 }
 void ClueBox::show_clue(int index){
-	cout << _clue_vector[index].get_name() << endl;
+	cout << _clue_vector[index].clue_name() << endl;
 }
 
 

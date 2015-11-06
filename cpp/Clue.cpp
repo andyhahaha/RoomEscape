@@ -32,13 +32,13 @@ Clue::Clue()
 	_height = 0;	//長
 
 	_current_dialog = 0; 		//目前使用到哪一個對話
-	_dialog.clear;		//線索文字內容
+	_dialog.clear();		//線索文字內容
 	_current_img = 0; 		//目前使用到哪一個3D image
-	_img_path.clear;		//線索3D image內容
+	_img_path.clear();		//線索3D image內容
 
 	_cluebox_img = "no path";
 
-	_state.clear;	//紀錄每個state是什麼代號
+	_state.clear();	//紀錄每個state是什麼代號
 	_current_state = 0;	//線索狀態
 };
 
@@ -48,6 +48,10 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
+
+	_row_shift = 5;
+	_col_shift = 5;
+
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
 	set_end_scene_up();
@@ -57,17 +61,14 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_width=width;		
 	_height=height;
 
-	_row_shift = 5;
-	_col_shift = 5;
-
 	_current_dialog = 0; 		//目前使用到哪一個對話
-	_dialog.clear;		//線索文字內容
+	_dialog.clear();		//線索文字內容
 	_current_img = 0; 		//目前使用到哪一個3D image
-	_img_path.clear;		//線索3D image內容
+	_img_path.clear();		//線索3D image內容
 
 	_cluebox_img = "no path";
 
-	_state.clear;	//紀錄每個state是什麼代號
+	_state.clear();	//紀錄每個state是什麼代號
 	_current_state = 0;	//線索狀態
 }
 
@@ -161,6 +162,10 @@ void Clue::add_state(int state_code){
 	_state.push_back(state_code);
 }
 
+void Clue::set_cluebox_img(string path){
+	_cluebox_img = path;
+}
+
 int Clue::current_img(){
 	return _current_img;
 }
@@ -217,7 +222,7 @@ int Clue::location_row(){
 	return _location_row;
 }
 
-int Clue::locarion_col(){
+int Clue::location_col(){
 	return _location_col;
 }
 
@@ -280,19 +285,19 @@ int Clue::write_initial_file(){
 
 	fwrite(&_cluebox_img, sizeof(_cluebox_img), 1, fp);
 
-	for (int i = 0; i < _state.size; i++)
+	for (int i = 0; i < _state.size(); i++)
 	{
 		fwrite(&_state[i], sizeof(int), 1, fp);
 	}
 
-	for (int i = 0; i < _dialog.size; i++)
+	for (int i = 0; i < _dialog.size(); i++)
 	{
 		length = sizeof(_dialog[i]);
 		fwrite(&length, sizeof(int), 1, fp);
 		fwrite(&_dialog[i], sizeof(_dialog[i]), 1, fp);
 	}
 
-	for (int i = 0; i < _img_path.size; i++)
+	for (int i = 0; i < _img_path.size(); i++)
 	{
 		length = sizeof(_img_path[i]);
 		fwrite(&length, sizeof(int), 1, fp);
