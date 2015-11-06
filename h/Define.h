@@ -1,9 +1,9 @@
 #ifndef _DEFINE_H
 #define _DEFINE_H
 
-//Position Setting--------------------------------
+/*Position Setting--------------------------------*/
 
-//stitch水平或垂直
+//stitch direction
 #define STITCH2_LEFT 0
 #define STITCH2_RIGHT 1
 #define STITCH2_UP 2
@@ -12,12 +12,6 @@
 #define STITCH2_LEFT_DOWN 5
 #define STITCH2_RIGHT_UP 6
 #define STITCH2_RIGHT_DOWN 7
-
-//#define STITCH3_HORIZON 0
-//#define STITCH3_VERTICAL 1
-
-//#define TURN_HORIZON 0
-//#define TURN_VERTICAL 1
 
 //match A to B or B to A
 #define MATCH_LEFT_TO_RIGHT 0
@@ -29,7 +23,7 @@
 #define BLEND_LEFT 0
 #define BLEND_RIGHT 1
 
-//水平、仰角20、俯角20、俯角40
+//horizontal、look up 20、look down 20、look down 40
 #define VERTICAL_UP_20 0
 #define VERTICAL_CENTRAL 1
 #define VERTICAL_DOWN_20 2
@@ -55,5 +49,9 @@
 #define STITCH_IMG_WIDTH 960
 #define STITCH_IMG_HEIGHT 540
 
+
+/*Clue Setting--------------------------------*/
+
+#define NOT_SHOW_CLUE -2	//clue will not be shown in these scenes
 
 #endif
