@@ -46,7 +46,7 @@ public:
 	int position_num();
 	string clue_name();
 	int location_row();
-	int locarion_col();
+	int location_col();
 	int width();
 	int height();
 	int start_scene_up();
