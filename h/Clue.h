@@ -11,7 +11,7 @@ using namespace std;
 class Clue {
 public:
 	Clue();
-	Clue(string, int, string, int, int, float, float, float, float);	//room name, position number, clue name, start_scene_up, start_scene_down, 左上角的座標row,左上角的座標column,寬,長
+	Clue(string, int, string, int, int, float, float, float, float);	//room name, position number, clue name, start_scene_up, start_scene_down, 左上角的座標column,左上角的座標row,寬,長
 	
 	void set_room_name(string);
 	void set_position_num(int);

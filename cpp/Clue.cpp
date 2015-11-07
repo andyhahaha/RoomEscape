@@ -42,7 +42,7 @@ Clue::Clue()
 	_current_state = 0;	//線索狀態
 };
 
-Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float row, float column, float width, float height)
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float column, float row, float width, float height)
 {
 	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
 	_room_name = room_name;
