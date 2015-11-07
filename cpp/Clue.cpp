@@ -42,7 +42,7 @@ Clue::Clue()
 	_current_state = 0;	//線索狀態
 };
 
-Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, int row, int column, int width, int height)
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float row, float column, float width, float height)
 {
 	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
 	_room_name = room_name;
@@ -121,7 +121,7 @@ int Clue::set_end_scene_up()
 	}
 
 	int scene = _start_scene_up - 1;
-	int x = _location_col;
+	float x = _location_col;
 
 	while (x < 1)
 	{
@@ -148,7 +148,7 @@ int Clue::set_end_scene_down()
 	}
 
 	int scene = _start_scene_down - 1;
-	int x = _location_col;
+	float x = _location_col;
 
 	while (x < 1)
 	{
@@ -348,11 +348,11 @@ float Clue::location_col(){
 	return _location_col;
 }
 
-int Clue::width(){
+float Clue::width(){
 	return _width;
 }
 
-int Clue::height(){
+float Clue::height(){
 	return _height;
 }
 

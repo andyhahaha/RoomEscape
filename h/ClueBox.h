@@ -9,6 +9,7 @@
 #include "glut.h"
 #include "Clue.h"
 #include "DrawImage.h"
+#include "Define.h"
 
 using namespace cv;
 using namespace std;
@@ -22,7 +23,7 @@ public:
 	void show_clue_box(Mat);	//用clue array裡面存的clue選圖出來show
 	void InsertItem(Clue);
 	void DelItem(int);
-	void show_clue(int);
+	void show_clue();
 	void set_box_width(int);
 	void set_box_height(int);
 	void set_item_width(int);
