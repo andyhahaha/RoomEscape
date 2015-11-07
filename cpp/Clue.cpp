@@ -121,7 +121,7 @@ int Clue::set_end_scene_up()
 	}
 
 	int scene = _start_scene_up - 1;
-	int x = _location_col;
+	float x = _location_col;
 
 	while (x < 1)
 	{
@@ -148,7 +148,7 @@ int Clue::set_end_scene_down()
 	}
 
 	int scene = _start_scene_down - 1;
-	int x = _location_col;
+	float x = _location_col;
 
 	while (x < 1)
 	{
