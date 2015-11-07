@@ -823,8 +823,8 @@ glmUnitize(GLMmodel* model)
 
 	/* translate around center then scale */
 	for (i = 1; i <= model->numvertices; i++) {
-		model->vertices[3 * i + 0] -= cx;
-		model->vertices[3 * i + 1] -= cy;
+		model->vertices[3 * i + 0] -= cx-w/2;
+		model->vertices[3 * i + 1] -= cy+h/2;
 		model->vertices[3 * i + 2] -= cz - glmAbs(minz);
 		model->vertices[3 * i + 0] *= scale;
 		model->vertices[3 * i + 1] *= scale;

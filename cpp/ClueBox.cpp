@@ -59,8 +59,7 @@ void ClueBox::show_clue_box(Mat image){	//用clue array裡面存的clue選圖出來show
 	printf("show_clue_box\n");
 	Mat image1 = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\key.png");
 
-	//glEnable(GL_BLEND); //Enable blending.
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+	
 	renderBackgroundGL(image,0,0,1,0.2);
 
 
@@ -87,6 +86,7 @@ void ClueBox::show_clue(){
 	int i = 1;
 	for (it_i = _clue_vector.begin(); it_i != _clue_vector.end(); ++it_i){
 		renderBackgroundGL(it_i->get_cluebox_img(), i*HORIZON_SPACE + (i-1)*ITEM_WIDTH, VERTICAL_SPACE, i*HORIZON_SPACE + i*ITEM_WIDTH, VERTICAL_SPACE + ITEM_HEIGHT);
+		i++;
 	}
 }
 
