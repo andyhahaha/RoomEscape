@@ -43,11 +43,12 @@ public:
 	string get_dialog(int); 	//取得第幾個對話
 	
 	
+	//basic information
 	string room_name();
 	int position_num();
 	string clue_name();
-	int location_row();
-	int location_col();
+	float location_row();
+	float location_col();
 	int width();
 	int height();
 	int start_scene_up();
@@ -55,7 +56,11 @@ public:
 	int start_scene_down();
 	int end_scene_down();
 
-	int write_initial_file();	//將clue的初始內容寫入initial檔案
+	int show_to_scene(int, int);	//check if the clue is in the current scene
+	float location_row_now(int, int);
+	float location_col_now(int, int);
+
+	int write_initial_file();	//write the basic information of the clue to a file
 	friend ostream& operator<<(ostream& , const Clue& );
 
 private:
@@ -70,8 +75,8 @@ private:
 	int _end_scene_down;
 
 	//change scene 時座標移動多少
-	int _row_shift;
-	int _col_shift;
+	float _row_shift;
+	float _col_shift;
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標

@@ -12,7 +12,7 @@ using namespace std;
 Clue::Clue()
 {
 	_room_name = "no name";			//密室名稱
-	_position_num = 0;			//position編號
+	_position_num = -1;			//position編號
 	_clue_name = "no name";			//線索名稱
 
 	_start_scene_up = -1;
@@ -21,13 +21,13 @@ Clue::Clue()
 	_end_scene_down = -1;
 
 	//change scene 時座標移動多少
-	_row_shift = 5;
-	_col_shift = 5;
+	_row_shift = 0.4;
+	_col_shift = 0.05;
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標
-	_location_row = 0;
-	_location_col = 0;
+	_location_row = -2.0;
+	_location_col = -2.0;
 	_width = 0;		//寬
 	_height = 0;	//長
 
@@ -42,15 +42,15 @@ Clue::Clue()
 	_current_state = 0;	//線索狀態
 };
 
-Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, int row, int column, int width, int height){
-	
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, int row, int column, int width, int height)
+{
 	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
 
-	_row_shift = 5;
-	_col_shift = 5;
+	_row_shift = 0.4;
+	_col_shift = 0.05;
 
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
@@ -72,38 +72,47 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_current_state = 0;	//線索狀態
 }
 
-void Clue::set_room_name(string s){
+void Clue::set_room_name(string s)
+{
 	_room_name=s;
 }
 
-void Clue::set_position_num(int n){
+void Clue::set_position_num(int n)
+{
 	_position_num = n;
 }
 
-void Clue::set_clue_name(string s){
+void Clue::set_clue_name(string s)
+{
 	_clue_name = s;
 }
 
-void Clue::set_location_row(int row){
+void Clue::set_location_row(int row)
+{
 	_location_row=row;
 }
-void Clue::set_location_col(int column){
+void Clue::set_location_col(int column)
+{
 	_location_col=column;
 }
 
-void Clue::set_width(int w){
+void Clue::set_width(int w)
+{
 	_width = w;
 }
 
-void Clue::set_height(int h){
+void Clue::set_height(int h)
+{
 	_height = h;
 }
 
-void Clue::set_start_scene_up(int i){
+void Clue::set_start_scene_up(int i)
+{
 	_start_scene_up = i;
 }
 
-int Clue::set_end_scene_up(){
+int Clue::set_end_scene_up()
+{
 	if (_start_scene_up == -1)
 	{
 		cout << "ERROR: Start_scene_up not define yet!" << endl;
@@ -114,7 +123,7 @@ int Clue::set_end_scene_up(){
 	int scene = _start_scene_up - 1;
 	int x = _location_col;
 
-	while (x < SCREEN_WIDTH)
+	while (x < 1)
 	{
 		scene++;
 		if (scene == 180) scene = 0;
@@ -124,11 +133,13 @@ int Clue::set_end_scene_up(){
 	return 1;
 }
 
-void Clue::set_start_scene_down(int i){
+void Clue::set_start_scene_down(int i)
+{
 	_start_scene_down = i;
 }
 
-int Clue::set_end_scene_down(){
+int Clue::set_end_scene_down()
+{
 	if (_start_scene_down == -1)
 	{
 		cout << "ERROR: Start_scene_down not define yet!" << endl;
@@ -139,7 +150,7 @@ int Clue::set_end_scene_down(){
 	int scene = _start_scene_down - 1;
 	int x = _location_col;
 
-	while (x < SCREEN_WIDTH)
+	while (x < 1)
 	{
 		scene++;
 		if (scene == 180) scene = 0;
@@ -150,23 +161,28 @@ int Clue::set_end_scene_down(){
 }
 
 
-int Clue::current_state(){
+int Clue::current_state()
+{
 	return _current_state;
 }
 
-void Clue::next_state(){
+void Clue::next_state()
+{
 	_current_state -= 1;
 }
 
-void Clue::add_state(int state_code){
+void Clue::add_state(int state_code)
+{
 	_state.push_back(state_code);
 }
 
-void Clue::set_cluebox_img(string path){
+void Clue::set_cluebox_img(string path)
+{
 	_cluebox_img = path;
 }
 
-Mat Clue::get_cluebox_img(){
+Mat Clue::get_cluebox_img()
+{
 	Mat img = imread(_cluebox_img);
 
 	if (!img.data)
@@ -177,19 +193,23 @@ Mat Clue::get_cluebox_img(){
 	return img;
 }
 
-int Clue::current_img(){
+int Clue::current_img()
+{
 	return _current_img;
 }
 
-void Clue::next_img(){
+void Clue::next_img()
+{
 	_current_img += 1;
 }
 
-void Clue::add_img_path(string path){
+void Clue::add_img_path(string path)
+{
 	_img_path.push_back(path);
 }
 
-string Clue::get_img(int number){  	
+string Clue::get_img(int number)
+{  	
 	if (_img_path[number][0] == NULL)
 	{
 		cout << "ERROR: Image" << number << " undefined!" << endl;
@@ -198,40 +218,133 @@ string Clue::get_img(int number){
 	return _img_path[number];
 }
 
-int Clue::current_dialog(){
+int Clue::current_dialog()
+{
 	return _current_dialog;
 }
 
-void Clue::next_dialog(){
+void Clue::next_dialog()
+{
 	_current_dialog += 1;
 }
 
-void Clue::add_dialog(string d){
+void Clue::add_dialog(string d)
+{
 	_dialog.push_back(d);
 }
 
-string Clue::get_dialog(int index){ 	//取得第幾個對話
+string Clue::get_dialog(int index)
+{ 
+	if (_dialog[index][0] == NULL)
+	{
+		cout << "ERROR: Dialog" << index << " undefined!" << endl;
+		return NULL;
+	}
 	return _dialog[index];
 }
 
 
-string Clue::room_name(){
+string Clue::room_name()
+{
 	return _room_name;
 }
 
-int Clue::position_num(){
+int Clue::position_num()
+{
 	return _position_num;
 }
 
-string Clue::clue_name(){
+string Clue::clue_name()
+{
 	return _clue_name;
 }
 
-int Clue::location_row(){
+int Clue::show_to_scene(int vertical, int scene_now)
+{
+	if (vertical == VERTICAL_CENTRAL)
+	{
+		if (_start_scene_up == -2)
+		{
+			cout << "ERROR: Start scene up undefined!" << endl;
+			return -1;
+		}
+
+		if (_start_scene_up < _end_scene_up)
+		{
+			if (scene_now >= _start_scene_up && scene_now <= _end_scene_up)
+				return 1;
+		}
+		else
+		{
+			if (scene_now >= _start_scene_up || scene_now <= _end_scene_up)
+				return 1;
+		}
+	}
+	else if (vertical == VERTICAL_DOWN_20)
+	{
+		if (_start_scene_down == -2)
+		{
+			cout << "ERROR: Start scene down undefined!" << endl;
+			return -1;
+		}
+
+		if (_start_scene_down < _end_scene_down)
+		{
+			if (scene_now >= _start_scene_down && scene_now <= _end_scene_down)
+				return 1;
+		}
+		else
+		{
+			if (scene_now >= _start_scene_down || scene_now <= _end_scene_down)
+				return 1;
+		}
+	}
+	return 0;
+}
+
+float Clue::location_row_now(int vertical, int scene_now)
+{
+	if (_location_row == -2.0)
+	{
+		cout << "ERROR: location row undefined!" << endl;
+		return _location_row;
+	}
+
+	if (vertical == VERTICAL_CENTRAL)
+	{
+		return _location_row + _row_shift;
+	}
 	return _location_row;
 }
 
-int Clue::location_col(){
+float Clue::location_col_now(int vertical, int scene_now){
+	if (_location_col == -2.0)
+	{
+		cout << "ERROR: location col undefined!" << endl;
+		return _location_col;
+	}
+
+	if (vertical == VERTICAL_CENTRAL)
+	{
+		if (scene_now - _start_scene_up < 0)
+			return _location_col + (180 - (scene_now - _start_scene_up))*_col_shift;
+		else
+			return _location_col + (scene_now - _start_scene_up)*_col_shift;
+	}
+	else
+	{
+		if (scene_now - _start_scene_down < 0)
+			return _location_col + (180 - (scene_now - _start_scene_down))*_col_shift;
+		else
+			return _location_col + (scene_now - _start_scene_down)*_col_shift;
+	}
+}
+
+float Clue::location_row(){
+	return _location_row;
+}
+
+float Clue::location_col(){
 	return _location_col;
 }
 
