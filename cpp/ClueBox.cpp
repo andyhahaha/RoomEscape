@@ -62,7 +62,7 @@ void ClueBox::show_clue_box(Mat image){	//用clue array裡面存的clue選圖出來show
 	//glEnable(GL_BLEND); //Enable blending.
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
 	renderBackgroundGL(image,0,0,1,0.2);
-	renderBackgroundGL(image1,0.05,0.05,0.15,0.15);
+
 
 
 
@@ -80,18 +80,13 @@ void ClueBox::DelItem(int index){
 	_clue_vector.erase(itor);
 	_clue_number = sizeof(_clue_vector) / sizeof(_clue_vector[0]);
 }
-void ClueBox::show_clue(int index){
+void ClueBox::show_clue(){
 	
-
-
 	vector<Clue>::iterator it_i;
-	Mat clue;
-	// 尋訪
+
+	int i = 1;
 	for (it_i = _clue_vector.begin(); it_i != _clue_vector.end(); ++it_i){
-		clue = imread(it_i->);
-
-
-
+		renderBackgroundGL(it_i->get_cluebox_img(), i*HORIZON_SPACE + (i-1)*ITEM_WIDTH, VERTICAL_SPACE, i*HORIZON_SPACE + i*ITEM_WIDTH, VERTICAL_SPACE + ITEM_HEIGHT);
 	}
 }
 

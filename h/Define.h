@@ -54,4 +54,11 @@
 
 #define NOT_SHOW_CLUE -2	//clue will not be shown in these scenes
 
+//cluebox
+#define HORIZON_SPACE 0.05
+#define VERTICAL_SPACE 0.05
+#define BOX_HEIGHT 0.2
+#define BOX_WIDTH 1
+#define ITEM_HEIGHT 0.1
+#define ITEM_WIDTH 0.1
 #endif

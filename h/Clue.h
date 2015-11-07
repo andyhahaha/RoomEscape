@@ -11,7 +11,7 @@ using namespace std;
 class Clue {
 public:
 	Clue();
-	Clue(string, int, string, int, int, int, int, int, int);	//room name, position number, clue name, start_scene_up, start_scene_down, 左上角的座標row,左上角的座標column,寬,長
+	Clue(string, int, string, int, int, float, float, float, float);	//room name, position number, clue name, start_scene_up, start_scene_down, 左上角的座標row,左上角的座標column,寬,長
 	
 	void set_room_name(string);
 	void set_position_num(int);
@@ -49,8 +49,8 @@ public:
 	string clue_name();
 	float location_row();
 	float location_col();
-	int width();
-	int height();
+	float width();
+	float height();
 	int start_scene_up();
 	int end_scene_up();
 	int start_scene_down();
@@ -80,10 +80,10 @@ private:
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標
-	int _location_row;	
-	int _location_col;
-	int _width;		//寬
-	int _height;	//長
+	float _location_row;
+	float _location_col;
+	float _width;		//寬
+	float _height;	//長
 
 	int _current_dialog; 		//目前使用到哪一個對話
 	vector<string>_dialog;		//線索文字內容
