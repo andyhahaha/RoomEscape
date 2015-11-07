@@ -53,6 +53,15 @@
 /*Clue Setting--------------------------------*/
 
 #define NOT_SHOW_CLUE -2	//clue will not be shown in these scenes
+#define CLUE_FILE_END 111111	//the end of one clue file
+
+//clue state code
+#define DRAW_ON_SCENE 0
+#define NOT_SHOW 1
+#define SHOW_IN_CLUEBOX 2
+#define CHANGE_IMG 3
+#define SHOW_ANIMATION 4
+#define SHOW_DIALOG 5
 
 //cluebox
 #define HORIZON_SPACE 0.05

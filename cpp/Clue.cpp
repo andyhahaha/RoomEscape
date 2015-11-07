@@ -28,8 +28,8 @@ Clue::Clue()
 	//左上角的座標
 	_location_row = -2.0;
 	_location_col = -2.0;
-	_width = 0;		//寬
-	_height = 0;	//長
+	_width = 0.0;		//寬
+	_height = 0.0;	//長
 
 	_current_dialog = 0; 		//目前使用到哪一個對話
 	_dialog.clear();		//線索文字內容
@@ -71,6 +71,174 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_state.clear();	//紀錄每個state是什麼代號
 	_current_state = 0;	//線索狀態
 }
+
+Clue::Clue(string clue_path)
+{
+	char path[1000];
+	sprintf(path, "%s", clue_path);
+	int length = 0, size = 0, end;
+
+	FILE *fp = fopen(path, "rb");
+	if (!fp)
+	{
+		cout << "ERROR: Unable to read the clue file!" << endl;
+	}
+	else
+	{
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_room_name, length, 1, fp);
+
+		fread(&_position_num, sizeof(int), 1, fp);
+
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_clue_name, length, 1, fp);
+
+		fread(&_start_scene_up, sizeof(int), 1, fp);
+		fread(&_end_scene_up, sizeof(int), 1, fp);
+		fread(&_start_scene_down, sizeof(int), 1, fp);
+		fread(&_end_scene_down, sizeof(int), 1, fp);
+
+		fread(&_location_row, sizeof(float), 1, fp);
+		fread(&_location_col, sizeof(float), 1, fp);
+		fread(&_width, sizeof(float), 1, fp);
+		fread(&_location_row, sizeof(float), 1, fp);
+
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_cluebox_img, length, 1, fp);
+
+		fread(&size, sizeof(int), 1, fp);
+		_state.resize(size);
+		for (int i = 0; i < size; i++)
+		{
+			fread(&_state[i], sizeof(int), 1, fp);
+		}
+
+		fread(&size, sizeof(int), 1, fp);
+		_dialog.resize(size);
+		for (int i = 0; i < size; i++)
+		{
+			fread(&length, sizeof(int), 1, fp);
+			fread(&_dialog[i], length, 1, fp);
+		}
+
+		fread(&size, sizeof(int), 1, fp);
+		_img_path.resize(size);
+		for (int i = 0; i < size; i++)
+		{
+			fread(&length, sizeof(int), 1, fp);
+			fread(&_img_path[i], length, 1, fp);
+		}
+
+		fread(&end, sizeof(int), 1, fp);
+		fclose(fp);
+		if (end == CLUE_FILE_END)
+			cout << "Read clue file " << _clue_name << " succeed!" << endl;
+		else
+			cout << "ERROR: Read clue file failed!" << endl;
+	}
+}
+
+void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float column, float row, float width, float height)
+{
+	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+	_row_shift = 0.4;
+	_col_shift = 0.05;
+
+	_start_scene_up = start_scene_up;
+	_start_scene_down = start_scene_down;
+	set_end_scene_up();
+	set_end_scene_down();
+	_location_row = row;
+	_location_col = column;
+	_width = width;
+	_height = height;
+
+	_current_dialog = 0; 		//目前使用到哪一個對話
+	_dialog.clear();		//線索文字內容
+	_current_img = 0; 		//目前使用到哪一個3D image
+	_img_path.clear();		//線索3D image內容
+
+	_cluebox_img = "no path";
+
+	_state.clear();	//紀錄每個state是什麼代號
+	_current_state = 0;	//線索狀態
+}
+
+int Clue::set_clue(string clue_path)
+{
+	char path[1000] = {0};
+	sprintf(path, "%s", clue_path);
+	int length = 0, size = 0, end;
+
+	FILE *fp = fopen(path, "rb");
+	if (!fp)
+	{
+		cout << "ERROR: Unable to read the clue file!" << endl;
+		return -1;
+	}
+	
+	fread(&length, sizeof(int), 1, fp);
+	fread(&_room_name, length, 1, fp);
+
+	fread(&_position_num, sizeof(int), 1, fp);
+
+	fread(&length, sizeof(int), 1, fp);
+	fread(&_clue_name, length, 1, fp);
+
+	fread(&_start_scene_up, sizeof(int), 1, fp);
+	fread(&_end_scene_up, sizeof(int), 1, fp);
+	fread(&_start_scene_down, sizeof(int), 1, fp);
+	fread(&_end_scene_down, sizeof(int), 1, fp);
+
+	fread(&_location_row, sizeof(float), 1, fp);
+	fread(&_location_col, sizeof(float), 1, fp);
+	fread(&_width, sizeof(float), 1, fp);
+	fread(&_height, sizeof(float), 1, fp);
+
+	fread(&length, sizeof(int), 1, fp);
+	fread(&_cluebox_img, length, 1, fp);
+
+	fread(&size, sizeof(int), 1, fp);
+	_state.resize(size);
+	for (int i = 0; i < size; i++)
+	{
+		fread(&_state[i], sizeof(int), 1, fp);
+	}
+
+	fread(&size, sizeof(int), 1, fp);
+	_dialog.resize(size);
+	for (int i = 0; i < size; i++)
+	{
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_dialog[i], length, 1, fp);
+	}
+
+	fread(&size, sizeof(int), 1, fp);
+	_img_path.resize(size);
+	for (int i = 0; i < size; i++)
+	{
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_img_path[i], length, 1, fp);
+	}
+
+	fread(&end, sizeof(int), 1, fp);
+	fclose(fp);
+	if (end == CLUE_FILE_END)
+	{
+		cout << "Read clue file " << _clue_name << " succeed!" << endl;
+		return 1;
+	}
+	else
+	{
+		cout << "ERROR: Read clue file failed!" << endl;
+		return -1;
+	}
+}
+
 
 void Clue::set_room_name(string s)
 {
@@ -317,7 +485,8 @@ float Clue::location_row_now(int vertical, int scene_now)
 	return _location_row;
 }
 
-float Clue::location_col_now(int vertical, int scene_now){
+float Clue::location_col_now(int vertical, int scene_now)
+{
 	if (_location_col == -2.0)
 	{
 		cout << "ERROR: location col undefined!" << endl;
@@ -340,49 +509,60 @@ float Clue::location_col_now(int vertical, int scene_now){
 	}
 }
 
-float Clue::location_row(){
+float Clue::location_row()
+{
 	return _location_row;
 }
 
-float Clue::location_col(){
+float Clue::location_col()
+{
 	return _location_col;
 }
 
-float Clue::width(){
+float Clue::width()
+{
 	return _width;
 }
 
-float Clue::height(){
+float Clue::height()
+{
 	return _height;
 }
 
-int Clue::start_scene_up(){
+int Clue::start_scene_up()
+{
 	return _start_scene_up;
 }
 
-int Clue::end_scene_up(){
+int Clue::end_scene_up()
+{
 	return _end_scene_up;
 }
 
-int Clue::start_scene_down(){
+int Clue::start_scene_down()
+{
 	return _start_scene_down;
 }
 
-int Clue::end_scene_down(){
+int Clue::end_scene_down()
+{
 	return _end_scene_down;
 }
 
-void Clue::_show_animation() {
+void Clue::_show_animation() 
+{
 
 	printf("_show_animation\n");
 
 
 }
 
-int Clue::write_initial_file(){
-	char path[1000];
-	int length;
-	sprintf(path, "D:\\clue\\%s\\position%d\\%s", _room_name, _position_num, _clue_name);
+int Clue::write_initial_file()
+{
+	char path[1000] = {0};
+	int length, end = CLUE_FILE_END;
+	sprintf(path, "D:\\clue\\%s\\position%d\\%s", &_room_name, _position_num, &_clue_name);
+	cout << path << endl;
 
 	FILE *fp = fopen(path, "wb");
 	if (!fp)
@@ -390,6 +570,12 @@ int Clue::write_initial_file(){
 		cout << "ERROR: Unable to open the clue file!" << endl;
 		return -1;
 	}
+
+	length = sizeof(_room_name);
+	fwrite(&length, sizeof(int), 1, fp);
+	fwrite(&_room_name, sizeof(_room_name), 1, fp);
+
+	fwrite(&_position_num, sizeof(int), 1, fp);
 
 	length = sizeof(_clue_name);
 	fwrite(&length, sizeof(int), 1, fp);
@@ -400,18 +586,24 @@ int Clue::write_initial_file(){
 	fwrite(&_start_scene_down, sizeof(int), 1, fp);
 	fwrite(&_end_scene_down, sizeof(int), 1, fp);
 
-	fwrite(&_location_row, sizeof(int), 1, fp);
-	fwrite(&_location_col, sizeof(int), 1, fp);
-	fwrite(&_width, sizeof(int), 1, fp);
-	fwrite(&_height, sizeof(int), 1, fp);
+	fwrite(&_location_row, sizeof(float), 1, fp);
+	fwrite(&_location_col, sizeof(float), 1, fp);
+	fwrite(&_width, sizeof(float), 1, fp);
+	fwrite(&_height, sizeof(float), 1, fp);
 
+	length = sizeof(_cluebox_img);
+	fwrite(&length, sizeof(int), 1, fp);
 	fwrite(&_cluebox_img, sizeof(_cluebox_img), 1, fp);
 
+	length = _state.size();
+	fwrite(&length, sizeof(int), 1, fp);
 	for (int i = 0; i < _state.size(); i++)
 	{
 		fwrite(&_state[i], sizeof(int), 1, fp);
 	}
 
+	length = _dialog.size();
+	fwrite(&length, sizeof(int), 1, fp);
 	for (int i = 0; i < _dialog.size(); i++)
 	{
 		length = sizeof(_dialog[i]);
@@ -419,12 +611,16 @@ int Clue::write_initial_file(){
 		fwrite(&_dialog[i], sizeof(_dialog[i]), 1, fp);
 	}
 
+	length = _img_path.size();
+	fwrite(&length, sizeof(int), 1, fp);
 	for (int i = 0; i < _img_path.size(); i++)
 	{
 		length = sizeof(_img_path[i]);
 		fwrite(&length, sizeof(int), 1, fp);
 		fwrite(&_img_path[i], sizeof(_img_path[i]), 1, fp);
 	}
+
+	fwrite(&end, sizeof(int), 1, fp);
 	fclose(fp);
 	return 1;
 };
