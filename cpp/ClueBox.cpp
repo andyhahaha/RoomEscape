@@ -57,7 +57,6 @@ int ClueBox::get_item_selected(){
 
 void ClueBox::show_clue_box(Mat image){	//用clue array裡面存的clue選圖出來show
 	printf("show_clue_box\n");
-	Mat image1 = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\key.png");
 
 	
 	renderBackgroundGL(image,0,0,1,0.2);
@@ -79,13 +78,18 @@ void ClueBox::DelItem(int index){
 	_clue_vector.erase(itor);
 	_clue_number = sizeof(_clue_vector) / sizeof(_clue_vector[0]);
 }
-void ClueBox::show_clue(){
+void ClueBox::show_clue(int width, int height){
 	
 	vector<Clue>::iterator it_i;
+	float horizon_space = SPACE*height / width;
+	float item_w = ITEM_WIDTH*height / width;
+	float vertical_space = SPACE;
+	float item_h = ITEM_WIDTH;
 
 	int i = 1;
-	for (it_i = _clue_vector.begin(); it_i != _clue_vector.end(); ++it_i){
-		renderBackgroundGL(it_i->get_cluebox_img(), i*HORIZON_SPACE + (i-1)*ITEM_WIDTH, VERTICAL_SPACE, i*HORIZON_SPACE + i*ITEM_WIDTH, VERTICAL_SPACE + ITEM_HEIGHT);
+	for (it_i = _clue_vector.begin(); it_i != _clue_vector.end() && (ARROW_WIDTH + i*horizon_space + i*item_w)<0.98; ++it_i){
+		renderBackgroundGL(it_i->get_cluebox_img(), ARROW_WIDTH + i*horizon_space + (i - 1)*item_w, vertical_space, ARROW_WIDTH + i*horizon_space + i*item_w, vertical_space + item_h);
+		//change the cluebox_on_the_screen vector here
 		i++;
 	}
 }
