@@ -64,10 +64,9 @@
 #define SHOW_DIALOG 5
 
 //cluebox
-#define HORIZON_SPACE 0.05
-#define VERTICAL_SPACE 0.05
+#define SPACE 0.03		//clue in the clue box space(horizon and vertical is both 0.03% of the screen height)
 #define BOX_HEIGHT 0.2
 #define BOX_WIDTH 1
-#define ITEM_HEIGHT 0.1
-#define ITEM_WIDTH 0.1
+#define ITEM_WIDTH 0.14	//clue in clue box is a square (width is 0.14% of the screen height)
+#define ARROW_WIDTH 0.01
 #endif

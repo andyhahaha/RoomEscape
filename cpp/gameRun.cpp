@@ -35,10 +35,51 @@ float OBJ_x = 0, OBJ_y = 0;
 ClueBox clueBox(0, width, 100, 100, 100);
 vector<Clue>ClueOnScreen;
 vector<Clue>AllClue;
+int q = 0;
 
 
 Mat clueBox_text;
 #define RADPERDEG 0.0174533
+
+
+
+void showDialog(const char *text, int length){
+	glColor3f(0, 0, 0);
+	glMatrixMode(GL_PROJECTION); // change the current matrix to PROJECTION
+	double matrix[16]; // 16 doubles in stack memory
+	glGetDoublev(GL_PROJECTION_MATRIX, matrix); // get the values from PROJECTION matrix to local variable
+	glLoadIdentity(); // reset PROJECTION matrix to identity matrix
+	glOrtho(0, width, 0, height, -5, 5); // orthographic perspective
+	glMatrixMode(GL_MODELVIEW); // change current matrix to MODELVIEW matrix again
+	glLoadIdentity(); // reset it to identity matrix
+	glPushMatrix(); // push current state of MODELVIEW matrix to stack
+	glLoadIdentity(); // reset it again. (may not be required, but it my convention)
+	glRasterPos2i(width*0.065, height*0.29); // raster position in 2D
+	for (int i = 0; i<length; i++){
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font
+	}
+	glPopMatrix(); // get MODELVIEW matrix value from stack
+	glMatrixMode(GL_PROJECTION); // change current matrix mode to PROJECTION
+	glLoadMatrixd(matrix); // reset
+	glMatrixMode(GL_MODELVIEW); // change current matrix mode to MODELVIEW
+
+	// draw 透明框框
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND); //Enable blending.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+
+	glBegin(GL_QUADS);
+	glColor4f(0.62, 0.6, 0.55, 0.7);
+	glVertex3f(-0.9, -0.5, 0.0);
+	glVertex3f(-0.9, -0.5+(150.0/height), 0.0);
+	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5 + (150.0 / height), 0.0);
+	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5, 0.0);
+	glEnd();
+	//Printw
+
+}
+
+
 
 
 
@@ -161,8 +202,6 @@ void mouse(int button, int state, int x, int y)
 			if (x <= clue_col + clue_width && x >= clue_col && y <= clue_row + clue_height && y >= clue_row){
 
 				clueBox.InsertItem(*it_clue);
-
-
 			}
 
 		}
@@ -218,11 +257,7 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 'i':
-
-		glmTranslate(glm_model, 0, 0.02, 0);
-		OBJ_y += 0.02;
-		cout << "OBJ_y = " << OBJ_y << endl;
-		list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+		q = 1;
 		glutPostRedisplay();
 		break;
 
@@ -324,7 +359,6 @@ void keyboard(unsigned char key, int x, int y)
 
 void display()
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	clock_t drawObj_start, drawObj_end;
 	drawObj_start = clock();
@@ -334,7 +368,6 @@ void display()
 	cout << "draw back time = " << ((double)(drawObj_end - drawObj_start) / CLOCKS_PER_SEC) << "s" << endl;
 
 	//drawAxes(5);
-
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -363,17 +396,18 @@ void display()
 	glCallList(list_id[0]);
 	clock_t drawObj_start1, drawObj_end1;
 	drawObj_start1 = clock();
-
+	if (q==0)
 	glCallList(list_id[1]);
 	drawObj_end1 = clock();
 	cout << "call list time = " << ((double)(drawObj_end - drawObj_start) / CLOCKS_PER_SEC) << "s" << endl;
 
 	glCallList(list_id[2]);
 	DrawClueHit();
+	string text = "andyhahayayaya yoyoyo";
+	showDialog(text.data(), text.size());
 
 	clueBox.show_clue_box(clueBox_text);
-
-	clueBox.show_clue();
+	clueBox.show_clue(width, height);
 
 	glFlush();
 
@@ -391,7 +425,7 @@ void clueSetting(){
 	Clue clue2("room", 0, "bear", 0, 0, -0.5, 0.5, 0.1, 0.1);
 	Clue clue3("room", 0, "pillow", 0, 0, 0, 0, 0.1, 0.1);
 	clue1.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\key.obj");
-	clue1.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\key.png");
+	clue1.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\key1.png");
 	clue2.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\teddy.obj");
 	clue2.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
 	clue3.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\pillow.obj");
@@ -432,7 +466,7 @@ void initializeOpenGL()
 
 	// Load background image
 	background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\stitch_test4.jpg");
-	clueBox_text = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\iron_texture.jpg");
+	clueBox_text = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\paper_texture2.png");
 
 
 
