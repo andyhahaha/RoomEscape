@@ -830,7 +830,7 @@ Mat find_homography_matrix(string path, int img_to_num, int img_from_num)
 void choose_image(string& room_name, int position_number, int vertical_angle, int img_num1, int img_num2)
 {
 	string path_src = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "\\";
-	string path_dst = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "\\";
+	string path_dst = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "_choosen\\";
 	int num_now = 0;
 	int num_next = 1;
 	int img_num = 0;
@@ -850,6 +850,7 @@ void choose_image(string& room_name, int position_number, int vertical_angle, in
 	
 	//img1轉到img2的視角(乘H)
 	imwrite(path_dst + to_string(img_num) + ".jpg", img1);
+	cout << path_dst;
 	warpPerspective(img1, img1_new, H, Size(img_width, img_height));
 
 	//先做一個白色的轉H的圖
