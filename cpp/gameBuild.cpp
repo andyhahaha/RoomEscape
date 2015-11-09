@@ -1,4 +1,4 @@
-#include "D:/RoomEscape/h/functions.h"
+#include "D:/RoomEscape/h/ResizeImg.h"
 #include "D:/RoomEscape/h/PositionImgSetting.h"
 #include "D:/RoomEscape/h/ChooseImageSSIM.h"
 #include "D:/RoomEscape/h/Clue.h"
@@ -37,37 +37,41 @@ void SetAllClue()
 	int i;
 }
 
-void SetAllSceneImg(int argc, char** argv)
+
+void SetResourceImg()
 {
-	
-
-	TickMeter  tm;
-
 	int position_num = 1;
+
+	int findH_from = 618;
+	int findH_to = 619;
+	//choose_image(room_test5, position_num, VERTICAL_DOWN_40, findH_from, findH_to);
+
 	//resize_all(room_test5, position_num, VERTICAL_CENTRAL, 50);
 	//resize_all(room_test5, position_num, VERTICAL_UP_20, 50);
 	//resize_all(room_test5, position_num, VERTICAL_DOWN_20, 50);
+	resize_all(room_test5, position_num, VERTICAL_DOWN_40, 50);
+}
+
+
+void SetAllSceneImg(int argc, char** argv)
+{
+	TickMeter  tm;
+	int position_num = 1;
 
 	tm.reset();
 	tm.start();
 
 	string path = "D:\\image\\image_use\\" + room_test3 + "\\position1" + "\\";
-	//pos_set3_1.draw_2img_matches(imread(path + "18.jpg"), imread(path + "1.jpg"), 14);
-
-	pos_set5_1.StitchScreenAll(METHOD1);
-
-	int findH_from = 0;
-	int findH_to = 26;
-	//choose_image(room_test5, position_num, VERTICAL_DOWN_20, findH_from, findH_to);
+	pos_set5_1.StitchSceneRange(VERTICAL_DOWN_20, 0, 181, METHOD2);
+	//pos_set5_1.StitchSceneAll(METHOD2);
 
 	tm.stop();
 	cout << "process time1=" << tm.getTimeSec() << " sec." << endl;
-
-	//system("pause");
 }
 
 void gameBuild(int argc, char** argv)
 {
-	//SetAllSceneImg(argc, argv);
-	SetAllClue();
+	//SetResourceImgImg();
+	SetAllSceneImg(argc, argv);
+	//SetAllClue();
 }

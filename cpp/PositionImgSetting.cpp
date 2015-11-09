@@ -781,7 +781,7 @@ void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int sti
 	}
 
 	assert(image_amount > 0);
-	interval = (int)round(img_amount * 20.0 / 360.0);	//img next(left or right) number interval
+	interval = (int)round(img_amount * 5.0 / 360.0);	//img next(left or right) number interval
 
 	central_img = (int)round((float)img_number * 2.0 / 360.0 * (float)img_amount);
 	if (central_img - interval >= 0)		//img max number is (image_amount - 1), min number is 0
@@ -867,7 +867,7 @@ void PositionImgSetting::StitchPart(int img_number, int vertical_angle, int meth
 	}
 }
 
-void PositionImgSetting::StitchScreen(int vertical_angle, int img_number, int method){	//0~179
+void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int method){	//0~179
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 	FILE * fp;
 	char filename[200];
@@ -920,38 +920,51 @@ void PositionImgSetting::StitchScreen(int vertical_angle, int img_number, int me
 	fclose(fp);
 }
 
-void PositionImgSetting::StitchScreenAll(int method){
+void PositionImgSetting::StitchSceneRange(int vertical_angle, int img_number1, int img_number2, int method){
+	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
+	cout << "_room_naem = " << _room_name << endl;
+	if (vertical_angle == VERTICAL_CENTRAL)
+	{
+		img_amount_top = getImgAmount(path + to_string(VERTICAL_UP_20) + "_choosen\\small\\");
+		img_amount_mid = getImgAmount(path + to_string(VERTICAL_CENTRAL) + "_choosen\\small\\");
+		img_amount_bot = getImgAmount(path + to_string(VERTICAL_DOWN_20) + "_choosen\\small\\");
+	}
+	else
+	{
+		img_amount_top = getImgAmount(path + to_string(VERTICAL_CENTRAL) + "_choosen\\small\\");
+		img_amount_mid = getImgAmount(path + to_string(VERTICAL_DOWN_20) + "_choosen\\small\\");
+		img_amount_bot = getImgAmount(path + to_string(VERTICAL_DOWN_40) + "_choosen\\small\\");
+	}
+
+	for (int n = img_number1; n < img_number2 + 1; n++)
+	{
+		StitchScene(vertical_angle, n, method);
+	}
+}
+
+void PositionImgSetting::StitchSceneAll(int method){
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 	cout <<"_room_naem = "<< _room_name << endl;
 	img_amount_top = getImgAmount(path + to_string(VERTICAL_UP_20) + "_choosen\\small\\");
 	img_amount_mid = getImgAmount(path + to_string(VERTICAL_CENTRAL) + "_choosen\\small\\");
 	img_amount_bot = getImgAmount(path + to_string(VERTICAL_DOWN_20) + "_choosen\\small\\");
 
-	/*FILE * fp;
-	char filename[50];
-	sprintf(filename, "%sstitch_time.txt", path);
-	cout << filename << endl;
-	fp = fopen(filename, "a");
-	fprintf(fp, "Stitch screen --- room name: %s , position %d ---\n", _room_name, _number);
-	fclose(fp);*/
-
-	for (int n = 100; n < 180; n++)
+	for (int n = 0; n < 180; n++)
 	{
-		StitchScreen(VERTICAL_CENTRAL, n, method);
+		StitchScene(VERTICAL_CENTRAL, n, method);
 	}
-	//StitchScreen(VERTICAL_CENTRAL, 102, method);
 
-	/*img_amount_top = img_amount_mid;
+	img_amount_top = img_amount_mid;
 	img_amount_mid = img_amount_bot;
 	img_amount_bot = getImgAmount(path + to_string(VERTICAL_DOWN_40) + "_choosen\\small\\");
 
 	for (int n = 0; n < 180; n++)
 	{
-		StitchScreen(VERTICAL_DOWN_20, n, method);
-	}*/
+		StitchScene(VERTICAL_DOWN_20, n, method);
+	}
 }
 
-Mat PositionImgSetting::GetStitchScreen(int img_number){
+Mat PositionImgSetting::GetStitchScene(int img_number){
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\img" + to_string(img_number) + ".jpg";
 	return imread(path);
 }

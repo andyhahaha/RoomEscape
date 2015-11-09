@@ -9,8 +9,8 @@ using namespace cv;
 
 void image_resize(string& room_name, int position_number,  int vertical_angle, int img_number, int percent)
 {
-	string path_src = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "\\";
-	string path_dst = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "\\small\\";
+	string path_src = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "_choosen\\";
+	string path_dst = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "_choosen\\small\\";
 
 	//string path_src = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\stitch\\stitch";
 	//string path_dst = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\stitch_small\\stitch";
@@ -36,7 +36,7 @@ void image_resize(string& room_name, int position_number,  int vertical_angle, i
 
 void resize_all(string& room_name, int position_number,int vertical_angle, int percent)
 {
-	string path_src = "D:\\image\\image_use\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "\\";
+	string path_src = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "_choosen\\";
 	Mat img;
 
 	for (int i = 0; i < 500; i++)

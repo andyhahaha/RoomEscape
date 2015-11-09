@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef RESIZEIMG_H
+#define RESIZEIMG_H
 
 #include <iostream> 
 #include <string> 
