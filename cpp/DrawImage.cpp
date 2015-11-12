@@ -78,7 +78,6 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 {
 	// Make sure that the polygon mode is set so we draw the polygons filled
 	// (save the state first so we can restore it).
-	GLfloat backgroundHeight = 0.8;
 	GLint polygonMode[2];
 	glGetIntegerv(GL_POLYGON_MODE, polygonMode);
 	glPolygonMode(GL_FRONT, GL_FILL);
@@ -88,7 +87,6 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0.0, 1.0, 0.0, 1.0);
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -117,6 +115,7 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 	glBegin(GL_TRIANGLES);
 	glNormal3f(0.0, 0.0, 1.0);
 
+	
 	glTexCoord2f(0.0, 1.0);
 	glVertex3f(x1, y1, 0.0);
 	glTexCoord2f(0.0, 0.0);
@@ -130,6 +129,7 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 	glVertex3f(x1, y2, 0.0);
 	glTexCoord2f(1.0, 0.0);
 	glVertex3f(x2, y2, 0.0);
+	
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
