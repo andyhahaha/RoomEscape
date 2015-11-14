@@ -444,7 +444,7 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 	{
 		warpPerspective(img2, left, H1, Size(STITCH_SCREEN_WIDTH, STITCH_SCREEN_HEIGHT));
 		rook_points[0][0] = Point(x1 + 200, y1 + 200);
-		rook_points[0][1] = Point(x2, y2 + 200);
+		rook_points[0][1] = Point(x2 - 10, y2 + 200);
 		rook_points[0][2] = Point(x3 - 10, y3);
 		rook_points[0][3] = Point(x4 + 200, y4 );
 

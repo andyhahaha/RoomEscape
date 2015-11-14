@@ -62,7 +62,7 @@ void SetAllSceneImg(int argc, char** argv)
 	tm.start();
 
 	string path = "D:\\image\\image_use\\" + room_test3 + "\\position1" + "\\";
-	pos_set5_1.StitchSceneRange(VERTICAL_DOWN_20, 0, 181, METHOD2);
+	pos_set5_1.StitchSceneRange(VERTICAL_DOWN_20, 160, 181, METHOD2);
 	//pos_set5_1.StitchSceneAll(METHOD2);
 
 	tm.stop();
