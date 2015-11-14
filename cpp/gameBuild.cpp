@@ -27,7 +27,7 @@ void SetAllClue()
 	Clue clue0(room_test5, 1, "teddy", 0, 0, 0.0, 0.0, 0.1, 0.1), clue1;
 
 	clue0.add_dialog("This is a teddy!");
-	clue0.add_state(DRAW_ON_SCENE);
+	clue0.add_state(SHOW_ON_SCENE);
 	clue0.add_img_path("No image~~~");
 
 	clue0.write_initial_file();
@@ -53,7 +53,7 @@ void SetResourceImg()
 }
 
 
-void SetAllSceneImg(int argc, char** argv)
+void SetAllSceneImg()
 {
 	TickMeter  tm;
 	int position_num = 1;
@@ -62,16 +62,16 @@ void SetAllSceneImg(int argc, char** argv)
 	tm.start();
 
 	string path = "D:\\image\\image_use\\" + room_test3 + "\\position1" + "\\";
-	pos_set5_1.StitchSceneRange(VERTICAL_DOWN_20, 0, 181, METHOD2);
+	pos_set5_1.StitchSceneRange(VERTICAL_DOWN_20, 0, 156, METHOD2);
 	//pos_set5_1.StitchSceneAll(METHOD2);
 
 	tm.stop();
-	cout << "process time1=" << tm.getTimeSec() << " sec." << endl;
+	cout << "process time = " << tm.getTimeSec() << " sec." << endl;
 }
 
-void gameBuild(int argc, char** argv)
+void gameBuild()
 {
 	//SetResourceImgImg();
-	SetAllSceneImg(argc, argv);
+	SetAllSceneImg();
 	//SetAllClue();
 }

@@ -38,150 +38,42 @@ string& PositionImgSetting::get_room_name() {
 	return _room_name;
 }
 
-void PositionImgSetting::set_number(int number) {
+void PositionImgSetting::set_position_number(int number) {
 	_number = number;
 }
 
-int PositionImgSetting::get_number() {
+int PositionImgSetting::get_position_number() {
 	return _number;
 }
 
-Mat PositionImgSetting::get_image(int img_number) {
-	Mat img = imread("D:\\Repo\\image\\" + _room_name + "\\position" + to_string(_number) + "\\img" + to_string(img_number) + ".jpg");
-
-	return img;
-}
-
-vector< DMatch > PositionImgSetting::get_good_dist_matches(vector< DMatch > matches, int method){
-	double max_dist = 0;
-	double min_dist = 100;
-
-	//-- Quick calculation of max and min distances between keypoints
-	for (int i = 0; i < matches.size(); i++)
+int PositionImgSetting::img_capture(Mat img_original, int x, int y, int width, int height, Image &img_result)
+{
+	if (!img_original.data)
 	{
-		double dist = matches[i].distance;
-		if (dist < min_dist) min_dist = dist;
-		if (dist > max_dist) max_dist = dist;
+		cout << "ERROR: Input image is null. Cannot capture image!" << endl;
+		return -1;
 	}
-	//printf("-- Max dist : %f \n", max_dist);
-	//printf("-- Min dist : %f \n", min_dist);
 
-	//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
-	vector< DMatch > good_matches;
+	Rect rect;
+	Mat img_temp;
+	vector<KeyPoint> img_keypoints;
 
-	for (int i = 0; i < matches.size(); i++)
+	rect = Rect(x, y, width, height);
+	img_original(rect).copyTo(img_temp);
+	img_result.set_image(img_temp);
+
+	if (x > 0 || y > 0)
 	{
-		if (method == METHOD1 || method == METHOD3)
+		img_keypoints = img_result.keypoints();
+		cout << img_keypoints.size() << endl;
+		for (int i = 0; i < img_keypoints.size(); i++)
 		{
-			if (matches[i].distance < 6 * min_dist)
-			{
-				good_matches.push_back(matches[i]);
-			}
+			img_keypoints[i].pt.x += x;
+			img_keypoints[i].pt.y += y;
 		}
-		else
-		{
-			if (matches[i].distance < 7 * min_dist)
-			{
-				good_matches.push_back(matches[i]);
-			}
-		}
+		img_result.set_keypoints(img_keypoints);
 	}
-	return good_matches;
-}
-
-vector< DMatch > PositionImgSetting::get_correct_range_matches(vector <DMatch>  matches, Image img1, Image img2, int direction){
-	//look if the match is inside a defined area of the image
-	double tresholdDist_x = 0.6*img2.mat().cols;
-	double tresholdDist_y = 0.6*img2.mat().rows;
-
-	vector< DMatch > good_matches;
-	good_matches.reserve(matches.size());
-
-	for (int i = 0; i < matches.size(); i++)
-	{
-		//calculate local distance for each possible match
-		vector < KeyPoint > keypoints1 = img1.keypoints();
-		vector < KeyPoint > keypoints2 = img2.keypoints();
-
-		Point2f point1 = keypoints1[matches[i].queryIdx].pt;
-		Point2f point2 = keypoints2[matches[i].trainIdx].pt;
-
-		if (direction == STITCH2_LEFT)
-		{
-			//if (point2.x > img2.mat().cols - tresholdDist_x)	// img2.x > 0.4 * img2 width
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_RIGHT)
-		{
-			//if (point1.x>STITCH_SCREEN_WIDTH/3 && point2.x <tresholdDist_x)	//img1.x > (1/3)*img1 width, img2.x < 0.6 * img2 width
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_UP)
-		{
-			//if (point1.x>STITCH_SCREEN_WIDTH / 12 && point2.y > img2.mat().rows - tresholdDist_y)	//img1.x > (1/12)*img1 width, img2.y > 0.4 * img2 height
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_DOWN)
-		{
-			//if (point1.y>STITCH_SCREEN_HEIGHT*5 / 12 && point2.y < tresholdDist_y)		// img1.y > (5/12)*img1 height, img2.y < 0.6 * img2 height
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_LEFT_UP)
-		{
-			//if (point2.x > 0.2*img2.mat().cols && point2.y > 0.2*img2.mat().rows)
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_LEFT_DOWN)
-		{
-			//if (point1.y>STITCH_SCREEN_HEIGHT * 5 / 12/*point2.x > img2.mat().cols - tresholdDist_x && point2.y < tresholdDist_y*/)
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_RIGHT_UP)
-		{
-			//if (point1.x>(STITCH_SCREEN_WIDTH / 3)/*&& to.x >img2.mat().rows - tresholdDist_x */)	//img1.x > (1/3)*img1 width
-				good_matches.push_back(matches[i]);
-		}
-		else if (direction == STITCH2_RIGHT_DOWN)
-		{
-			//if (point1.x>STITCH_SCREEN_WIDTH / 3 && point1.y>STITCH_SCREEN_HEIGHT*5 / 12/* && to.x <tresholdDist_x && to.y < tresholdDist_y*/)	//img1.x > (1/3)*img1 width
-				good_matches.push_back(matches[i]);
-		}
-	}
-	return good_matches;
-}
-
-vector< DMatch > PositionImgSetting::get_correct_range_matches_vertical(vector <DMatch>  matches, Image img1, Image img2, int direction){
-	//look if the match is inside a defined area of the image
-	double tresholdDist = 0.6*img2.mat().rows;
-
-	vector< DMatch > good_matches;
-	good_matches.reserve(matches.size());
-
-	for (int i = 0; i < matches.size(); i++)
-	{
-		//calculate local distance for each possible match
-		vector < KeyPoint > keypoints1 = img1.keypoints();
-		vector < KeyPoint > keypoints2 = img2.keypoints();
-
-		Point2f from = keypoints1[matches[i].queryIdx].pt;
-		Point2f to = keypoints2[matches[i].trainIdx].pt;
-
-		if (direction == STITCH2_UP)
-		{
-			if (from.y > (img1.mat().rows - tresholdDist) && to.y < tresholdDist)
-			{
-				good_matches.push_back(matches[i]);
-			}
-		}
-		else
-		{
-			if (from.y < tresholdDist && to.y >(img2.mat().rows - tresholdDist))
-			{
-				good_matches.push_back(matches[i]);
-			}
-		}
-	}
-	return good_matches;
+	return 1;
 }
 
 void PositionImgSetting::symmetryTest(const vector<DMatch> matches1, const vector<DMatch> matches2, vector<DMatch> &symMatches)
@@ -199,6 +91,31 @@ void PositionImgSetting::symmetryTest(const vector<DMatch> matches1, const vecto
 			}
 		}
 	}
+}
+
+vector< DMatch > PositionImgSetting::get_good_dist_matches(vector< DMatch > matches, int min_scale){
+	double max_dist = 0;
+	double min_dist = 100;
+
+	//-- Quick calculation of max and min distances between keypoints
+	for (int i = 0; i < matches.size(); i++)
+	{
+		double dist = matches[i].distance;
+		if (dist < min_dist) min_dist = dist;
+		if (dist > max_dist) max_dist = dist;
+	}
+	//printf("-- Max dist : %f \n", max_dist);
+	//printf("-- Min dist : %f \n", min_dist);
+
+	//-- Use only "good" matches (i.e. whose distance is less than min_scale*min_dist )
+	vector< DMatch > good_matches;
+
+	for (int i = 0; i < matches.size(); i++)
+	{
+		if (matches[i].distance < min_scale * min_dist)
+			good_matches.push_back(matches[i]);
+	}
+	return good_matches;
 }
 
 void PositionImgSetting::draw_matches(Mat img1, Mat img2, vector< KeyPoint > keypoints1, vector< KeyPoint > keypoints2, vector< DMatch > matches, int number){
@@ -264,7 +181,8 @@ void PositionImgSetting::draw_2img_matches(Mat img_1, Mat img_2, int number){
 	cout<<"D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\Good Matches\\good_match" + to_string(number) + ".jpg"<<endl;
 }
 
-void PositionImgSetting::get_homography_matrix(Image img1, Image img2, vector< DMatch > matches1, Mat& H1){
+void PositionImgSetting::get_homography_matrix(Image img1, Image img2, vector< DMatch > matches1, Mat& H1)
+{
 	vector< Point2f > img_good1, img_good2;		//img1是不變的(central)，img2要貼到img1上
 
 	for (size_t i = 0; i < matches1.size(); i++)
@@ -280,7 +198,8 @@ void PositionImgSetting::get_homography_matrix(Image img1, Image img2, vector< D
 	H1 = findHomography(img_good2, img_good1, CV_RANSAC);
 }
 
-Mat PositionImgSetting::get_blending_matrix(Mat left, Mat right, Mat mask){
+Mat PositionImgSetting::get_blending_matrix(Mat left, Mat right, Mat mask)
+{
 	//做pyramid blending讓光線柔和
 	Mat_<Vec3f> l, r;
 	left.convertTo(l, CV_32F, 1.0 / 255.0);//Vec3f表示有三通道，即 l[row][column][depth]
@@ -296,7 +215,8 @@ Mat PositionImgSetting::get_blending_matrix(Mat left, Mat right, Mat mask){
 	return blend_mat;
 }
 
-Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat H1, vector<int> &fill){
+Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat H1, vector<int> &fill)
+{
 	// Use the Homography Matrix to warp the images
 	Mat left, right,result;
 	Mat mask(STITCH_SCREEN_HEIGHT, STITCH_SCREEN_WIDTH, CV_8U, Scalar(0));
@@ -310,11 +230,11 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 	point2.at<double>(1, 0) = 0.0;
 	point2.at<double>(2, 0) = 1.0;
 
-	point3.at<double>(0, 0) = img2.cols;	//img2左下角
+	point3.at<double>(0, 0) = img2.cols;	//img2右下角
 	point3.at<double>(1, 0) = img2.rows;
 	point3.at<double>(2, 0) = 1.0;
 
-	point4.at<double>(0, 0) = 0.0;			//img2右下角
+	point4.at<double>(0, 0) = 0.0;			//img2左下角
 	point4.at<double>(1, 0) = img2.rows;
 	point4.at<double>(2, 0) = 1.0;
 
@@ -343,14 +263,6 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 	{
 		warpPerspective(img2, left, H1, Size(STITCH_SCREEN_WIDTH, STITCH_SCREEN_HEIGHT));
 		mask(Range::all(), Range(0, x2-300)) = 1.0;
-
-		/*rook_points[0][0] = Point(x1-50, y1-50);
-		rook_points[0][1] = Point(x2-300, y2-50);
-		rook_points[0][2] = Point(x3-300, y3+50);
-		rook_points[0][3] = Point(x4-50, y4+50);
-
-		const Point* ppt[1] = { rook_points[0] };
-		fillPoly(mask, ppt, npt, 1, Scalar(1), lineType);*/
 
 		if (x1 < 0 && x4 < 0) fill[0] = 1;
 		cout <<"fill[0] = "<< fill[0] << endl;
@@ -444,13 +356,12 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 	{
 		warpPerspective(img2, left, H1, Size(STITCH_SCREEN_WIDTH, STITCH_SCREEN_HEIGHT));
 		rook_points[0][0] = Point(x1 + 200, y1 + 200);
-		rook_points[0][1] = Point(x2, y2 + 200);
+		rook_points[0][1] = Point(x2 - 10, y2 + 200);
 		rook_points[0][2] = Point(x3 - 10, y3);
 		rook_points[0][3] = Point(x4 + 200, y4 );
 
 		const Point* ppt[1] = { rook_points[0] };
 		fillPoly(mask, ppt, npt, 1, Scalar(1), lineType);
-
 		if (x2 > STITCH_SCREEN_WIDTH && x3 >STITCH_SCREEN_WIDTH) fill[5] = 1;
 		cout << "fill[5] = " << fill[5] << endl;
 
@@ -461,49 +372,31 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 	return result;
 }
 
+
 //img2會貼到img1
-Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction, vector<int> &fill){
-	assert(img_1.rows>0 && img_2.rows>0);
-	Rect rect1, rect2;
-	Mat roiImage1, roiImage2;
+Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction, vector<int> &fill)
+{
+	assert(img_1.rows > 0 && img_2.rows > 0);
+	//Rect rect1, rect2;
+	//Mat roiImage1, roiImage2;
 	Image img1, img2;
-	vector<KeyPoint> img1_keypoints, img2_keypoints;
+	//vector<KeyPoint> img1_keypoints, img2_keypoints;
 	
 	if (direction == STITCH2_LEFT)	//img1.x<(2/3)*img1 wdith, img2.x>0.3*img2 width
 	{
-		rect1=Rect(0, 0, int(STITCH_SCREEN_WIDTH*2/3), STITCH_SCREEN_HEIGHT);
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		Rect rect2(int(STITCH_IMG_WIDTH * 0.3), 0, int(STITCH_IMG_WIDTH * 0.7), STITCH_IMG_HEIGHT);
-		img_2(rect2).copyTo(roiImage2);
-		img2.set_image(roiImage2);
-
-		img2_keypoints = img2.keypoints();
-		for (int i = 0; i < img2.keypoints().size(); i++)
-			img2_keypoints[i].pt.x += int(STITCH_IMG_WIDTH * 0.3);
-
-		img2.set_keypoints(img2_keypoints);
+		img_capture(img_1, 0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), STITCH_SCREEN_HEIGHT, img1);
+		img_capture(img_2, int(STITCH_IMG_WIDTH * 0.3), 0, int(STITCH_IMG_WIDTH * 0.7), STITCH_IMG_HEIGHT, img2);
 	}
 	else if (direction == STITCH2_RIGHT)	//img1.x > (1/3)*img1 width, img2.x < 0.7 * img2 width
 	{
-		rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), STITCH_SCREEN_HEIGHT);
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH * 1 / 3);
-
-		img1.set_keypoints(img1_keypoints);
-
-		rect2 = Rect(0, 0, int(STITCH_IMG_WIDTH * 0.7), STITCH_IMG_HEIGHT);
-		img_2(rect2).copyTo(roiImage2);
-		img2.set_image(roiImage2);
+		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), STITCH_SCREEN_HEIGHT, img1);
+		img_capture(img_2, 0, 0, int(STITCH_IMG_WIDTH * 0.7), STITCH_IMG_HEIGHT, img2);
 	}
 	else if (direction == STITCH2_UP)	//(1/6)*img1 width<img1.x < (5/6)*img1 width, img1.y < (7/12)*img1 height, img2.y > 0.4 * img2 height
 	{
-		rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), 0, int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 6), 0, int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		img_capture(img_2, 0, int(STITCH_IMG_HEIGHT*0.4), STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6), img2);
+		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), 0, int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
 		img1.set_image(roiImage1);
 
@@ -521,11 +414,13 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 		for (int i = 0; i < img2.keypoints().size(); i++)
 			img2_keypoints[i].pt.y += int(STITCH_IMG_HEIGHT*0.4);
 
-		img2.set_keypoints(img2_keypoints);
+		img2.set_keypoints(img2_keypoints);*/
 	}
 	else if (direction == STITCH2_DOWN)	// img1.y > (5/12)*img1 height, img2.y < 0.6 * img2 height
 	{
-		rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 6), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		img_capture(img_2, 0, 0, STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6), img2);
+		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
 		img1.set_image(roiImage1);
 
@@ -539,18 +434,20 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 
 		rect2 = Rect(0, 0, STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6));
 		img_2(rect2).copyTo(roiImage2);
-		img2.set_image(roiImage2);
+		img2.set_image(roiImage2);*/
 	}
 	else if (direction == STITCH2_LEFT_UP)	//img1.x<(2/3)*img1 width, img1.y<(7/12)*img1 height
 	{
-		rect1 = Rect(0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, 0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		/*rect1 = Rect(0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
+		img1.set_image(roiImage1);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_LEFT_DOWN)	//img1.x<(2/3)*img1 width, img1.y > (5/12)*img1 height
 	{
-		rect1 = Rect(0, int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, 0, int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		/*rect1 = Rect(0, int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
 		img1.set_image(roiImage1);
 		
@@ -558,12 +455,13 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 		for (int i = 0; i < img1.keypoints().size(); i++)
 			img1_keypoints[i].pt.y += int(STITCH_SCREEN_HEIGHT * 5 / 12);
 
-		img1.set_keypoints(img1_keypoints);
+		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_RIGHT_UP)	//img1.x > (1/3)*img1 width, img1.y<(7/12)*img1 height
 	{
-		rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
 		img1.set_image(roiImage1);
 
@@ -571,12 +469,13 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 		for (int i = 0; i < img1.keypoints().size(); i++)
 			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH * 1 / 3);
 
-		img1.set_keypoints(img1_keypoints);
+		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_RIGHT_DOWN)	//	//img1.x > (1/3)*img1 width, img1.y > (5/12)*img1 height
 	{
-		rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
+		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 3), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
+		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
 		img_1(rect1).copyTo(roiImage1);
 		img1.set_image(roiImage1);
 
@@ -586,47 +485,42 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH / 3);
 			img1_keypoints[i].pt.y += int(STITCH_SCREEN_HEIGHT * 5 / 12);
 		}
-		img1.set_keypoints(img1_keypoints);
+		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 
 	FlannBasedMatcher matcher;
-	vector<DMatch>matches1,matches1_1, matches2_1;
-	/*if (img1.descriptors().type() != CV_32F) {
-		//img1.descriptors().convertTo(img1.descriptors(), CV_32F);
-		cout << "haha1" << endl;
-	}
-	if (img2.descriptors().type() != CV_32F) {
-		//img2.descriptors().convertTo(img2.descriptors(), CV_32F);
-		cout << "haha2" << endl;
-	}*/
+	vector<DMatch> matches1, matches2, good_matches;
+
 	matcher.match(img1.descriptors(), img2.descriptors(), matches1);
-	matcher.match(img2.descriptors(), img1.descriptors(), matches1_1);
+	matcher.match(img2.descriptors(), img1.descriptors(), matches2);
 	draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), matches1, 1);
 	draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), matches1, 2);
-
-	vector<DMatch>good_matches1;
 
 	if (method == METHOD1 || method == METHOD2)
 	{
 		//look for symmetry matches
-		vector< DMatch > sym_matches1;
+		vector< DMatch > sym_matches;
 
-		symmetryTest(matches1, matches1_1, sym_matches1);
-		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), sym_matches1, 3);
-		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), sym_matches1, 4);
+		symmetryTest(matches1, matches2, sym_matches);
+		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), sym_matches, 3);
+		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), sym_matches, 4);
 
 		//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
-		good_matches1 = get_good_dist_matches(sym_matches1, method);
-		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), good_matches1, 5);
-		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), good_matches1, 6);
+		if (method == METHOD1)
+			good_matches = get_good_dist_matches(sym_matches, 6);
+		else
+			good_matches = get_good_dist_matches(sym_matches, 7);
+
+		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), good_matches, 5);
+		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), good_matches, 6);
 	}
 	else
 	{
 		//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
-		good_matches1 = get_good_dist_matches(matches1, METHOD3);
-		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), good_matches1, 7);
-		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), good_matches1, 8);
+		good_matches = get_good_dist_matches(matches1, 6);
+		draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), good_matches, 7);
+		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), good_matches, 8);
 	}
 
 	//找接近圖片重疊範圍的match(最兩邊的不要)
@@ -636,7 +530,7 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 
 	// Find the Homography Matrix from best matches
 	Mat H1;
-	get_homography_matrix(img1, img2,  good_matches1, H1);
+	get_homography_matrix(img1, img2,  good_matches, H1);
 	//cout << H1 << endl;
 
 	// Use the Homography Matrix to warp the images
@@ -647,92 +541,6 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 	//imshow("stitch3_result",stitch3_result);
 	return stitch2_result;
 }
-
-
-/*Mat PositionImgSetting::stitch3(Image img1, Image img2, Image img3, int method, int direction){
-
-	FlannBasedMatcher matcher;
-	vector<DMatch>matches1, matches2, matches1_1, matches2_1;
-	matcher.match(img1.descriptors(), img2.descriptors(), matches1);
-	matcher.match(img2.descriptors(), img3.descriptors(), matches2);
-	matcher.match(img2.descriptors(), img1.descriptors(), matches1_1);
-	matcher.match(img3.descriptors(), img2.descriptors(), matches2_1);
-	draw_matches(img1, img2, matches1, 1);
-	draw_matches(img2, img3, matches2, 2);
-
-	vector<DMatch>good_matches1, good_matches2;
-
-	if (method == METHOD1 || method == METHOD2)
-	{
-		//look for symmetry matches
-		vector< DMatch > sym_matches1, sym_matches2;
-
-		symmetryTest(matches1, matches1_1, sym_matches1);
-		symmetryTest(matches2, matches2_1, sym_matches2);
-		draw_matches(img1, img2, sym_matches1, 3);
-		draw_matches(img2, img3, sym_matches2, 4);
-
-		//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
-		if (method == METHOD1)
-		{
-			good_matches1 = get_good_dist_matches(sym_matches1, METHOD1);
-			good_matches2 = get_good_dist_matches(sym_matches2, METHOD1);
-		}
-		else
-		{
-			good_matches1 = get_good_dist_matches(sym_matches1, METHOD2);
-			good_matches2 = get_good_dist_matches(sym_matches2, METHOD2);
-		}
-		draw_matches(img1, img2, good_matches1, 5);
-		draw_matches(img2, img3, good_matches2, 6);
-	}
-	else
-	{
-		//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
-		good_matches1 = get_good_dist_matches(matches1, METHOD3);
-		good_matches2 = get_good_dist_matches(matches2, METHOD3);
-		draw_matches(img1, img2, good_matches1, 3);
-		draw_matches(img2, img3, good_matches2, 4);
-	}
-
-	//找接近圖片重疊範圍的match(最兩邊的不要)
-	vector<DMatch>best_matches1, best_matches2;
-
-	if (direction == STITCH3_HORIZON)
-	{
-		best_matches1 = get_correct_range_matches_horizon(good_matches1, img1, img2, MATCH_LEFT_TO_RIGHT);
-		best_matches2 = get_correct_range_matches_horizon(good_matches2, img2, img3, MATCH_LEFT_TO_RIGHT);
-	}
-	else
-	{
-		best_matches1 = get_correct_range_matches_vertical(good_matches1, img1, img2, MATCH_LEFT_TO_RIGHT);
-		best_matches2 = get_correct_range_matches_vertical(good_matches2, img2, img3, MATCH_LEFT_TO_RIGHT);
-	}
-	draw_matches(img1, img2, best_matches1, 7);
-	draw_matches(img2, img3, best_matches2, 8);
-
-	// Find the Homography Matrix from best matches
-	Mat H1, H2;
-
-	if (direction == STITCH3_HORIZON)
-		get_homography_matrix(img1, img2, img3, best_matches1, best_matches2, STITCH3_HORIZON, H1, H2);
-	else
-		get_homography_matrix(img1, img2, img3, best_matches1, best_matches2, STITCH3_VERTICAL, H1, H2);
-
-	cout << H1 << endl << H2 << endl;
-
-	// Use the Homography Matrix to warp the images
-	Mat stitch3_result;
-
-	if (direction == STITCH3_HORIZON)
-		stitch3_result = get_stitch_matrix(img1, img2, img3, STITCH3_HORIZON, H1, H2);
-	else
-		stitch3_result = get_stitch_matrix(img1, img2, img3, STITCH3_VERTICAL, H1, H2);
-
-	cout << "stitch3 success" << endl;
-	//imshow("stitch3_result",stitch3_result);
-	return stitch3_result;
-}*/
 
 
 int PositionImgSetting::getImgAmount(string target_folder){
@@ -760,7 +568,6 @@ int PositionImgSetting::getImgAmount(string target_folder){
 
 	return count-2;
 }
-
 
 void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int stitch_part){
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
@@ -802,7 +609,6 @@ void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int sti
 	img_r = imread(path + to_string(vertical_angle) + "_choosen\\small\\" + to_string(right_img) + ".jpg");
 
 }
-
 
 void PositionImgSetting::StitchPart(int img_number, int vertical_angle, int method, int stitch_part, vector<int> &fill, Mat& stitch)
 {
@@ -920,9 +726,29 @@ void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int met
 	fclose(fp);
 }
 
-void PositionImgSetting::StitchSceneRange(int vertical_angle, int img_number1, int img_number2, int method){
+
+
+/* StitchSceneRange: Create the stitched scenes from img_number1 to img_number2.
+*
+*  vertical_angle - choose depression angle(0 degree or 20 degree)
+*  img_number1 - the scene you want to start. (0~179)
+*  img_number2 - the scene you want to end. (0~179)
+*  methed - choose one of the stitching method.
+*  (method1 - symmetric test + distance <= 6*min_dist
+*   method2 - symmetric test + distance <= 7*min_dist
+*   method3 - distance <= 6*min_dist)
+*
+*/
+int PositionImgSetting::StitchSceneRange(int vertical_angle, int img_number1, int img_number2, int method){
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 	cout << "_room_naem = " << _room_name << endl;
+
+	if (img_number1 < 0 || img_number1 > 179 || img_number2 < 0 || img_number2 > 179)
+	{
+		cout << "ERROR: The number of scene is out of range!" << endl;
+		return -1;
+	}
+
 	if (vertical_angle == VERTICAL_CENTRAL)
 	{
 		img_amount_top = getImgAmount(path + to_string(VERTICAL_UP_20) + "_choosen\\small\\");
@@ -940,8 +766,18 @@ void PositionImgSetting::StitchSceneRange(int vertical_angle, int img_number1, i
 	{
 		StitchScene(vertical_angle, n, method);
 	}
+	return 1;
 }
 
+
+/* StitchSceneAll: Create all the stitched scenes. Total 360 images.
+*  
+*  methed - choose one of the stitching method.
+*  (method1 - symmetric test + distance <= 6*min_dist
+*   method2 - symmetric test + distance <= 7*min_dist
+*   method3 - distance <= 6*min_dist)
+*
+*/
 void PositionImgSetting::StitchSceneAll(int method){
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 	cout <<"_room_naem = "<< _room_name << endl;
@@ -964,10 +800,6 @@ void PositionImgSetting::StitchSceneAll(int method){
 	}
 }
 
-Mat PositionImgSetting::GetStitchScene(int img_number){
-	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\img" + to_string(img_number) + ".jpg";
-	return imread(path);
-}
 
 /*Mat PositionImgSetting::get_screen(int angle_horizon, int angle_vertical){
 int stitch9_number;
