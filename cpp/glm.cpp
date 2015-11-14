@@ -770,6 +770,9 @@ glmSecondPass(GLMmodel* model, FILE* file)
 /* public functions */
 
 
+
+
+
 /* glmUnitize: "unitize" a model by translating it to the origin and
 * scaling it to fit in a unit cube around the origin.  Returns the
 * scalefactor used.
@@ -823,9 +826,9 @@ glmUnitize(GLMmodel* model)
 
 	/* translate around center then scale */
 	for (i = 1; i <= model->numvertices; i++) {
-		model->vertices[3 * i + 0] -= cx-w/2;
-		model->vertices[3 * i + 1] -= cy+h/2;
-		model->vertices[3 * i + 2] -= cz - glmAbs(minz);
+		model->vertices[3 * i + 0] -= cx/*-w/2*/;
+		model->vertices[3 * i + 1] -= cy/*+h/2*/;
+		model->vertices[3 * i + 2] -= cz /*-10*glmAbs(minz)*/;
 		model->vertices[3 * i + 0] *= scale;
 		model->vertices[3 * i + 1] *= scale;
 		model->vertices[3 * i + 2] *= scale;
