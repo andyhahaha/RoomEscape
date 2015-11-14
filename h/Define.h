@@ -56,7 +56,7 @@
 #define CLUE_FILE_END 111111	//the end of one clue file
 
 //clue state code
-#define DRAW_ON_SCENE 0
+#define SHOW_ON_SCENE 0
 #define NOT_SHOW 1
 #define SHOW_IN_CLUEBOX 2
 #define CHANGE_IMG 3
