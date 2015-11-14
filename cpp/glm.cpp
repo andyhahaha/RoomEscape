@@ -15,6 +15,7 @@ coordinate generation (spheremap and planar projections) + more.
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include <string.h>
 #include <assert.h>
 #include "../h/glm.h"
@@ -770,6 +771,119 @@ glmSecondPass(GLMmodel* model, FILE* file)
 /* public functions */
 
 
+
+Vector<Point3f>
+glmPoint(GLMmodel* model)
+{
+	GLuint  i;
+	GLfloat maxx, minx, maxy, miny, maxz, minz;
+	GLfloat cx, cy, cz, w, h, d;
+	Vector<Point3f> corner;
+
+	assert(model);
+	assert(model->vertices);
+
+	/* get the max/mins */
+	maxx = minx = model->vertices[3 + 0];
+	maxy = miny = model->vertices[3 + 1];
+	maxz = minz = model->vertices[3 + 2];
+	for (i = 1; i <= model->numvertices; i++) {
+		if (maxx < model->vertices[3 * i + 0])
+			maxx = model->vertices[3 * i + 0];
+		if (minx > model->vertices[3 * i + 0])
+			minx = model->vertices[3 * i + 0];
+
+		if (maxy < model->vertices[3 * i + 1])
+			maxy = model->vertices[3 * i + 1];
+		if (miny > model->vertices[3 * i + 1])
+			miny = model->vertices[3 * i + 1];
+
+		if (maxz < model->vertices[3 * i + 2])
+			maxz = model->vertices[3 * i + 2];
+		if (minz > model->vertices[3 * i + 2])
+			minz = model->vertices[3 * i + 2];
+	}
+
+	/* calculate model width, height, and depth */
+	w = glmAbs(maxx-minx);
+	h = glmAbs(maxy-miny);
+	d = glmAbs(maxz-minz);
+
+	/* calculate center of the model */
+	cx = (maxx + minx) / 2.0;
+	cy = (maxy + miny) / 2.0;
+	cz = (maxz + minz) / 2.0;
+
+	/*
+	
+			c3-------c2
+	        |         |
+	        |         |
+	c4--------c1      |
+	 |		|  |      |
+	 |		|  |      |
+	 |      |  |      |
+	 |		c7 |------c6
+     |         |
+	 |	       |
+	c8---------c5
+
+
+	
+	
+	*/
+
+
+
+	Point3f c1, c2, c3, c4, c5, c6, c7, c8;
+	c1.x = cx + w / 2;
+	c2.x = cx + w / 2;
+	c5.x = cx + w / 2;
+	c6.x = cx + w / 2;
+
+	c4.x = cx - w / 2;
+	c3.x = cx - w / 2;
+	c8.x = cx - w / 2;
+	c7.x = cx - w / 2;
+
+	c1.y = cy + h / 2;
+	c2.y = cy + h / 2;
+	c3.y = cy + h / 2;
+	c4.y = cy + h / 2;
+
+	c5.y = cy - h / 2;
+	c6.y = cy - h / 2;
+	c7.y = cy - h / 2;
+	c8.y = cy - h / 2;
+
+	c1.z = cz + d / 2;
+	c5.z = cz + d / 2;
+	c4.z = cz + d / 2;
+	c8.z = cz + d / 2;
+
+	c2.z = cz - d / 2;
+	c6.z = cz - d / 2;
+	c7.z = cz - d / 2;
+	c3.z = cz - d / 2;
+	corner.push_back(c1);
+	corner.push_back(c2);
+	corner.push_back(c3);
+	corner.push_back(c4);
+	corner.push_back(c5);
+	corner.push_back(c6);
+	corner.push_back(c7);
+	corner.push_back(c8);
+	cout << "c1 = "<<c1 << endl;
+	cout << "c2 = " << c2 << endl;
+	cout << "c3 = " << c3 << endl;
+	cout << "c4 = " << c4 << endl;
+	cout << "c5 = " << c5 << endl;
+	cout << "c6 = " << c6 << endl;
+	cout << "c7 = " << c7 << endl;
+	cout << "c8 = " << c8 << endl;
+	return corner;
+
+}
 
 
 
