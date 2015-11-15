@@ -14,7 +14,7 @@ coordinate generation (spheremap and planar projections) + more.
 #define _GLM_H_
 
 #include <GL/glut.h>
-
+#include "opencv2/nonfree/nonfree.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265
@@ -26,7 +26,8 @@ coordinate generation (spheremap and planar projections) + more.
 #define GLM_TEXTURE  (1 << 2)		/* render with texture coords */
 #define GLM_COLOR    (1 << 3)		/* render with colors */
 #define GLM_MATERIAL (1 << 4)		/* render with materials */
-
+using namespace cv;
+using namespace std;
 
 /* GLMmaterial: Structure that defines a material in a model.
 */
@@ -90,6 +91,8 @@ typedef struct _GLMmodel {
 
 } GLMmodel;
 
+
+Vector<Point3f> glmPoint(GLMmodel* model);
 
 /* glmUnitize: "unitize" a model by translating it to the origin and
 * scaling it to fit in a unit cube around the origin.  Returns the

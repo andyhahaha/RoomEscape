@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-
+#include <iostream>
 #include "glut.h"
 #include "..\..\..\..\RoomEscape\h\glm.h"
 
@@ -55,51 +55,17 @@ int old_rot_z = 0;
 #define offset 1.5
 float cam_z = 0;
 
-
-/* showDialog: Show dialog box and dialog content.
-*
-* text - text 
-* length - length of text string
-*/
+GLint    viewport[4];
+GLdouble modelview[16];
+GLdouble projection[16];
 
 
-void showDialog(const char *text, int length){
-	glColor3f(0, 0, 0);
-	glMatrixMode(GL_PROJECTION);					// change the current matrix to PROJECTION
-	double matrix[16];								// 16 doubles in stack memory
-	glGetDoublev(GL_PROJECTION_MATRIX, matrix);		// get the values from PROJECTION matrix to local variable
-	glLoadIdentity();								// reset PROJECTION matrix to identity matrix
-	glOrtho(0, width, 0, height, -5, 5);			// orthographic perspective
-	glMatrixMode(GL_MODELVIEW);						// change current matrix to MODELVIEW matrix again
-	glLoadIdentity();								// reset it to identity matrix
-	glPushMatrix();									// push current state of MODELVIEW matrix to stack
-	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D
-
-	for (int i = 0; i<length; i++){
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font
-	}
-
-	glPopMatrix();									// get MODELVIEW matrix value from stack
-	glMatrixMode(GL_PROJECTION);					// change current matrix mode to PROJECTION
-	glLoadMatrixd(matrix);							// reset
-	glMatrixMode(GL_MODELVIEW);						// change current matrix mode to MODELVIEW
-
-	// draw 透明框框
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_BLEND);								//Enable blending.
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-
-	glBegin(GL_QUADS);
-	glColor4f(0.62, 0.6, 0.55, 0.7);
-	glVertex3f(-0.9, -0.5, 0.0);
-	glVertex3f(-0.9, -0.5+(150.0/height), 0.0);
-	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5 + (150.0 / height), 0.0);
-	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5, 0.0);
-	glEnd();
 
 
-}
+
+
+
+
 
 
 /* DrawWall: Draw four virtual wall to pretend room wall.
@@ -166,22 +132,24 @@ void DrawWall(){
 *
 */
 
-GLuint drawObject(GLMmodel *glm_model, char *path, GLfloat trans_x, GLfloat trans_y, GLfloat trans_z, GLfloat rot_x, GLfloat rot_y, GLfloat rot_z, GLfloat scale){
+GLuint drawObject(GLMmodel *model, Clue &clue, char *path, GLfloat trans_x, GLfloat trans_y, GLfloat trans_z, GLfloat rot_x, GLfloat rot_y, GLfloat rot_z, GLfloat scale){
 
-	glm_model = glmReadOBJ(path);				//read obj file
+	model = glmReadOBJ(path);				//read obj file
 
-	glmUnitize(glm_model);						//unitize object to origin and umit cube
+	glmUnitize(model);						//unitize object to origin and umit cube
 
-	glmScale(glm_model, scale);
-	glmTranslate(glm_model, trans_x, trans_y, trans_z);
-	glmRotation(glm_model, 0, rot_x);
-	glmRotation(glm_model, 1, rot_y);
-	glmRotation(glm_model, 2, rot_z);
+	glmScale(model, scale);
+	glmTranslate(model, trans_x, trans_y, trans_z);
+	glmRotation(model, 0, rot_x);
+	glmRotation(model, 1, rot_y);
+	glmRotation(model, 2, rot_z);
+	clue.set_obj_corner(glmPoint(model));
 
-	glmFacetNormals(glm_model);
-	glmVertexNormals(glm_model, 90);
+		
+	glmFacetNormals(model);
+	glmVertexNormals(model, 90);
 
-	return glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+	return glmList(model, GLM_MATERIAL | GLM_SMOOTH);
 
 }
 
@@ -218,13 +186,68 @@ void DrawClueHit(){
 }
 
 
+void ClueHit(int x, int y){
+	vector<Clue>::iterator it_clue;
+
+	
+	GLdouble  winX, winY, winZ;
+	GLdouble posX, posY, posZ;
+	int screenX, screenY;
+	int maxX=-10000, minX=10000, maxY=-10000, minY=10000;
+	int i;
+	//glGetIntegerv(GL_VIEWPORT, viewport);
+	//glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+	//glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+
+	for (it_clue = ClueOnScreen.begin(); it_clue != ClueOnScreen.end(); ++it_clue) {
+		maxX = -10000;
+		minX = 10000;
+		maxY = -10000;
+		minY = 10000;
+		for (i = 0; i < 8; i++){
+			posX = it_clue->obj_corner()[i].x;
+			posY = it_clue->obj_corner()[i].y;
+			posZ = it_clue->obj_corner()[i].z;
+			gluProject(posX, posY, posZ, modelview, projection, viewport, &winX, &winY, &winZ);
+			screenX = winX;
+			screenY = viewport[3] - (float)winY;
+			if (maxX < screenX)
+				maxX = screenX;
+			if (maxY < screenY)
+				maxY = screenY;
+			if (minX > screenX)
+				minX = screenX;
+			if (minY > screenY)
+				minY = screenY;
+		}
+		if (minX < 0)
+			minX = width + 1;
+		if (minY < 0)
+			minY = height + 1;
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		cout << "clue = " << it_clue->clue_name() << endl;
+		cout << "maxX = " << maxX << endl;
+		cout << "minX = " << minX << endl;
+		cout << "maxY = " << maxY << endl;
+		cout << "minY = " << minY << endl;
+		
+
+		if (x <= maxX && x >= minX && y <= maxY && y >=minY){
+
+			clueBox.InsertItem(*it_clue);
+			cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
+		}
+	}
+}
+
+
 
 /* WindowSize: Drawback function return winndow size.
 *
 * w - window width.
 * h - window height.
 */
-
 
 void WindowSize(int w, int h)
 {
@@ -234,7 +257,7 @@ void WindowSize(int w, int h)
 	glViewport(0, 0, w, h);            //當視窗長寬改變時，畫面也跟著變
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-10, 10, -10, 10, -10, 10);      //正交投影
+	//glOrtho(-10, 10, -10, 10, -10, 10);      //正交投影
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -255,43 +278,26 @@ void mouse(int button, int state, int x, int y)
 	{
 		// Each wheel event reports like a button click, GLUT_DOWN then GLUT_UP
 		if (state == GLUT_UP) return; // Disregard redundant GLUT_UP events
-		if (button == 3){
-
+		if (button == 3)
+		{
 			printf("Scroll %s At %d %d\n", "Up", x, y);
 			cam_z -= 0.5;
 			glutPostRedisplay();
 		}
-
-		else if (button == 4){
-
+		else if (button == 4)
+		{
 			printf("Scroll %s At %d %d\n", "Down", x, y);			
 			cam_z += 0.5;
-
 			glutPostRedisplay();
 		}
 	}
-	else if (state == GLUT_DOWN){  // normal button event
+	else if (state == GLUT_DOWN)	// normal button event
+	{  
 		printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
-
-
-		vector<Clue>::iterator it_clue;
-
-		int clue_col, clue_row, clue_width, clue_height;
-
-		for (it_clue = ClueOnScreen.begin(); it_clue != ClueOnScreen.end(); ++it_clue) {
-			clue_col = (it_clue->location_col() + 1) / 2 * width;
-			clue_row = height - (it_clue->location_row() + 1) / 2 * height;
-			clue_width = it_clue->width() / 2 * width;
-			clue_height = it_clue->height() / 2 * height;
-			if (x <= clue_col + clue_width && x >= clue_col && y <= clue_row + clue_height && y >= clue_row){
-
-				clueBox.InsertItem(*it_clue);
-			}
-
-		}
-
-
+		glutPostRedisplay();
+		ClueHit(x,y);
 	}
+
 	if (state)
 	{
 		record_x += x - old_rot_x;
@@ -316,8 +322,6 @@ void mouse(int button, int state, int x, int y)
 * y - click coordinate y.
 */
 
-
-
 void MotionMouse(int x, int y)
 {
 	rot_x = x - old_rot_x;
@@ -335,13 +339,11 @@ void prepare_lighting()
 {
 	theta = fmodf(theta, 2 * G_PI);
 	phi = fmodf(phi, 2 * G_PI);
-	cout << "theta = " << theta << endl;
-	cout << "phi = " << phi << endl;
+	//cout << "theta = " << theta << endl;
+	//cout << "phi = " << phi << endl;
 	//GLenum lightSource = GL_LIGHT0;
 
-
 	//glEnable(lightSource);
-	
 
 	float mat_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
@@ -357,8 +359,8 @@ void prepare_lighting()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glEnable(GL_LIGHT0);
-
 }
+
 /* keyboard: Processed keyboard signal.
 *
 * key - key value.
@@ -483,16 +485,14 @@ void display()
 		0, 0, cam_z,
 		sinf(float(scence_num * 2) / 180 * G_PI), 0, -cosf(float(scence_num * 2) / 180 * G_PI),
 		0, 1, 0);
-	cout << "cam_z = " << cam_z << endl;
+	//cout << "cam_z = " << cam_z << endl;
 
 	/* rotate all 3D models*/
-	glRotatef((float)rot_y + (float)record_y, 1.0, 0.0, 0.0);//上下滑  以x軸當旋轉軸 
-	glRotatef((float)rot_x + (float)record_x, 0.0, 1.0, 0.0);//左右滑  以y軸當旋轉軸 
+	//glRotatef((float)rot_y + (float)record_y, 1.0, 0.0, 0.0);//上下滑  以x軸當旋轉軸 
+	//glRotatef((float)rot_x + (float)record_x, 0.0, 1.0, 0.0);//左右滑  以y軸當旋轉軸 
 
 	/* convert opengl coordinate to screen coordinate*/
-	GLint    viewport[4];
-	GLdouble modelview[16];
-	GLdouble projection[16];
+
 	GLdouble  winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 
@@ -500,15 +500,7 @@ void display()
 	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
 	glGetDoublev(GL_PROJECTION_MATRIX, projection);
 
-	posX = -2.2 * dist;
-	posY = 4 * dist + offset;
-	posZ = -3 * dist;
-	//glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-	gluProject(posX, posY, posZ, modelview, projection, viewport, &winX, &winY, &winZ);
-
-	int yy = viewport[3] - (float)winY;
-	cout << "x = " << winX << endl << "y = " << yy << endl;
-
+	
 	/*light*/
 	prepare_lighting();
 
@@ -521,8 +513,8 @@ void display()
 	/*draw other game interface view*/
 	DrawClueHit();
 	DrawWall();
-	string text = "andyhahayayaya yoyoyo";
-	showDialog(text.data(), text.size());
+	string text = "andyha yoyoyo";
+	drawDialog(text.data(), text.size(),width,height);
 	clueBox.show_clue_box(clueBox_text);
 	clueBox.show_clue(width, height);
 
@@ -546,15 +538,14 @@ void clueSetting(){
 	AllClue.push_back(clue1);
 	AllClue.push_back(clue2);
 	AllClue.push_back(clue3);
+	
+
+	list_id.push_back(drawObject(glm_model,clue1, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\key.obj", -2*dist, 1*dist, -3*dist , 0, 0, 0, 1.0));
+	list_id.push_back(drawObject(glm_model, clue2, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\teddy.obj", -0.5*dist, 0.5*dist, -3 * dist, 0, 90, 0, 2.0));
+	list_id.push_back(drawObject(glm_model, clue3, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\pillow.obj", 0, 0, -3 * dist, 0, 0, 0, 10.0));
 	ClueOnScreen.push_back(clue1);
 	ClueOnScreen.push_back(clue2);
 	ClueOnScreen.push_back(clue3);
-
-
-	list_id.push_back(drawObject(glm_model, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\key.obj", -1*dist, 1*dist, -3*dist , 0, 0, 0, 1.0));
-	list_id.push_back(drawObject(glm_model, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\teddy.obj", -0.5*dist, 0.5*dist, -3 * dist, 0, 90, 0, 2.0));
-	list_id.push_back(drawObject(glm_model, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\pillow.obj", 0, 0, -3 * dist, 0, 0, 0, 10.0));
-
 }
 
 void initializeOpenGL()
@@ -579,22 +570,13 @@ void initializeOpenGL()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	// Load background image
-	
 	clueBox_text = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\paper_texture2.png");
-
-
-
-
-
 
 	// Set light
 	prepare_lighting();
 
 	//clue setting
 	clueSetting();
-
-
-
 }
 
 void initializeGLUT(int argc, char** argv){
@@ -611,21 +593,12 @@ void initializeGLUT(int argc, char** argv){
 	glutMouseFunc(mouse);
 	glutMotionFunc(MotionMouse);
 
-
-
-
 }
 
 void gameRun(int argc, char** argv)
 {
-
 	initializeGLUT(argc, argv);
-
 	glutMainLoop();
-
-
-
-
 }
 
 

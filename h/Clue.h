@@ -29,6 +29,7 @@ public:
 	int set_end_scene_up();			//設定平視最後一個出現的scene(0~179)
 	void set_start_scene_down(int);	//設定俯視第幾個scene會出現(0~179)
 	int set_end_scene_down();		//設定俯視最後一個出現的scene(0~179)
+	void set_obj_corner(Vector<Point3f>);
 
 	int current_state();	//return _state_array(_current_state)
 	void next_state();		//_current_state + 1
@@ -59,6 +60,7 @@ public:
 	int end_scene_up();
 	int start_scene_down();
 	int end_scene_down();
+	Vector<Point3f> obj_corner();
 
 	int show_to_scene(int, int);	//check if the clue is in the current scene
 	float location_row_now(int, int);
@@ -84,6 +86,7 @@ private:
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標
+	vector<Point3f> _obj_corner;
 	float _location_row;
 	float _location_col;
 	float _width;		//寬

@@ -1,8 +1,5 @@
-#include <string>
-#include <opencv2/contrib/contrib.hpp> 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/nonfree.hpp"
-#include <iostream>
 #include <stdio.h>
 #include "../h/Clue.h"
 
@@ -329,6 +326,13 @@ int Clue::set_end_scene_down()
 }
 
 
+void Clue::set_obj_corner(Vector<Point3f> obj_corner){
+	
+	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
+
+}
+
+
 int Clue::current_state()
 {
 	return _current_state;
@@ -548,6 +552,17 @@ int Clue::end_scene_down()
 {
 	return _end_scene_down;
 }
+
+
+Vector<Point3f> Clue::obj_corner(){
+
+
+	return _obj_corner;
+}
+
+
+
+
 
 void Clue::_show_animation() 
 {

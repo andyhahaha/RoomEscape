@@ -210,3 +210,78 @@ void CoverObject(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y
 	glPolygonMode(GL_BACK, polygonMode[1]);
 }
 
+/* showDialog: Show dialog box and dialog content.
+*
+* text - text
+* length - length of text string
+*/
+void drawDialog(const char *text, int length,int width,int height){
+
+	//draw text
+	glColor3f(0, 0, 0);
+	glMatrixMode(GL_PROJECTION);					// change the current matrix to PROJECTION
+	double matrix[16];								// 16 doubles in stack memory
+	glGetDoublev(GL_PROJECTION_MATRIX, matrix);		// get the values from PROJECTION matrix to local variable
+	glLoadIdentity();								// reset PROJECTION matrix to identity matrix
+	glOrtho(0, width, 0, height, -5, 5);			// orthographic perspective
+	glMatrixMode(GL_MODELVIEW);						// change current matrix to MODELVIEW matrix again
+	glLoadIdentity();								// reset it to identity matrix
+	glPushMatrix();									// push current state of MODELVIEW matrix to stack
+	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
+	glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D
+
+	for (int i = 0; i<length; i++){
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font
+	}
+
+
+
+	// Make sure that the polygon mode is set so we draw the polygons filled
+	// (save the state first so we can restore it).
+
+	GLint polygonMode[2];
+	glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_BACK, GL_FILL);
+
+	// Set up the virtual camera, projecting using simple ortho so we can draw the background image.
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0, 1.0, 0.0, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Draw the image.
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND);								//Enable blending.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+
+	/*glBegin(GL_QUADS);
+	glColor4f(0.62, 0.6, 0.55, 0.7);
+	glVertex3f(-0.9, -0.5, 0.0);
+	glVertex3f(-0.9, -0.5 + (150.0 / height), 0.0);
+	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5 + (150.0 / height), 0.0);
+	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5, 0.0);
+	glEnd();*/
+	glBegin(GL_QUADS);
+	glColor4f(0.62, 0.6, 0.55, 0.7);
+	glVertex3f(0.05, 0.25, 0.0);
+	glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25, 0.0);
+	glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25 + (75.0 / height), 0.0);
+	glVertex3f(0.05, 0.25 + (75.0 / height), 0.0);
+	glEnd();
+
+	// Clear the depth buffer so the texture forms the background.
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// Restore the polygon mode state.
+	glPolygonMode(GL_FRONT, polygonMode[0]);
+	glPolygonMode(GL_BACK, polygonMode[1]);
+
+
+
+
+
+
+}
