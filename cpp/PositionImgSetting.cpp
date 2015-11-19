@@ -46,7 +46,7 @@ int PositionImgSetting::get_position_number() {
 	return _number;
 }
 
-int PositionImgSetting::img_capture(Mat img_original, int x, int y, int width, int height, Image &img_result)
+int PositionImgSetting::img_capture(Mat img_original, int x, int y, int width, int height, Image& img_result)
 {
 	if (!img_original.data)
 	{
@@ -373,14 +373,23 @@ Mat PositionImgSetting::get_stitch_matrix(Mat img1, Mat img2, int direction, Mat
 }
 
 
-//img2會貼到img1
+/* stitch2: Stitch image2 to image1 and return the result.
+*  
+*  img_1 - image that won't change
+*  img_2 - image that will stitch to img_1
+*  method - choose one of the stitching method.
+*  (method1 - symmetric test + distance <= 6*min_dist
+*   method2 - symmetric test + distance <= 7*min_dist
+*   method3 - distance <= 6*min_dist)
+*  direction - the direction of stitching img_2 to img_1, according to the center of img_1
+*  fill - has 6 numbers according to 6 directions. Number change from 0 to 1 if the edge of that direction is filled.
+*
+*/
+
 Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction, vector<int> &fill)
 {
 	assert(img_1.rows > 0 && img_2.rows > 0);
-	//Rect rect1, rect2;
-	//Mat roiImage1, roiImage2;
 	Image img1, img2;
-	//vector<KeyPoint> img1_keypoints, img2_keypoints;
 	
 	if (direction == STITCH2_LEFT)	//img1.x<(2/3)*img1 wdith, img2.x>0.3*img2 width
 	{
@@ -396,96 +405,30 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 	{
 		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 6), 0, int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
 		img_capture(img_2, 0, int(STITCH_IMG_HEIGHT*0.4), STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6), img2);
-		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), 0, int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH * 1 / 6);
-
-		img1.set_keypoints(img1_keypoints);
-
-		rect2 = Rect(0, int(STITCH_IMG_HEIGHT*0.4), STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6));
-		img_2(rect2).copyTo(roiImage2);
-		img2.set_image(roiImage2);
-
-		img2_keypoints = img2.keypoints();
-		for (int i = 0; i < img2.keypoints().size(); i++)
-			img2_keypoints[i].pt.y += int(STITCH_IMG_HEIGHT*0.4);
-
-		img2.set_keypoints(img2_keypoints);*/
 	}
 	else if (direction == STITCH2_DOWN)	// img1.y > (5/12)*img1 height, img2.y < 0.6 * img2 height
 	{
 		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 6), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
 		img_capture(img_2, 0, 0, STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6), img2);
-		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 6), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 4 / 6), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-		{
-			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH / 6);
-			img1_keypoints[i].pt.y += int(STITCH_SCREEN_HEIGHT * 5 / 12);
-		}
-		img1.set_keypoints(img1_keypoints);
-
-		rect2 = Rect(0, 0, STITCH_IMG_WIDTH, int(STITCH_IMG_HEIGHT*0.6));
-		img_2(rect2).copyTo(roiImage2);
-		img2.set_image(roiImage2);*/
 	}
 	else if (direction == STITCH2_LEFT_UP)	//img1.x<(2/3)*img1 width, img1.y<(7/12)*img1 height
 	{
 		img_capture(img_1, 0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
-		/*rect1 = Rect(0, 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_LEFT_DOWN)	//img1.x<(2/3)*img1 width, img1.y > (5/12)*img1 height
 	{
 		img_capture(img_1, 0, int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
-		/*rect1 = Rect(0, int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-		
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-			img1_keypoints[i].pt.y += int(STITCH_SCREEN_HEIGHT * 5 / 12);
-
-		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_RIGHT_UP)	//img1.x > (1/3)*img1 width, img1.y<(7/12)*img1 height
 	{
 		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
-		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), 0, int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH * 1 / 3);
-
-		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 	else if (direction == STITCH2_RIGHT_DOWN)	//	//img1.x > (1/3)*img1 width, img1.y > (5/12)*img1 height
 	{
 		img_capture(img_1, int(STITCH_SCREEN_WIDTH * 1 / 3), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12), img1);
-		/*rect1 = Rect(int(STITCH_SCREEN_WIDTH * 1 / 3), int(STITCH_SCREEN_HEIGHT * 5 / 12), int(STITCH_SCREEN_WIDTH * 2 / 3), int(STITCH_SCREEN_HEIGHT * 7 / 12));
-		img_1(rect1).copyTo(roiImage1);
-		img1.set_image(roiImage1);
-
-		img1_keypoints = img1.keypoints();
-		for (int i = 0; i < img1.keypoints().size(); i++)
-		{
-			img1_keypoints[i].pt.x += int(STITCH_SCREEN_WIDTH / 3);
-			img1_keypoints[i].pt.y += int(STITCH_SCREEN_HEIGHT * 5 / 12);
-		}
-		img1.set_keypoints(img1_keypoints);*/
 		img2.set_image(img_2);
 	}
 
@@ -523,11 +466,6 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 		draw_matches(img1.mat(), img2.mat(), img1.keypoints(), img2.keypoints(), good_matches, 8);
 	}
 
-	//找接近圖片重疊範圍的match(最兩邊的不要)
-	//vector<DMatch>best_matches1;
-	//best_matches1 = get_correct_range_matches(good_matches1, img1, img2, direction);
-	//draw_matches(img_1, img_2, img1.keypoints(), img2.keypoints(), best_matches1, 5);
-
 	// Find the Homography Matrix from best matches
 	Mat H1;
 	get_homography_matrix(img1, img2,  good_matches, H1);
@@ -543,8 +481,8 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 }
 
 
-int PositionImgSetting::getImgAmount(string target_folder){
-
+int PositionImgSetting::getImgAmount(string target_folder)
+{
 	DIR *dp;
 	struct dirent *ep;
 	char target_char[100];
@@ -565,11 +503,20 @@ int PositionImgSetting::getImgAmount(string target_folder){
 		perror("Couldn't open the directory");
 
 	//cout << "count = " << count << endl;
-
 	return count-2;
 }
 
-void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int stitch_part){
+
+/* Initial3Img: Initial 3 images to start stitching(central image, right image and left image).
+*
+*  img_number - the half angle of the central image(0~179)
+*  vertical_angle - up 20 degree, 0 degree, down 20 degree or down 40 degree
+*  stitch_part - the part of the scene (top, central or bottom)
+*
+*/
+
+void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int stitch_part)
+{
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 
 	if (stitch_part == STITCH_SCREEN_TOP)
@@ -673,7 +620,8 @@ void PositionImgSetting::StitchPart(int img_number, int vertical_angle, int meth
 	}
 }
 
-void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int method){	//0~179
+void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int method)	//0~179
+{	
 	string path = "D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\";
 	FILE * fp;
 	char filename[200];
@@ -693,7 +641,7 @@ void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int met
 
 	StitchPart(img_number, vertical_angle, method, STITCH_SCREEN_MID, fill, stitch);
 
-	//拼上方-----------------------------------------------------------------------------------------------------
+	//stitch up------------------------------------------------------------------------------------------------
 	Initial3Img(img_number, vertical_angle, STITCH_SCREEN_TOP);
 
 	stitch = stitch2(stitch, img_mid, method, STITCH2_UP, fill);
@@ -716,7 +664,6 @@ void PositionImgSetting::StitchScene(int vertical_angle, int img_number, int met
 	cout << "process time for stitch screen " << img_number << " = " << t.getTimeSec() << " sec." << endl;
 
 	sprintf(filename, "%sstitch_time.txt", path);
-	cout << filename << endl;
 	fp = fopen(filename, "a");
 	if (!fp)
 		cout << "Error: Open stitch_time.txt error!" << endl;

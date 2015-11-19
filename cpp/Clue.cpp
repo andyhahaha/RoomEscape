@@ -6,17 +6,23 @@
 using namespace cv;
 using namespace std;
 
+
+
+/* Clue: Initialization 
+*/
+
 Clue::Clue()
 {
-	_room_name = "no name";			//密室名稱
+	_room_name = "no name";		//密室名稱
 	_position_num = -1;			//position編號
-	_clue_name = "no name";			//線索名稱
+	_clue_name = "no name";		//線索名稱
 
 	_start_scene_up = -1;
 	_end_scene_up = -1;
 	_start_scene_down = -1;
 	_end_scene_down = -1;
 
+	/*
 	//change scene 時座標移動多少
 	_row_shift = 0.4;
 	_col_shift = 0.05;
@@ -27,47 +33,61 @@ Clue::Clue()
 	_location_col = -2.0;
 	_width = 0.0;		//寬
 	_height = 0.0;	//長
+	*/
 
-	_current_dialog = 0; 		//目前使用到哪一個對話
-	_dialog.clear();		//線索文字內容
-	_current_img = 0; 		//目前使用到哪一個3D image
-	_img_path.clear();		//線索3D image內容
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();	
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();		
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();		
 
 	_cluebox_img = "no path";
 
-	_state.clear();	//紀錄每個state是什麼代號
-	_current_state = 0;	//線索狀態
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
 };
 
-Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float column, float row, float width, float height)
+
+/* Clue: Initial clue by giving some parameters. 
+*/
+
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down)
 {
-	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
 
+	/*
 	_row_shift = 0.4;
 	_col_shift = 0.05;
+	_location_row = row;
+	_location_col = column;
+	_width = width;
+	_height = height;
+	*/
 
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
-	set_end_scene_up();
-	set_end_scene_down();
-	_location_row=row;	
-	_location_col=column;
-	_width=width;		
-	_height=height;
+	_end_scene_up = end_scene_up;
+	_end_scene_down = end_scene_down;
 
-	_current_dialog = 0; 		//目前使用到哪一個對話
-	_dialog.clear();		//線索文字內容
-	_current_img = 0; 		//目前使用到哪一個3D image
-	_img_path.clear();		//線索3D image內容
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();		
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();		
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
 
-	_state.clear();	//紀錄每個state是什麼代號
-	_current_state = 0;	//線索狀態
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
 }
+
+
+/* Clue: Initial clue by giving a path of a clue file. 
+*/
 
 Clue::Clue(string clue_path)
 {
@@ -95,10 +115,10 @@ Clue::Clue(string clue_path)
 		fread(&_start_scene_down, sizeof(int), 1, fp);
 		fread(&_end_scene_down, sizeof(int), 1, fp);
 
-		fread(&_location_row, sizeof(float), 1, fp);
+		/*fread(&_location_row, sizeof(float), 1, fp);
 		fread(&_location_col, sizeof(float), 1, fp);
 		fread(&_width, sizeof(float), 1, fp);
-		fread(&_location_row, sizeof(float), 1, fp);
+		fread(&_location_row, sizeof(float), 1, fp);*/
 
 		fread(&length, sizeof(int), 1, fp);
 		fread(&_cluebox_img, length, 1, fp);
@@ -119,11 +139,19 @@ Clue::Clue(string clue_path)
 		}
 
 		fread(&size, sizeof(int), 1, fp);
-		_img_path.resize(size);
+		_2Dimg_path.resize(size);
 		for (int i = 0; i < size; i++)
 		{
 			fread(&length, sizeof(int), 1, fp);
-			fread(&_img_path[i], length, 1, fp);
+			fread(&_2Dimg_path[i], length, 1, fp);
+		}
+
+		fread(&size, sizeof(int), 1, fp);
+		_3Dobj_path.resize(size);
+		for (int i = 0; i < size; i++)
+		{
+			fread(&length, sizeof(int), 1, fp);
+			fread(&_3Dobj_path[i], length, 1, fp);
 		}
 
 		fread(&end, sizeof(int), 1, fp);
@@ -135,35 +163,46 @@ Clue::Clue(string clue_path)
 	}
 }
 
-void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int start_scene_down, float column, float row, float width, float height)
+
+/* set_clue: Initial clue by giving some parameters. 
+*/
+
+void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down)
 {
-	//(room name, position number, clue name, start_scene_up, start_scene_down,  左上角的座標row,左上角的座標column,寬,長
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
 
+	/*
 	_row_shift = 0.4;
 	_col_shift = 0.05;
-
-	_start_scene_up = start_scene_up;
-	_start_scene_down = start_scene_down;
-	set_end_scene_up();
-	set_end_scene_down();
 	_location_row = row;
 	_location_col = column;
 	_width = width;
 	_height = height;
+	*/
 
-	_current_dialog = 0; 		//目前使用到哪一個對話
-	_dialog.clear();		//線索文字內容
-	_current_img = 0; 		//目前使用到哪一個3D image
-	_img_path.clear();		//線索3D image內容
+	_start_scene_up = start_scene_up;
+	_start_scene_down = start_scene_down;
+	_end_scene_up = end_scene_up;
+	_end_scene_down = end_scene_down;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
 
-	_state.clear();	//紀錄每個state是什麼代號
-	_current_state = 0;	//線索狀態
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
 }
+
+
+/* set_clue: Initial clue by giving a path of a clue file. 
+*/
 
 int Clue::set_clue(string clue_path)
 {
@@ -191,10 +230,10 @@ int Clue::set_clue(string clue_path)
 	fread(&_start_scene_down, sizeof(int), 1, fp);
 	fread(&_end_scene_down, sizeof(int), 1, fp);
 
-	fread(&_location_row, sizeof(float), 1, fp);
+	/*fread(&_location_row, sizeof(float), 1, fp);
 	fread(&_location_col, sizeof(float), 1, fp);
 	fread(&_width, sizeof(float), 1, fp);
-	fread(&_height, sizeof(float), 1, fp);
+	fread(&_height, sizeof(float), 1, fp);*/
 
 	fread(&length, sizeof(int), 1, fp);
 	fread(&_cluebox_img, length, 1, fp);
@@ -215,11 +254,19 @@ int Clue::set_clue(string clue_path)
 	}
 
 	fread(&size, sizeof(int), 1, fp);
-	_img_path.resize(size);
+	_2Dimg_path.resize(size);
 	for (int i = 0; i < size; i++)
 	{
 		fread(&length, sizeof(int), 1, fp);
-		fread(&_img_path[i], length, 1, fp);
+		fread(&_2Dimg_path[i], length, 1, fp);
+	}
+
+	fread(&size, sizeof(int), 1, fp);
+	_3Dobj_path.resize(size);
+	for (int i = 0; i < size; i++)
+	{
+		fread(&length, sizeof(int), 1, fp);
+		fread(&_3Dobj_path[i], length, 1, fp);
 	}
 
 	fread(&end, sizeof(int), 1, fp);
@@ -237,6 +284,8 @@ int Clue::set_clue(string clue_path)
 }
 
 
+/* ---------------- Setting basic information of the clue. ----------------*/
+
 void Clue::set_room_name(string s)
 {
 	_room_name=s;
@@ -252,11 +301,11 @@ void Clue::set_clue_name(string s)
 	_clue_name = s;
 }
 
-void Clue::set_location_row(int row)
+/*void Clue::set_location_row(float row)
 {
 	_location_row=row;
 }
-void Clue::set_location_col(int column)
+void Clue::set_location_col(float column)
 {
 	_location_col=column;
 }
@@ -269,14 +318,19 @@ void Clue::set_width(int w)
 void Clue::set_height(int h)
 {
 	_height = h;
-}
+}*/
 
 void Clue::set_start_scene_up(int i)
 {
 	_start_scene_up = i;
 }
 
-int Clue::set_end_scene_up()
+void Clue::set_end_scene_up(int i)
+{
+	_end_scene_up = i;
+}
+
+/*int Clue::set_end_scene_up()
 {
 	if (_start_scene_up == -1)
 	{
@@ -296,14 +350,19 @@ int Clue::set_end_scene_up()
 	}
 	_end_scene_up = scene;
 	return 1;
-}
+}*/
 
 void Clue::set_start_scene_down(int i)
 {
 	_start_scene_down = i;
 }
 
-int Clue::set_end_scene_down()
+void Clue::set_end_scene_down(int i)
+{
+	_end_scene_down = i;
+}
+
+/*int Clue::set_end_scene_down()
 {
 	if (_start_scene_down == -1)
 	{
@@ -323,30 +382,33 @@ int Clue::set_end_scene_down()
 	}
 	_end_scene_down = scene;
 	return 1;
-}
+}*/
 
-
-void Clue::set_obj_corner(Vector<Point3f> obj_corner){
-	
+void Clue::set_obj_corner(Vector<Point3f> obj_corner)
+{
 	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
-
 }
 
+
+/* ----------------------- Setting clue state. ------------------------*/
 
 int Clue::current_state()
 {
 	return _current_state;
 }
 
-void Clue::next_state()
+void Clue::next_state(int s)
 {
-	_current_state -= 1;
+	_current_state = s;
 }
 
 void Clue::add_state(int state_code)
 {
 	_state.push_back(state_code);
 }
+
+
+/* ---------- Setting image that will be put in the clue box. ------------*/
 
 void Clue::set_cluebox_img(string path)
 {
@@ -365,30 +427,64 @@ Mat Clue::get_cluebox_img()
 	return img;
 }
 
-int Clue::current_img()
+
+/* ----------------- Setting 2D images of the clue. ---------------------*/
+
+int Clue::current_2Dimg()
 {
-	return _current_img;
+	return _current_2Dimg;
 }
 
-void Clue::next_img()
+void Clue::next_2Dimg(int n)
 {
-	_current_img += 1;
+	_current_2Dimg = n;
 }
 
-void Clue::add_img_path(string path)
+void Clue::add_2Dimg_path(string path)
 {
-	_img_path.push_back(path);
+	_2Dimg_path.push_back(path);
 }
 
-string Clue::get_img(int number)
+string Clue::get_2Dimg(int number)
 {  	
-	if (_img_path[number][0] == NULL)
+	if (_2Dimg_path[number][0] == NULL)
 	{
 		cout << "ERROR: Image" << number << " undefined!" << endl;
 		return NULL;
 	}
-	return _img_path[number];
+	return _2Dimg_path[number];
 }
+
+
+/* ----------------- Setting 3D objects of the clue. ---------------------*/
+
+int Clue::current_3Dobj()
+{
+	return _current_3Dobj;
+}
+
+void Clue::next_3Dobj(int n)
+{
+	_current_3Dobj = n;
+}
+
+void Clue::add_3Dobj_path(string path)
+{
+	_3Dobj_path.push_back(path);
+}
+
+string Clue::get_3Dobj(int number)
+{
+	if (_3Dobj_path[number][0] == NULL)
+	{
+		cout << "ERROR: Image" << number << " undefined!" << endl;
+		return NULL;
+	}
+	return _3Dobj_path[number];
+}
+
+
+/* ----------------- Setting dialogs of the clue. ---------------------*/
 
 int Clue::current_dialog()
 {
@@ -415,6 +511,8 @@ string Clue::get_dialog(int index)
 	return _dialog[index];
 }
 
+
+/* ----------------- Get basic information of the clue. ---------------------*/
 
 string Clue::room_name()
 {
@@ -474,7 +572,7 @@ int Clue::show_to_scene(int vertical, int scene_now)
 	return 0;
 }
 
-float Clue::location_row_now(int vertical, int scene_now)
+/*float Clue::location_row_now(int vertical, int scene_now)
 {
 	if (_location_row == -2.0)
 	{
@@ -531,7 +629,7 @@ float Clue::width()
 float Clue::height()
 {
 	return _height;
-}
+}*/
 
 int Clue::start_scene_up()
 {
@@ -553,24 +651,19 @@ int Clue::end_scene_down()
 	return _end_scene_down;
 }
 
-
-Vector<Point3f> Clue::obj_corner(){
-
-
+Vector<Point3f> Clue::obj_corner()
+{
 	return _obj_corner;
 }
 
 
-
-
-
 void Clue::_show_animation() 
 {
-
 	printf("_show_animation\n");
-
-
 }
+
+
+/* ------------ Write the data into a file named by the clue name. ----------------*/
 
 int Clue::write_initial_file()
 {
@@ -601,10 +694,10 @@ int Clue::write_initial_file()
 	fwrite(&_start_scene_down, sizeof(int), 1, fp);
 	fwrite(&_end_scene_down, sizeof(int), 1, fp);
 
-	fwrite(&_location_row, sizeof(float), 1, fp);
+	/*fwrite(&_location_row, sizeof(float), 1, fp);
 	fwrite(&_location_col, sizeof(float), 1, fp);
 	fwrite(&_width, sizeof(float), 1, fp);
-	fwrite(&_height, sizeof(float), 1, fp);
+	fwrite(&_height, sizeof(float), 1, fp);*/
 
 	length = sizeof(_cluebox_img);
 	fwrite(&length, sizeof(int), 1, fp);
@@ -626,13 +719,22 @@ int Clue::write_initial_file()
 		fwrite(&_dialog[i], sizeof(_dialog[i]), 1, fp);
 	}
 
-	length = _img_path.size();
+	length = _2Dimg_path.size();
 	fwrite(&length, sizeof(int), 1, fp);
-	for (int i = 0; i < _img_path.size(); i++)
+	for (int i = 0; i < _2Dimg_path.size(); i++)
 	{
-		length = sizeof(_img_path[i]);
+		length = sizeof(_2Dimg_path[i]);
 		fwrite(&length, sizeof(int), 1, fp);
-		fwrite(&_img_path[i], sizeof(_img_path[i]), 1, fp);
+		fwrite(&_2Dimg_path[i], sizeof(_2Dimg_path[i]), 1, fp);
+	}
+
+	length = _3Dobj_path.size();
+	fwrite(&length, sizeof(int), 1, fp);
+	for (int i = 0; i < _3Dobj_path.size(); i++)
+	{
+		length = sizeof(_3Dobj_path[i]);
+		fwrite(&length, sizeof(int), 1, fp);
+		fwrite(&_3Dobj_path[i], sizeof(_3Dobj_path[i]), 1, fp);
 	}
 
 	fwrite(&end, sizeof(int), 1, fp);
@@ -642,11 +744,8 @@ int Clue::write_initial_file()
 
 ostream& operator<<(ostream& os, const Clue& clue)
 {
-	
 	//os << dt.mo << '/' << dt.da << '/' << dt.yr;
 	os << "name = " << clue._clue_name << "\n"\
-		"_clue_location_row = " << clue._location_row << "\n"\
-		"_clue_location_column = " << clue._location_col << "\n"\
 		"_current_state = " << clue._current_state << "\n" << endl;
 
 	return os;
