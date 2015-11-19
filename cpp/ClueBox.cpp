@@ -30,7 +30,8 @@ void ClueBox::set_item_height(int height){
 	_item_height = height;
 }
 void ClueBox::set_item_selected(int index){
-	_item_selected = index;
+	if (index<=_clue_number)
+		_item_selected = index;
 }
 
 
@@ -92,7 +93,24 @@ void ClueBox::show_clue(int width, int height){
 		//change the cluebox_on_the_screen vector here
 		i++;
 	}
+	set_item_show_last(i - 1);
+
+	
 }
+
+void ClueBox::set_item_show_first(int toward){
+	if (toward == 1 && _item_show_first<_clue_number)
+		_item_show_first +=1;
+	else if (toward == 0 && _item_show_first>1)
+		_item_show_first -= 1;
+
+
+}
+void ClueBox::set_item_show_last(int index){
+	_item_show_last = index;
+
+}
+
 
 
 

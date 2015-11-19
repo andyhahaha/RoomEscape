@@ -82,7 +82,7 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 	glGetIntegerv(GL_POLYGON_MODE, polygonMode);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_FILL);
-
+	
 	// Set up the virtual camera, projecting using simple ortho so we can draw the background image.
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -257,13 +257,6 @@ void drawDialog(const char *text, int length,int width,int height){
 	glEnable(GL_BLEND);								//Enable blending.
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
 
-	/*glBegin(GL_QUADS);
-	glColor4f(0.62, 0.6, 0.55, 0.7);
-	glVertex3f(-0.9, -0.5, 0.0);
-	glVertex3f(-0.9, -0.5 + (150.0 / height), 0.0);
-	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5 + (150.0 / height), 0.0);
-	glVertex3f(-0.9 + (length + 2)*(24.0 / width), -0.5, 0.0);
-	glEnd();*/
 	glBegin(GL_QUADS);
 	glColor4f(0.62, 0.6, 0.55, 0.7);
 	glVertex3f(0.05, 0.25, 0.0);
