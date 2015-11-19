@@ -68,5 +68,15 @@
 #define BOX_HEIGHT 0.2
 #define BOX_WIDTH 1
 #define ITEM_WIDTH 0.14	//clue in clue box is a square (width is 0.14% of the screen height)
-#define ARROW_WIDTH 0.01
+#define ARROW_WIDTH 0.02
+
+//near scence
+#define ROOM			0
+#define DRAWER_ST		1
+#define DRAWER_ED		2
+#define BOOKSHELF_TOP	3
+#define BOOKSHELF_ED	4
+#define CLOSET			5
+#define PILLOW			6
+#define CURTAIN			7
 #endif

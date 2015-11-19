@@ -34,6 +34,13 @@ float phi = 1.5292;
 float OBJ_x = 0, OBJ_y = 0;
 ClueBox clueBox(0, width, 100, 100, 100);
 vector<Clue>ClueOnScreen;
+vector<Clue>ClueInCloset;
+vector<Clue>ClueInDrawer1;
+vector<Clue>ClueInDrawer2;
+vector<Clue>ClueInShel1;
+vector<Clue>ClueInShel2;
+vector<Clue>ClueInPillow;
+vector<Clue>ClueInCurtain;
 vector<Clue>AllClue;
 int q = 0;
 int scence_num = 0;
@@ -59,12 +66,46 @@ GLint    viewport[4];
 GLdouble modelview[16];
 GLdouble projection[16];
 
+int mouseState = ROOM;
+
+
+
+void nearScence(string path, int scence){
+
+	background = imread(path);
+	mouseState = scence;
+
+}
+
+void clueBoxController(int x){
+
+	float horizon_space = SPACE*height ;
+	float item_w = ITEM_WIDTH*height ;
+	if (x < ARROW_WIDTH*width){
+		clueBox.set_item_show_first(0);
+		cout << "-" << endl;
+	}
+	else if (x >width - ARROW_WIDTH*width){
+		clueBox.set_item_show_first(1);
+		cout << "+" << endl;
+
+	}
+	else{
+		int click = x - (int)(ARROW_WIDTH*width + horizon_space);
+		int selected;
+		for (selected = 0; click  > 0; selected++)
+			click = click - (int)((item_w + horizon_space));
+		if (click - (int)(item_w) < 0){
+			clueBox.set_item_selected(selected);
+			cout << "selected = " << selected << endl;
+		}
+
+	}
 
 
 
 
-
-
+}
 
 
 
@@ -186,21 +227,21 @@ void DrawClueHit(){
 }
 
 
-void ClueHit(int x, int y){
+void ClueHit(int x, int y, vector<Clue> _onScreenClue){
 	vector<Clue>::iterator it_clue;
 
-	
+
 	GLdouble  winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 	int screenX, screenY;
-	int maxX=-10000, minX=10000, maxY=-10000, minY=10000;
+	int maxX = -10000, minX = 10000, maxY = -10000, minY = 10000;
 	int i;
 	//glGetIntegerv(GL_VIEWPORT, viewport);
 	//glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
 	//glGetDoublev(GL_PROJECTION_MATRIX, projection);
 
 
-	for (it_clue = ClueOnScreen.begin(); it_clue != ClueOnScreen.end(); ++it_clue) {
+	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
 		maxX = -10000;
 		minX = 10000;
 		maxY = -10000;
@@ -221,22 +262,19 @@ void ClueHit(int x, int y){
 			if (minY > screenY)
 				minY = screenY;
 		}
-		if (minX < 0)
-			minX = width + 1;
-		if (minY < 0)
-			minY = height + 1;
-		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		
+		/*cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "clue = " << it_clue->clue_name() << endl;
 		cout << "maxX = " << maxX << endl;
 		cout << "minX = " << minX << endl;
 		cout << "maxY = " << maxY << endl;
 		cout << "minY = " << minY << endl;
-		
+		*/
 
 		if (x <= maxX && x >= minX && y <= maxY && y >=minY){
 
-			clueBox.InsertItem(*it_clue);
-			cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
+		clueBox.InsertItem(*it_clue);
+		cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
 		}
 	}
 }
@@ -295,7 +333,45 @@ void mouse(int button, int state, int x, int y)
 	{  
 		printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 		glutPostRedisplay();
-		ClueHit(x,y);
+
+		if (y > height - (SPACE+ITEM_WIDTH)*height&&y < height - SPACE*height)
+			clueBoxController(x);
+
+
+		else
+		{
+			switch (mouseState)
+			{
+			case ROOM:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case DRAWER_ST:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case DRAWER_ED:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case BOOKSHELF_TOP:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case BOOKSHELF_ED:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case CLOSET:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case PILLOW:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case CURTAIN:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+		
+	
+				
+			}
+		}
+		
 	}
 
 	if (state)

@@ -29,6 +29,8 @@ public:
 	void set_item_width(int);
 	void set_item_height(int);
 	void set_item_selected(int);
+	void set_item_show_first(int);
+	void set_item_show_last(int);
 
 
 	int get_clue_number();
@@ -47,6 +49,8 @@ private:
 	int _item_width;
 	int _item_height;
 	int _item_selected;	//0沒有項目被選	1~n 第n項目被選
+	int _item_show_first;
+	int _item_show_last;
 	//Clue *_clue_array = new Clue[_clue_number];
 	vector<Clue>_clue_vector;
 
