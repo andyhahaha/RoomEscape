@@ -15,7 +15,7 @@ public:
 	void set_position_number(int);
 	int get_position_number();	//查看位置編號	
 	
-	void stitch_one_scene(int, int, int);
+	
 	int StitchSceneRange(int, int, int, int);	//stitch from num1 to num2
 	void StitchSceneAll(int);	//把360張stitch圖都拼接出來
 	
@@ -37,12 +37,15 @@ private:
 	vector< DMatch > get_good_dist_matches( vector< DMatch >, int);
 	//vector< DMatch > get_correct_range_matches(vector<DMatch>, Image, Image, int);
 	
-	void get_homography_matrix(Image, Image, vector< DMatch >, Mat&);
-	Mat get_blending_matrix(Mat, Mat, Mat);
-	Mat get_stitch_matrix(Mat, Mat, int, Mat, vector<int> &);
+	void get_homography_matrix_by_matches(Image, Image, vector< DMatch >, Mat&);
+	Mat get_blending_image(Mat, Mat, Mat);
+	Mat get_stitch_image(Mat, Mat, int, Mat, vector<int> &);
 
 
+	//stitch scenes by H path
+	void StitchSceneByHPath(int, int);
 	Mat get_H(Mat img_1, Mat img_2, int method);
+	void StitchPartByHPath(int, int, int, int, vector<int> &, Mat&);
 };
 
 #endif

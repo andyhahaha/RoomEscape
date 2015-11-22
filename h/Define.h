@@ -20,6 +20,7 @@
 #define METHOD1 1
 #define METHOD2 2
 #define METHOD3 3
+#define METHOD4 4	//stitch by H path
 #define BLEND_LEFT 0
 #define BLEND_RIGHT 1
 
