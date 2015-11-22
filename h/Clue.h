@@ -2,6 +2,8 @@
 #define _CLUE_H_
 #include <string>
 #include <opencv2/contrib/contrib.hpp> 
+#include "opencv2/nonfree/nonfree.hpp"
+
 #include <iostream>
 #include "Define.h"
 
@@ -11,7 +13,9 @@ using namespace std;
 class Clue {
 public:
 	Clue();
-	Clue(string, int, string, int, int, int, int);	//room name, position number, clue name, start_scene_up, end_scene_up, start_scene_down, end_scene_down
+	Clue(string, int, string, int, int, int, int, float, float, float, float, float, float, float);	//room name, position number, clue name, start_scene_up, end_scene_up, start_scene_down, end_scene_down
+	Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner);
+	Clue(string, int, string, vector<Point2i>);
 	Clue(string);	//read clue initial file
 
 	void set_clue(string, int, string, int, int, int, int);
@@ -21,15 +25,13 @@ public:
 	void set_position_num(int);
 	void set_clue_name(string);
 
-	//void set_location_row(float);		//左上角 row
-	//void set_location_col(float);		//左上角col
-	//void set_width(int);				//設定clue觸發width
-	//void set_height(int);				//設定clue觸發height
+
 	void set_start_scene_up(int);			//設定平視第幾個scene會出現(0~179)
 	void set_end_scene_up(int);				//設定平視最後一個出現的scene(0~179)
 	void set_start_scene_down(int);			//設定俯視第幾個scene會出現(0~179)
 	void set_end_scene_down(int);			//設定俯視最後一個出現的scene(0~179)
 	void set_obj_corner(Vector<Point3f>);
+	void set_2D_coordinate(Vector<Point2i>);
 
 	int current_state();		//return _state_array(_current_state)
 	void next_state(int);		//assign _current_state
@@ -51,16 +53,24 @@ public:
 	void next_dialog();			//assign _current_dialog
 	void add_dialog(string);	//add一個對話  內容
 	string get_dialog(int); 	//取得第幾個對話
+
+	Vector<Point2i> get_2D_coordinate();
+
 	
 	
 	/* Get Clue basic information */
 	string room_name();
 	int position_num();
 	string clue_name();
-	//float location_row();
-	//float location_col();
-	//float width();
-	//float height();
+
+	float trans_x();
+	float trans_y();
+	float trans_z();
+	float rot_x();
+	float rot_y();
+	float rot_z();
+	float scale();
+
 	int start_scene_up();
 	int end_scene_up();
 	int start_scene_down();
@@ -69,8 +79,7 @@ public:
 
 	int show_to_scene(int, int);	//check if the clue is in the current scene
 
-	//float location_row_now(int, int);
-	//float location_col_now(int, int);
+
 
 	int write_initial_file();	//write the basic information of the clue to a file
 	friend ostream& operator<<(ostream& , const Clue& );
@@ -86,17 +95,23 @@ private:
 	int _start_scene_down;
 	int _end_scene_down;
 
-	//change scene 時座標移動多少
-	//float _row_shift;
-	//float _col_shift;
+	//3D 座標
+	float _trans_x;
+	float _trans_y;
+	float _trans_z;
+	float _rot_x;
+	float _rot_y;
+	float _rot_z;
+	float _scale;
+
+
+
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標
 	vector<Point3f> _obj_corner;
-	//float _location_row;
-	//float _location_col;
-	//float _width;		//寬
-	//float _height;	//長
+	vector<Point2i> _2DCoordinate;
+
 
 	int _current_dialog; 		//目前使用到哪一個對話
 	vector<string>_dialog;		//線索文字內容

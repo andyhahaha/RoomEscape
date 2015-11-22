@@ -1,15 +1,169 @@
-#include"../h/ClueAction.h"
-#include <opencv2/contrib/contrib.hpp> 
-#include "opencv2/core/core.hpp"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/nonfree/nonfree.hpp"
-#include "opencv2/calib3d/calib3d.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include <opencv2/legacy/legacy.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
+#include "D:\RoomEscape\h\gameRun.h"
 
-/*void ClueHit(int x, int y){
+
+void safeAction(){
+
+
+}
+void keyAction(){
+
+
+}
+void cardDAction(){
+
+
+}
+void cardSAction(){
+
+
+}
+void cardPAction(){
+
+
+}
+void card_num1Action(){
+
+
+}
+void card_num2Action(){
+
+
+}
+void card_num3Action(){
+
+
+}
+void curtainAction(){
+
+
+}
+void pillowAction(){
+
+
+}
+void Blue_shelf_TopAction(){
+	nearScence("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png", BLUESHELF_TOP);
+
+}
+void Blue_shelf_MidAction(){
+
+
+}
+void Blue_shelf_buttonAction(){
+
+
+}
+void Orange_shelf_TopAction(){
+
+
+}
+void Orange_shelf_MidAction(){
+
+
+}
+void Orange_shelf_buttonAction(){
+
+
+}
+void Green_shelf_TopAction(){
+
+
+}
+void Green_shelf_MidAction(){
+
+
+}
+void Green_shelf_buttonAction(){
+
+
+}
+void Wood_shelf_TopAction(){
+
+
+}
+void Wood_shelf_MidAction(){
+
+
+}
+void Wood_shelf_buttonAction(){
+
+
+}
+
+
+
+void nearScence(string path, int scence){
+
+	background = imread(path);
+	mouseState = scence;
+
+}
+string typeCode(){
+
+
+	return "1234";
+}
+void showInCluebox(Clue clue){
+
+	clueBox.InsertItem(clue);
+
+}
+void changeState(Clue clue){
+
+	//if (clue.clue_name() = "")
+
+	cout << "clue = " << clue.clue_name() << endl;
+
+	if (!clue.clue_name().compare("safe"))
+		safeAction();
+	else if (!clue.clue_name().compare("key"))
+		keyAction();
+	else if (!clue.clue_name().compare("cardD"))
+		cardDAction();
+	else if (!clue.clue_name().compare("cardS"))
+		cardSAction();
+	else if (!clue.clue_name().compare("cardP"))
+		cardPAction();
+	else if (!clue.clue_name().compare("card_num1"))
+		card_num1Action();
+	else if (!clue.clue_name().compare("card_num2"))
+		card_num2Action();
+	else if (!clue.clue_name().compare("card_num3"))
+		card_num3Action();
+	else if (!clue.clue_name().compare("curtain"))
+		curtainAction();
+	else if (!clue.clue_name().compare("pillow"))
+		pillowAction();
+	else if (!clue.clue_name().compare("Blue_shelf_Top"))
+		Blue_shelf_TopAction();
+	else if (!clue.clue_name().compare("Blue_shelf_Mid"))
+		Blue_shelf_MidAction();
+	else if (!clue.clue_name().compare("Blue_shelf_button"))
+		Blue_shelf_buttonAction();
+	else if (!clue.clue_name().compare("Orange_shelf_Top"))
+		Orange_shelf_TopAction();
+	else if (!clue.clue_name().compare("Orange_shelf_Mid"))
+		Orange_shelf_MidAction();
+	else if (!clue.clue_name().compare("Orange_shelf_button"))
+		Orange_shelf_buttonAction();
+	else if (!clue.clue_name().compare("Green_shelf_Top"))
+		Green_shelf_TopAction();
+	else if (!clue.clue_name().compare("Green_shelf_Mid"))
+		Green_shelf_MidAction();
+	else if (!clue.clue_name().compare("Green_shelf_button"))
+		Green_shelf_buttonAction();
+	else if (!clue.clue_name().compare("Wood_shelf_Top"))
+		Wood_shelf_TopAction();
+	else if (!clue.clue_name().compare("Wood_shelf_Mid"))
+		Wood_shelf_MidAction();
+	else if (!clue.clue_name().compare("Wood_shelf_button"))
+		Wood_shelf_buttonAction();
+
+
+
+}
+
+void ClueHit(int x, int y, vector<Clue> _onScreenClue){
 	vector<Clue>::iterator it_clue;
 
 
@@ -18,17 +172,13 @@
 	int screenX, screenY;
 	int maxX = -10000, minX = 10000, maxY = -10000, minY = 10000;
 	int i;
-	//glGetIntegerv(GL_VIEWPORT, viewport);
-	//glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-	//glGetDoublev(GL_PROJECTION_MATRIX, projection);
 
-
-	for (it_clue = ClueOnScreen.begin(); it_clue != ClueOnScreen.end(); ++it_clue) {
+	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
 		maxX = -10000;
 		minX = 10000;
 		maxY = -10000;
 		minY = 10000;
-		for (i = 0; i < 8; i++){
+		for (i = 0; i < it_clue->obj_corner().size(); i++){
 			posX = it_clue->obj_corner()[i].x;
 			posY = it_clue->obj_corner()[i].y;
 			posZ = it_clue->obj_corner()[i].z;
@@ -44,22 +194,36 @@
 			if (minY > screenY)
 				minY = screenY;
 		}
-		if (minX < 0)
-			minX = width + 1;
-		if (minY < 0)
-			minY = height + 1;
+
 		/*cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "clue = " << it_clue->clue_name() << endl;
 		cout << "maxX = " << maxX << endl;
 		cout << "minX = " << minX << endl;
 		cout << "maxY = " << maxY << endl;
-		cout << "minY = " << minY << endl;
+		cout << "minY = " << minY << endl;*/
+		
 
+		if (x <= maxX && x >= minX && y <= maxY && y >= minY){
 
-		if (x <= maxX && x >= minX && y <= maxY && y >=minY){
+			changeState(*it_clue);
+			//cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
+			}
 
-		clueBox.InsertItem(*it_clue);
-		cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
+			//clueBox.InsertItem(*it_clue);
+			
 		}
 	}
-}*/
+
+void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue){
+
+	/*vector<Clue>::iterator it_clue;
+	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
+		
+		if (x<it_clue->get_2D_coordinate())
+
+	}*/
+
+
+
+
+}

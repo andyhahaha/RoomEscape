@@ -22,18 +22,6 @@ Clue::Clue()
 	_start_scene_down = -1;
 	_end_scene_down = -1;
 
-	/*
-	//change scene 時座標移動多少
-	_row_shift = 0.4;
-	_col_shift = 0.05;
-
-	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
-	//左上角的座標
-	_location_row = -2.0;
-	_location_col = -2.0;
-	_width = 0.0;		//寬
-	_height = 0.0;	//長
-	*/
 
 	_current_dialog = 0; 	//目前使用到哪一個對話
 	_dialog.clear();	
@@ -49,23 +37,24 @@ Clue::Clue()
 };
 
 
-/* Clue: Initial clue by giving some parameters. 
+/* Clue: Initial 3D clue by giving some parameters. 
 */
 
-Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down)
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, float trans_x, float trans_y, float trans_z, float rot_x, float rot_y, float rot_z, float scale)
 {
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
 
-	/*
-	_row_shift = 0.4;
-	_col_shift = 0.05;
-	_location_row = row;
-	_location_col = column;
-	_width = width;
-	_height = height;
-	*/
+
+	_trans_x = trans_x;
+	_trans_y = trans_y; 
+	_trans_z = trans_z;
+	_rot_x = rot_x;
+	_rot_y = rot_y;
+	_rot_z = rot_z;
+	_scale = scale;
+	
 
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
@@ -84,6 +73,61 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_state.clear();			//紀錄每個state是什麼代號
 	_current_state = 0;		//線索狀態
 }
+
+
+
+/* Clue: Initial 2D clue by giving some parameters.
+*/
+
+Clue::Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner)
+{
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+
+
+	_start_scene_up = start_scene_up;
+	_start_scene_down = start_scene_down;
+	_end_scene_up = end_scene_up;
+	_end_scene_down = end_scene_down;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
+
+	_cluebox_img = "no path";
+
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
+
+	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
+}
+
+/*near scence clue*/
+Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
+
+	_cluebox_img = "no path";
+
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
+
+
+}
+
 
 
 /* Clue: Initial clue by giving a path of a clue file. 
@@ -388,6 +432,11 @@ void Clue::set_obj_corner(Vector<Point3f> obj_corner)
 {
 	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
 }
+
+void Clue::set_2D_coordinate(Vector<Point2i> coordinate){
+	_2DCoordinate.assign( coordinate.begin(),coordinate.end());
+}
+
 
 
 /* ----------------------- Setting clue state. ------------------------*/
@@ -741,6 +790,51 @@ int Clue::write_initial_file()
 	fclose(fp);
 	return 1;
 };
+
+float Clue::trans_x(){
+	return _trans_x;
+
+
+};
+float Clue::trans_y(){
+	return _trans_y;
+
+}
+float Clue::trans_z(){
+	return _trans_z;
+
+
+}
+float Clue::rot_x(){
+	return _rot_x;
+
+
+}
+float Clue::rot_y(){
+	return _rot_y;
+
+
+
+}
+float Clue::rot_z(){
+	return _rot_z;
+
+
+}
+float Clue::scale(){
+	return _scale;
+
+}
+
+Vector<Point2i> Clue::get_2D_coordinate(){
+
+	return _2DCoordinate;
+
+}
+
+
+
+
 
 ostream& operator<<(ostream& os, const Clue& clue)
 {

@@ -278,3 +278,52 @@ void drawDialog(const char *text, int length,int width,int height){
 
 
 }
+
+
+/* DrawWall: Draw four virtual wall to pretend room wall.
+*
+*/
+
+void DrawWall(){
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND); //Enable blending.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+
+	//front red wall
+	glBegin(GL_QUADS);
+	glColor4f(0.9, 0.0, 0.0, 0.5);
+	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
+	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
+	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
+	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
+	glEnd();
+
+	//back  green wall
+	glBegin(GL_QUADS);
+	glColor4f(0.0, 0.9, 0.0, 0.5);
+	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
+	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
+	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
+	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
+	glEnd();
+
+	//right  blue wall
+	glBegin(GL_QUADS);
+	glColor4f(0.0, 0.0, 0.9, 0.5);
+	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
+	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
+	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
+	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
+	glEnd();
+
+	//left  yellow wall
+	glBegin(GL_QUADS);
+	glColor4f(0.9, 0.9, 0.0, 0.5);
+	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
+	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
+	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
+	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
+	glEnd();
+
+
+}
