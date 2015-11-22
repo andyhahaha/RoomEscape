@@ -52,7 +52,6 @@ void SetAllSceneImg()
 	tm.start();
 
 	string path = "D:\\image\\image_use\\" + room_final + "\\position1" + "\\";
-	//PosSet1.stitch_one_scene(VERTICAL_CENTRAL, 0, METHOD1);
 	PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 11, 179, METHOD1);
 	//PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 90, 179, METHOD2);
 	//PosSet1.StitchSceneAll(METHOD2);
