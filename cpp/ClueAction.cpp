@@ -216,12 +216,12 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue){
 
 void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue){
 
-	/*vector<Clue>::iterator it_clue;
+	vector<Clue>::iterator it_clue;
 	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
 		
-		if (x<it_clue->get_2D_coordinate())
-
-	}*/
+		if (x > it_clue->get_2D_coordinate()[0].x&&x<it_clue->get_2D_coordinate()[1].x&&y>it_clue->get_2D_coordinate()[0].y&&y < it_clue->get_2D_coordinate()[1].y)
+			changeState(*it_clue);
+	}
 
 
 

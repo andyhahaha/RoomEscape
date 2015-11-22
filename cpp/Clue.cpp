@@ -125,7 +125,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i>
 	_state.clear();			//紀錄每個state是什麼代號
 	_current_state = 0;		//線索狀態
 
-
+	_2DCoordinate.assign(coordinate.begin(), coordinate.end());
 }
 
 

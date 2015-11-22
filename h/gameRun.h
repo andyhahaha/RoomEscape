@@ -84,17 +84,19 @@ extern GLdouble modelview[16];
 extern GLdouble projection[16];
 
 
-extern void  gameRun(int argc, char** argv);
+void  gameRun(int argc, char** argv);
 
 /*clue action*/
-extern void nearScence(string, int);
-extern string typeCode();
-extern void showInCluebox(Clue);
-extern void changeState(Clue);
-extern void ClueHit(int, int, vector<Clue>);
+void nearScence(string, int);
+string typeCode();
+void showInCluebox(Clue);
+void changeState(Clue);
+void ClueHit(int, int, vector<Clue>);
+void ClueHitNearScence(int , int , vector<Clue> );
 
-extern GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num);
-extern void clueSetting();
+
+GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num);
+void clueSetting();
 
 
 #endif

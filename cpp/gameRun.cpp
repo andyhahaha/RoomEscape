@@ -193,58 +193,58 @@ void mouse(int button, int state, int x, int y)
 				ClueHit(x, y, ClueOnScreen);
 				break;
 			case DRAWER_ST:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case DRAWER_ED:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case DRAWER_RD:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case BLUESHELF_TOP:
-				ClueHit(x, y, ClueInBlueShelfTop);
+				ClueHitNearScence(x, y, ClueInBlueShelfTop);
 				break;
 			case BLUESHELF_MID:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case BLUESHELF_BTN:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case ORANGESHELF_TOP:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case ORANGESHELF_MID:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case ORANGESHELF_BTN:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case GREENSHELF_TOP:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case GREENSHELF_MID:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case GREENSHELF_BTN:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case WOODSHELF_TOP:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case WOODSHELF_MID:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case WOODSHELF_BTN:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case CLOSET:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case PILLOW:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			case CURTAIN:
-				ClueHit(x, y, ClueOnScreen);
+				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			
 			}

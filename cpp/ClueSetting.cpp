@@ -25,7 +25,7 @@ vector<Point3f> set_corner(float x1, float y1, float z1, float x2, float y2, flo
 	return obj_corner;
 }
 
-vector<Point2i> set_coordinate(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+vector<Point2i> set_coordinate(int x1, int y1, int x2, int y2){
 	vector<Point2i> coordinate;
 	Point2d point;
 	point.x = x1;
@@ -33,12 +33,6 @@ vector<Point2i> set_coordinate(int x1, int y1, int x2, int y2, int x3, int y3, i
 	coordinate.push_back(point);
 	point.x = x2;
 	point.y = y2;
-	coordinate.push_back(point);
-	point.x = x3;
-	point.y = y3;
-	coordinate.push_back(point);
-	point.x = x4;
-	point.y = y4;
 	coordinate.push_back(point);
 
 	return coordinate;
@@ -126,7 +120,7 @@ void clueSetting(){
 	Clue Blue_shelf_Top("room", 0, "Blue_shelf_Top", 179, 62, 179, 62, corner);
 	AllClue.push_back(Blue_shelf_Top);
 
-	coordinate = set_coordinate(0, 0, 100, 0, 0, 100, 100, 100);
+	coordinate = set_coordinate(0, 0, 100, 100);
 	Clue textbook("room", 0, "textbook", coordinate);
 	ClueInBlueShelfTop.push_back(textbook);
 
