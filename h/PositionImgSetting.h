@@ -15,6 +15,7 @@ public:
 	void set_position_number(int);
 	int get_position_number();	//查看位置編號	
 	
+	void stitch_one_scene(int, int, int);
 	int StitchSceneRange(int, int, int, int);	//stitch from num1 to num2
 	void StitchSceneAll(int);	//把360張stitch圖都拼接出來
 	
@@ -39,6 +40,9 @@ private:
 	void get_homography_matrix(Image, Image, vector< DMatch >, Mat&);
 	Mat get_blending_matrix(Mat, Mat, Mat);
 	Mat get_stitch_matrix(Mat, Mat, int, Mat, vector<int> &);
+
+
+	Mat get_H(Mat img_1, Mat img_2, int method);
 };
 
 #endif

@@ -39,7 +39,7 @@ void resize_all(string& room_name, int position_number,int vertical_angle, int p
 	string path_src = "D:\\image\\" + room_name + "\\position" + to_string(position_number) + "\\" + to_string(vertical_angle) + "_choosen\\";
 	Mat img;
 
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < 800; i++)
 	{
 		img = imread(path_src + to_string(i) + ".jpg");
 

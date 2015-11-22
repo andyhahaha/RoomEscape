@@ -32,14 +32,14 @@ void SetResourceImg()
 {
 	int position_num = 1;
 
-	int findH_from = 32;
-	int findH_to = 33;
-	choose_image(room_final, position_num, VERTICAL_UP_20, findH_from, findH_to);
-
-	//resize_all(room_test5, position_num, VERTICAL_CENTRAL, 50);
-	//resize_all(room_test5, position_num, VERTICAL_UP_20, 50);
-	//resize_all(room_test5, position_num, VERTICAL_DOWN_20, 50);
-	//resize_all(room_test5, position_num, VERTICAL_DOWN_40, 50);
+	int findH_from = 0;
+	int findH_to = 22;
+	//choose_image(room_final, position_num, VERTICAL_CENTRAL, findH_from, findH_to);
+	
+	resize_all(room_final, position_num, VERTICAL_UP_20, 50);
+	//resize_all(room_final, position_num, VERTICAL_CENTRAL, 50);
+	//resize_all(room_final, position_num, VERTICAL_DOWN_20, 50);
+	//resize_all(room_final, position_num, VERTICAL_DOWN_40, 50);
 }
 
 
@@ -52,7 +52,9 @@ void SetAllSceneImg()
 	tm.start();
 
 	string path = "D:\\image\\image_use\\" + room_final + "\\position1" + "\\";
-	PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 0, 156, METHOD2);
+	//PosSet1.stitch_one_scene(VERTICAL_CENTRAL, 0, METHOD1);
+	PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 11, 179, METHOD1);
+	//PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 90, 179, METHOD2);
 	//PosSet1.StitchSceneAll(METHOD2);
 
 	tm.stop();
@@ -61,7 +63,7 @@ void SetAllSceneImg()
 
 void gameBuild()
 {
-	SetResourceImg();
-	//SetAllSceneImg();
+	//SetResourceImg();
+	SetAllSceneImg();
 	//SetAllClue();
 }
