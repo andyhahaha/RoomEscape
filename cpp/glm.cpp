@@ -873,14 +873,14 @@ glmPoint(GLMmodel* model)
 	corner.push_back(c6);
 	corner.push_back(c7);
 	corner.push_back(c8);
-	cout << "c1 = "<<c1 << endl;
+	/*cout << "c1 = "<<c1 << endl;
 	cout << "c2 = " << c2 << endl;
 	cout << "c3 = " << c3 << endl;
 	cout << "c4 = " << c4 << endl;
 	cout << "c5 = " << c5 << endl;
 	cout << "c6 = " << c6 << endl;
 	cout << "c7 = " << c7 << endl;
-	cout << "c8 = " << c8 << endl;
+	cout << "c8 = " << c8 << endl;*/
 	return corner;
 
 }

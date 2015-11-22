@@ -1,65 +1,45 @@
-#include <stdio.h>
-#include <math.h>
-#include <iostream>
-#include "glut.h"
-#include "..\..\..\..\RoomEscape\h\glm.h"
+#include "D:\RoomEscape\h\gameRun.h"
 
-#include <opencv2/contrib/contrib.hpp> 
-#include "opencv2/core/core.hpp"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/nonfree/nonfree.hpp"
-#include "opencv2/calib3d/calib3d.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include <opencv2/legacy/legacy.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
-#include <opencv2/nonfree/features2d.hpp>
-
-#include "..\..\..\..\RoomEscape\h\ClueBox.h"
-#include "..\..\..\..\RoomEscape\h\DrawImage.h"
-
-#include <time.h>
-
-using namespace cv;
-using namespace std;
-
-#define G_PI 3.14159265358979323846f
 int width = 1080;      //Width of the background in pixels.
 int height = 720;     //Height of the background in pixels.		
-vector<GLuint>list_id;
+
+int scence_num = 0;
 Mat background;
+
 GLMmodel *glm_model;
+vector<GLuint>list_id;
+
+
 float theta = -1.0792;
 float phi = 1.5292;
-float OBJ_x = 0, OBJ_y = 0;
-ClueBox clueBox(0, width, 100, 100, 100);
-vector<Clue>ClueOnScreen;
-vector<Clue>ClueInCloset;
-vector<Clue>ClueInDrawer1;
-vector<Clue>ClueInDrawer2;
-vector<Clue>ClueInShel1;
-vector<Clue>ClueInShel2;
-vector<Clue>ClueInPillow;
-vector<Clue>ClueInCurtain;
-vector<Clue>AllClue;
-int q = 0;
-int scence_num = 0;
-float OBJx = 0;
 
-Mat clueBox_text;
-#define RADPERDEG 0.0174533
+ClueBox clueBox(0, width, 100, 100, 100);
+
+vector<Clue> ClueOnScreen;
+vector<Clue> ClueInCloset;
+vector<Clue> ClueInDrawer1;
+vector<Clue> ClueInDrawer2;
+vector<Clue> ClueInDrawer3;
+vector<Clue> ClueInBlueShelfTop;
+vector<Clue> ClueInBlueShelfMid;
+vector<Clue> ClueInBlueShelfBtn;
+
+vector<Clue> ClueInPillow;
+vector<Clue> ClueInCurtain;
+vector<Clue> AllClue;
+
+Mat clueBox_texture;
+
 
 int record_x = 0;
 int record_y = 0;
-
 int rot_x = 0;
 int rot_y = 0;
 int rot_z = 0;
 int old_rot_x = 0;
 int old_rot_y = 0;
 int old_rot_z = 0;
-#define dist 5
-#define offset 1.5
+
 float cam_z = 0;
 
 GLint    viewport[4];
@@ -69,13 +49,6 @@ GLdouble projection[16];
 int mouseState = ROOM;
 
 
-
-void nearScence(string path, int scence){
-
-	background = imread(path);
-	mouseState = scence;
-
-}
 
 void clueBoxController(int x){
 
@@ -101,61 +74,8 @@ void clueBoxController(int x){
 		}
 
 	}
-
-
-
-
 }
 
-
-
-/* DrawWall: Draw four virtual wall to pretend room wall.
-*
-*/
-
-void DrawWall(){
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_BLEND); //Enable blending.
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-
-	//front red wall
-	glBegin(GL_QUADS);
-	glColor4f(0.9, 0.0, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
-	glEnd();
-
-	//back  green wall
-	glBegin(GL_QUADS);
-	glColor4f(0.0, 0.9, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
-	glEnd();
-
-	//right  blue wall
-	glBegin(GL_QUADS);
-	glColor4f(0.0, 0.0, 0.9, 0.5);
-	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
-	glEnd();
-
-	//left  yellow wall
-	glBegin(GL_QUADS);
-	glColor4f(0.9, 0.9, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
-	glEnd();
-
-
-}
 
 
 
@@ -173,17 +93,21 @@ void DrawWall(){
 *
 */
 
-GLuint drawObject(GLMmodel *model, Clue &clue, char *path, GLfloat trans_x, GLfloat trans_y, GLfloat trans_z, GLfloat rot_x, GLfloat rot_y, GLfloat rot_z, GLfloat scale){
+GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num){
+
+	
+	char *path = new char[clue.get_3Dobj(obj_num).length() + 1];
+	strcpy(path, clue.get_3Dobj(obj_num).c_str());
 
 	model = glmReadOBJ(path);				//read obj file
 
 	glmUnitize(model);						//unitize object to origin and umit cube
 
-	glmScale(model, scale);
-	glmTranslate(model, trans_x, trans_y, trans_z);
-	glmRotation(model, 0, rot_x);
-	glmRotation(model, 1, rot_y);
-	glmRotation(model, 2, rot_z);
+	glmScale(model, clue.scale());
+	glmTranslate(model, clue.trans_x(), clue.trans_y(), clue.trans_z());
+	glmRotation(model, 0, clue.rot_x());
+	glmRotation(model, 1, clue.rot_y());
+	glmRotation(model, 2, clue.rot_z());
 	clue.set_obj_corner(glmPoint(model));
 
 		
@@ -192,91 +116,6 @@ GLuint drawObject(GLMmodel *model, Clue &clue, char *path, GLfloat trans_x, GLfl
 
 	return glmList(model, GLM_MATERIAL | GLM_SMOOTH);
 
-}
-
-
-void DrawClueHit(){
-
-	vector<Clue>::iterator it_clue;
-
-	int clue_col, clue_row, clue_width, clue_height;
-	for (it_clue = ClueOnScreen.begin(); it_clue != ClueOnScreen.end(); ++it_clue) {
-
-		clue_col = (it_clue->location_col() + 1) / 2 * width;
-		clue_row = height - (it_clue->location_row() + 1) / 2 * height;
-		clue_width = it_clue->width() / 2 * width;
-		clue_height = it_clue->height() / 2 * height;
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_BLEND); //Enable blending.
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-	
-		glBegin(GL_QUADS);
-		glColor4f(0.5, 0.5, 0.5, 0.5);
-		glVertex3f(it_clue->location_col(), it_clue->location_row(), 0.0);
-		glColor4f(0.5, 0.5, 0.5, 0.5);
-		glVertex3f(it_clue->location_col(), it_clue->location_row() - it_clue->height(), 0.0);
-		glColor4f(0.5, 0.5, 0.5, 0.5);
-		glVertex3f(it_clue->location_col() + it_clue->width(), it_clue->location_row() - it_clue->height(), 0.0);
-		glColor4f(0.5, 0.5, 0.5, 0.5);
-		glVertex3f(it_clue->location_col() + it_clue->width(), it_clue->location_row(), 0.0);
-		
-		glEnd();
-	
-	}
-
-}
-
-
-void ClueHit(int x, int y, vector<Clue> _onScreenClue){
-	vector<Clue>::iterator it_clue;
-
-
-	GLdouble  winX, winY, winZ;
-	GLdouble posX, posY, posZ;
-	int screenX, screenY;
-	int maxX = -10000, minX = 10000, maxY = -10000, minY = 10000;
-	int i;
-	//glGetIntegerv(GL_VIEWPORT, viewport);
-	//glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-	//glGetDoublev(GL_PROJECTION_MATRIX, projection);
-
-
-	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
-		maxX = -10000;
-		minX = 10000;
-		maxY = -10000;
-		minY = 10000;
-		for (i = 0; i < 8; i++){
-			posX = it_clue->obj_corner()[i].x;
-			posY = it_clue->obj_corner()[i].y;
-			posZ = it_clue->obj_corner()[i].z;
-			gluProject(posX, posY, posZ, modelview, projection, viewport, &winX, &winY, &winZ);
-			screenX = winX;
-			screenY = viewport[3] - (float)winY;
-			if (maxX < screenX)
-				maxX = screenX;
-			if (maxY < screenY)
-				maxY = screenY;
-			if (minX > screenX)
-				minX = screenX;
-			if (minY > screenY)
-				minY = screenY;
-		}
-		
-		/*cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		cout << "clue = " << it_clue->clue_name() << endl;
-		cout << "maxX = " << maxX << endl;
-		cout << "minX = " << minX << endl;
-		cout << "maxY = " << maxY << endl;
-		cout << "minY = " << minY << endl;
-		*/
-
-		if (x <= maxX && x >= minX && y <= maxY && y >=minY){
-
-		clueBox.InsertItem(*it_clue);
-		cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
-		}
-	}
 }
 
 
@@ -333,6 +172,14 @@ void mouse(int button, int state, int x, int y)
 	{  
 		printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 		glutPostRedisplay();
+		GLdouble posX, posY, posZ;
+		GLdouble  winX, winY, winZ = 0.994;
+		winX = (float)x;
+		winY = (float)viewport[3] - (float)y;
+		//glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+		gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+		cout << "x = " << posX << endl << "y = " << posY << "z = " << posZ << endl;
+		
 
 		if (y > height - (SPACE+ITEM_WIDTH)*height&&y < height - SPACE*height)
 			clueBoxController(x);
@@ -351,10 +198,43 @@ void mouse(int button, int state, int x, int y)
 			case DRAWER_ED:
 				ClueHit(x, y, ClueOnScreen);
 				break;
-			case BOOKSHELF_TOP:
+			case DRAWER_RD:
 				ClueHit(x, y, ClueOnScreen);
 				break;
-			case BOOKSHELF_ED:
+			case BLUESHELF_TOP:
+				ClueHit(x, y, ClueInBlueShelfTop);
+				break;
+			case BLUESHELF_MID:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case BLUESHELF_BTN:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case ORANGESHELF_TOP:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case ORANGESHELF_MID:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case ORANGESHELF_BTN:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case GREENSHELF_TOP:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case GREENSHELF_MID:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case GREENSHELF_BTN:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case WOODSHELF_TOP:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case WOODSHELF_MID:
+				ClueHit(x, y, ClueOnScreen);
+				break;
+			case WOODSHELF_BTN:
 				ClueHit(x, y, ClueOnScreen);
 				break;
 			case CLOSET:
@@ -366,9 +246,7 @@ void mouse(int button, int state, int x, int y)
 			case CURTAIN:
 				ClueHit(x, y, ClueOnScreen);
 				break;
-		
-	
-				
+			
 			}
 		}
 		
@@ -430,7 +308,7 @@ void prepare_lighting()
 
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
@@ -545,7 +423,9 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	/* draw background*/
-	background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\scence\\final\\stitch" + to_string(scence_num) + ".jpg");
+	if (mouseState == ROOM)
+		background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\scence\\final\\stitch" + to_string(scence_num) + ".jpg");
+	
 	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
 
 
@@ -558,10 +438,10 @@ void display()
 
 	/* set camera sight*/
 	gluLookAt(
-		0, 0, cam_z,
+		0, 0, 0,
 		sinf(float(scence_num * 2) / 180 * G_PI), 0, -cosf(float(scence_num * 2) / 180 * G_PI),
 		0, 1, 0);
-	//cout << "cam_z = " << cam_z << endl;
+
 
 	/* rotate all 3D models*/
 	//glRotatef((float)rot_y + (float)record_y, 1.0, 0.0, 0.0);//上下滑  以x軸當旋轉軸 
@@ -581,17 +461,26 @@ void display()
 	prepare_lighting();
 
 	/*draw 3D models by call list*/
-	glCallList(list_id[0]);
-	glCallList(list_id[1]);
-	glCallList(list_id[2]);
-
+	ClueOnScreen.clear();
+	vector<Clue>::iterator it_clue;
+	for (it_clue = AllClue.begin(); it_clue != AllClue.end(); ++it_clue) {
+		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scence_num))
+			ClueOnScreen.push_back(*it_clue);
+	}
+	int i;
+	if (mouseState == ROOM){
+		for (i = 0; i < list_id.size(); i++){
+			glCallList(list_id[i]);
+		}
+	}
+	cout <<"scence = "<< scence_num << endl;
 
 	/*draw other game interface view*/
-	DrawClueHit();
+	//DrawClueHit();
 	DrawWall();
 	string text = "andyha yoyoyo";
 	drawDialog(text.data(), text.size(),width,height);
-	clueBox.show_clue_box(clueBox_text);
+	clueBox.show_clue_box(clueBox_texture);
 	clueBox.show_clue(width, height);
 
 	glFlush();
@@ -599,30 +488,6 @@ void display()
 }
 
 
-
-/*set clue */
-void clueSetting(){
-	Clue clue1("room", 0, "key", 0, 0, -0.9, 0.9, 0.1, 0.1);//　//room name, position number, clue name, start_scene_up, start_scene_down, 左上角的座標row,左上角的座標column,寬,長
-	Clue clue2("room", 0, "bear", 0, 0, -0.5, 0.5, 0.1, 0.1);
-	Clue clue3("room", 0, "pillow", 0, 0, 0, 0, 0.1, 0.1);
-	clue1.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\key.obj");
-	clue1.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\key1.png");
-	clue2.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\teddy.obj");
-	clue2.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
-	clue3.add_img_path("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\pillow.obj");
-	clue3.set_cluebox_img("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\pillow.png");
-	AllClue.push_back(clue1);
-	AllClue.push_back(clue2);
-	AllClue.push_back(clue3);
-	
-
-	list_id.push_back(drawObject(glm_model,clue1, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\key.obj", -2*dist, 1*dist, -3*dist , 0, 0, 0, 1.0));
-	list_id.push_back(drawObject(glm_model, clue2, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\teddy.obj", -0.5*dist, 0.5*dist, -3 * dist, 0, 90, 0, 2.0));
-	list_id.push_back(drawObject(glm_model, clue3, "D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\3D\\pillow.obj", 0, 0, -3 * dist, 0, 0, 0, 10.0));
-	ClueOnScreen.push_back(clue1);
-	ClueOnScreen.push_back(clue2);
-	ClueOnScreen.push_back(clue3);
-}
 
 void initializeOpenGL()
 {
@@ -646,7 +511,7 @@ void initializeOpenGL()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	// Load background image
-	clueBox_text = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\paper_texture2.png");
+	clueBox_texture = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\paper_texture2.png");
 
 	// Set light
 	prepare_lighting();

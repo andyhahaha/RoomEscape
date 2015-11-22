@@ -62,6 +62,9 @@
 #define CHANGE_IMG 3
 #define SHOW_ANIMATION 4
 #define SHOW_DIALOG 5
+#define SHOW_NEAR_SCENCE 6
+#define TYPE_CODE 7
+
 
 //cluebox
 #define SPACE 0.03		//clue in the clue box space(horizon and vertical is both 0.03% of the screen height)
@@ -71,12 +74,27 @@
 #define ARROW_WIDTH 0.02
 
 //near scence
-#define ROOM			0
-#define DRAWER_ST		1
-#define DRAWER_ED		2
-#define BOOKSHELF_TOP	3
-#define BOOKSHELF_ED	4
-#define CLOSET			5
-#define PILLOW			6
-#define CURTAIN			7
+#define ROOM				0
+#define DRAWER_ST			1
+#define DRAWER_ED			2
+#define DRAWER_RD			3
+#define BLUESHELF_TOP		4
+#define BLUESHELF_MID		5
+#define BLUESHELF_BTN		6
+#define ORANGESHELF_TOP		7
+#define ORANGESHELF_MID		8
+#define ORANGESHELF_BTN		9
+#define GREENSHELF_TOP		10	
+#define GREENSHELF_MID		11
+#define GREENSHELF_BTN		12	
+#define WOODSHELF_TOP		13
+#define WOODSHELF_MID		14
+#define WOODSHELF_BTN		15
+#define CLOSET				16
+#define PILLOW				17
+#define CURTAIN				18
+
+
+#define dist 5
+#define offset 1.5
 #endif
