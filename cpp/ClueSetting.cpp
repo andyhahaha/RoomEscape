@@ -124,6 +124,9 @@ void clueSetting(){
 	Clue textbook("room", 0, "textbook", coordinate);
 	ClueInBlueShelfTop.push_back(textbook);
 
+
+
+
 	Clue Blue_shelf_Mid("room", 0, "Blue_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
 	AllClue.push_back(Blue_shelf_Mid);
 
