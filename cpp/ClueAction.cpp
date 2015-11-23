@@ -101,11 +101,7 @@ void Wood_shelf_buttonAction(){
 	mouseState = scence;
 
 }*/
-string typeCode(){
 
-
-	return "1234";
-}
 void showInCluebox(Clue clue){
 
 	clueBox.InsertItem(clue);

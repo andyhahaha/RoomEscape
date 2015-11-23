@@ -97,6 +97,6 @@
 #define CURTAIN				18*/
 
 
-#define dist 5
-#define offset 1.5
+#define DIST 5
+#define OFFSET 1.5
 #endif

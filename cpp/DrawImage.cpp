@@ -292,37 +292,37 @@ void DrawWall(){
 	//front red wall
 	glBegin(GL_QUADS);
 	glColor4f(0.9, 0.0, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
+	glVertex3f(-2.2 * DIST, 4 * DIST + OFFSET, -3 * DIST);
+	glVertex3f(2.2 * DIST, 4 * DIST + OFFSET, -3 * DIST);
+	glVertex3f(2.2 * DIST, -2 * DIST + OFFSET, -3 * DIST);
+	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, -3 * DIST);
 	glEnd();
 
 	//back  green wall
 	glBegin(GL_QUADS);
 	glColor4f(0.0, 0.9, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
+	glVertex3f(-2.2 * DIST, 4 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(2.2 * DIST, 4 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(2.2 * DIST, -2 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, 3 * DIST);
 	glEnd();
 
 	//right  blue wall
 	glBegin(GL_QUADS);
 	glColor4f(0.0, 0.0, 0.9, 0.5);
-	glVertex3f(2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(2.2 * dist, -2 * dist + offset, -3 * dist);
+	glVertex3f(2.2 * DIST, 4 * DIST + OFFSET, -3 * DIST);
+	glVertex3f(2.2 * DIST, 4 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(2.2 * DIST, -2 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(2.2 * DIST, -2 * DIST + OFFSET, -3 * DIST);
 	glEnd();
 
 	//left  yellow wall
 	glBegin(GL_QUADS);
 	glColor4f(0.9, 0.9, 0.0, 0.5);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, -3 * dist);
-	glVertex3f(-2.2 * dist, 4 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, 3 * dist);
-	glVertex3f(-2.2 * dist, -2 * dist + offset, -3 * dist);
+	glVertex3f(-2.2 * DIST, 4 * DIST + OFFSET, -3 * DIST);
+	glVertex3f(-2.2 * DIST, 4 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, 3 * DIST);
+	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, -3 * DIST);
 	glEnd();
 
 

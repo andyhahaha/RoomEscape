@@ -48,50 +48,50 @@ void clueSetting(){
 	/*3D OBJ*/
 
 	/*safe*/
-	Clue safe("room", 0, "safe", 0, 45, 0, 45, 2*dist, 3*dist, -3 * dist, 0, 90, 0, 2.0);
+	Clue safe("room", 0, "safe", 0, 45, 0, 45, 2 * DIST, 3 * DIST, -3 * DIST, 0, 90, 0, 2.0);
 	safe.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	list_id.push_back(drawObject(glm_model, safe, 0));
 	AllClue.push_back(safe);
 
 	/*key*/
-	Clue key("room", 0, "key", 133, 14, 133, 14, -2*dist, 3*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue key("room", 0, "key", 133, 14, 133, 14, -2 * DIST, 3 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	key.add_3Dobj_path("D:\\resource\\3D\\key.obj");
 	list_id.push_back(drawObject(glm_model, key, 0));
 	AllClue.push_back(key);
 
 	/*card*/
-	Clue cardD("room", 0, "cardD", 133, 14, 133, 14, -2 * dist, 0 * dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue cardD("room", 0, "cardD", 133, 14, 133, 14, -2 * DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardD.add_3Dobj_path("D:\\resource\\3D\\cardD.obj");
 	cardD.set_cluebox_img("D:\\resource\\2D\\D.png");
 	list_id.push_back(drawObject(glm_model, cardD, 0));
 	AllClue.push_back(cardD);
 
-	Clue cardS("room", 0, "cardS", 139, 21, 139, 21, -1.1*dist, 0*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue cardS("room", 0, "cardS", 139, 21, 139, 21, -1.1*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardS.add_3Dobj_path("D:\\resource\\3D\\cardS.obj");
 	cardS.set_cluebox_img("D:\\resource\\2D\\S.png");
 	list_id.push_back(drawObject(glm_model, cardS, 0));
 	AllClue.push_back(cardS);
 
-	Clue cardP("room", 0, "cardP", 147, 29, 147, 29, -0.2*dist, 0*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue cardP("room", 0, "cardP", 147, 29, 147, 29, -0.2*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardP.add_3Dobj_path("D:\\resource\\3D\\cardP.obj");
 	cardP.set_cluebox_img("D:\\resource\\2D\\P.png");
 	list_id.push_back(drawObject(glm_model, cardP, 0));
 	AllClue.push_back(cardP);
 
-	Clue card_num1("room", 0, "card_num1", 156, 37, 156, 37, 0.7*dist, 0*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue card_num1("room", 0, "card_num1", 156, 37, 156, 37, 0.7*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	card_num1.add_3Dobj_path("D:\\resource\\3D\\7.obj");
 	card_num1.set_cluebox_img("D:\\resource\\2D\\7.png");
 	list_id.push_back(drawObject(glm_model, card_num1, 0));
 	AllClue.push_back(card_num1);
 
-	Clue card_num2("room", 0, "card_num2", 163, 44, 163, 44, 1.6*dist, 0*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue card_num2("room", 0, "card_num2", 163, 44, 163, 44, 1.6*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	card_num2.add_3Dobj_path("D:\\resource\\3D\\2.obj");
 	card_num2.set_cluebox_img("D:\\resource\\2D\\2.png");
 	list_id.push_back(drawObject(glm_model, card_num2, 0));
 	AllClue.push_back(card_num2);
 
-	Clue card_num3("room", 0, "card_num3", 170, 50, 170, 50, 2.5*dist, 0*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue card_num3("room", 0, "card_num3", 170, 50, 170, 50, 2.5*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	card_num3.add_3Dobj_path("D:\\resource\\3D\\0.obj");
 	card_num3.set_cluebox_img("D:\\resource\\2D\\0.png");
 	list_id.push_back(drawObject(glm_model, card_num3, 0));
@@ -103,13 +103,13 @@ void clueSetting(){
 	/*near scence*/
 
 	/*curtain*/
-	Clue curtain("room", 0, "curtain", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue curtain("room", 0, "curtain", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(curtain);
 
 
 
 	/*pillow*/
-	Clue pillow("room", 0, "pillow", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue pillow("room", 0, "pillow", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(pillow);
 
 	
@@ -124,43 +124,40 @@ void clueSetting(){
 	Clue textbook("room", 0, "textbook", coordinate);
 	ClueInBlueShelfTop.push_back(textbook);
 
-
-
-
-	Clue Blue_shelf_Mid("room", 0, "Blue_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Blue_shelf_Mid("room", 0, "Blue_shelf_Mid", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Blue_shelf_Mid);
 
-	Clue Blue_shelf_button("room", 0, "Blue_shelf_button", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Blue_shelf_button("room", 0, "Blue_shelf_button", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Blue_shelf_button);
 
 	/*Orange*/
-	Clue Orange_shelf_Top("room", 0, "Orange_shelf_Top", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Orange_shelf_Top("room", 0, "Orange_shelf_Top", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Orange_shelf_Top);
 
-	Clue Orange_shelf_Mid("room", 0, "Orange_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Orange_shelf_Mid("room", 0, "Orange_shelf_Mid", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Orange_shelf_Mid);
 
-	Clue Orange_shelf_button("room", 0, "Orange_shelf_button", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Orange_shelf_button("room", 0, "Orange_shelf_button", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Orange_shelf_button);
 
 	/*Green*/
-	Clue Green_shelf_Top("room", 0, "Green_shelf_Top", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Green_shelf_Top("room", 0, "Green_shelf_Top", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Green_shelf_Top);
 
-	Clue Green_shelf_Mid("room", 0, "Green_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Green_shelf_Mid("room", 0, "Green_shelf_Mid", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Green_shelf_Mid);
 
-	Clue Green_shelf_button("room", 0, "Green_shelf_button", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Green_shelf_button("room", 0, "Green_shelf_button", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Green_shelf_button);
 
 	/*Wood*/
-	Clue Wood_shelf_Top("room", 0, "Wood_shelf_Top", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Wood_shelf_Top("room", 0, "Wood_shelf_Top", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Wood_shelf_Top);
 
-	Clue Wood_shelf_Mid("room", 0, "Wood_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Wood_shelf_Mid("room", 0, "Wood_shelf_Mid", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Wood_shelf_Mid);
 
-	Clue Wood_shelf_button("room", 0, "Wood_shelf_button", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
+	Clue Wood_shelf_button("room", 0, "Wood_shelf_button", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
 	AllClue.push_back(Wood_shelf_button);
 
 

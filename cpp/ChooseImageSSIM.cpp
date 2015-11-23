@@ -258,13 +258,14 @@ Mat find_homography_matrix(string path, int img_to_num, int img_from_num)
 	matcher.match(descriptors_1, descriptors_2, matches);
 
 	double max_dist = 0; double min_dist = 100;
+	double distance;
 
 	//-- Quick calculation of max and min distances between keypoints
 	for (int i = 0; i < descriptors_1.rows; i++)
 	{
-		double dist = matches[i].distance;
-		if (dist < min_dist) min_dist = dist;
-		if (dist > max_dist) max_dist = dist;
+		distance = matches[i].distance;
+		if (distance < min_dist) min_dist = distance;
+		if (distance > max_dist) max_dist = distance;
 	}
 
 	//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
