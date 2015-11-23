@@ -124,14 +124,7 @@ void clueSetting(){
 	Clue textbook("room", 0, "textbook", coordinate);
 	ClueInBlueShelfTop.push_back(textbook);
 
-<<<<<<< HEAD
 	Clue Blue_shelf_Mid("room", 0, "Blue_shelf_Mid", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
-=======
-
-
-
-	Clue Blue_shelf_Mid("room", 0, "Blue_shelf_Mid", 0, 45, 0, 45, -0.5*dist, 0.5*dist, -3 * dist, 0, 0, 0, 2.0);
->>>>>>> refs/remotes/andyhahaha/master
 	AllClue.push_back(Blue_shelf_Mid);
 
 	Clue Blue_shelf_button("room", 0, "Blue_shelf_button", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
