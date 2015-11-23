@@ -49,6 +49,7 @@ extern ClueBox clueBox;
 
 /*Clue vector*/
 extern vector<Clue> ClueOnScreen;
+extern vector<Clue> ClueOnRoom;
 extern vector<Clue> ClueInCloset;
 extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;

@@ -76,7 +76,8 @@
 
 //near scence
 #define ROOM				0
-#define DRAWER_ST			1
+#define NEARSCENCE			1
+/*#define DRAWER_ST			1
 #define DRAWER_ED			2
 #define DRAWER_RD			3
 #define BLUESHELF_TOP		4
@@ -93,7 +94,7 @@
 #define WOODSHELF_BTN		15
 #define CLOSET				16
 #define PILLOW				17
-#define CURTAIN				18
+#define CURTAIN				18*/
 
 
 #define DIST 5

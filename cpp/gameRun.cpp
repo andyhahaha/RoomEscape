@@ -16,6 +16,7 @@ float phi = 1.5292;
 ClueBox clueBox(0, width, 100, 100, 100);
 
 vector<Clue> ClueOnScreen;
+vector<Clue> ClueOnRoom;
 vector<Clue> ClueInCloset;
 vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;
@@ -192,58 +193,7 @@ void mouse(int button, int state, int x, int y)
 			case ROOM:
 				ClueHit(x, y, ClueOnScreen);
 				break;
-			case DRAWER_ST:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case DRAWER_ED:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case DRAWER_RD:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case BLUESHELF_TOP:
-				ClueHitNearScence(x, y, ClueInBlueShelfTop);
-				break;
-			case BLUESHELF_MID:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case BLUESHELF_BTN:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case ORANGESHELF_TOP:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case ORANGESHELF_MID:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case ORANGESHELF_BTN:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case GREENSHELF_TOP:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case GREENSHELF_MID:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case GREENSHELF_BTN:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case WOODSHELF_TOP:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case WOODSHELF_MID:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case WOODSHELF_BTN:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case CLOSET:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case PILLOW:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
-			case CURTAIN:
+			case NEARSCENCE:
 				ClueHitNearScence(x, y, ClueOnScreen);
 				break;
 			
@@ -461,14 +411,17 @@ void display()
 	prepare_lighting();
 
 	/*draw 3D models by call list*/
-	ClueOnScreen.clear();
+	ClueOnRoom.clear();
 	vector<Clue>::iterator it_clue;
 	for (it_clue = AllClue.begin(); it_clue != AllClue.end(); ++it_clue) {
 		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scence_num))
-			ClueOnScreen.push_back(*it_clue);
+			ClueOnRoom.push_back(*it_clue);
 	}
+
+		
 	int i;
 	if (mouseState == ROOM){
+		ClueOnScreen.assign(ClueOnRoom.begin(), ClueOnRoom.end());
 		for (i = 0; i < list_id.size(); i++){
 			glCallList(list_id[i]);
 		}

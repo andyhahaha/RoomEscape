@@ -42,7 +42,10 @@ void pillowAction(){
 
 }
 void Blue_shelf_TopAction(){
-	nearScence("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png", BLUESHELF_TOP);
+	//nearScence("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
+	mouseState = NEARSCENCE;
+	background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
+	ClueOnScreen.assign(ClueInBlueShelfTop.begin(),ClueInBlueShelfTop.end());
 
 }
 void Blue_shelf_MidAction(){
@@ -92,12 +95,12 @@ void Wood_shelf_buttonAction(){
 
 
 
-void nearScence(string path, int scence){
+/*void nearScence(string path, int scence){
 
 	background = imread(path);
 	mouseState = scence;
 
-}
+}*/
 string typeCode(){
 
 
