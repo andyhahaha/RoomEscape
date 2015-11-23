@@ -2,8 +2,8 @@
 
 string typeCode()
 {
-	string typeCodeImgPath;
-	background = imread(typeCodeImgPath);
+	//string typeCodeImgPath;
+	//background = imread(typeCodeImgPath);
 
 
 }

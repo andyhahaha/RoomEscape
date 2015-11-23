@@ -14,7 +14,7 @@ PositionImgSetting PosSet1(room_final, 1);
 
 vector<Clue> clue_1;
 
-void SetAllClue()
+/*void SetAllClue()
 {
 	Clue clue0(room_final, 1, "teddy", 0, 0, 0, 0), clue1;
 
@@ -25,7 +25,7 @@ void SetAllClue()
 	clue0.write_initial_file();
 
 	clue1.set_clue("D:\\clue\\AR1\\position1\\teddy");
-}
+}*/
 
 
 void SetResourceImg()
@@ -51,9 +51,9 @@ void SetAllSceneImg()
 	tm.reset();
 	tm.start();
 
-	string path = "D:\\image\\image_use\\" + room_final + "\\position1" + "\\";
-	PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 11, 179, METHOD1);
-	//PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 90, 179, METHOD2);
+	string path = "D:\\image\\" + room_final + "\\position1" + "\\";
+	//PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 11, 179, METHOD1);
+	PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 0, 179, METHOD1);
 	//PosSet1.StitchSceneAll(METHOD2);
 
 	tm.stop();
