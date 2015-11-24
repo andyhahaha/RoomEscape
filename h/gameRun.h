@@ -47,9 +47,13 @@ extern vector<GLuint>list_id;
 /*clue box*/
 extern ClueBox clueBox;
 
+
+/* game state */
+extern int gameState;
+
 /*Clue vector*/
 extern vector<Clue> ClueOnScreen;
-extern vector<Clue> ClueOnRoom;
+extern vector<Clue> ClueInRoom;
 extern vector<Clue> ClueInCloset;
 extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;
@@ -57,10 +61,14 @@ extern vector<Clue> ClueInDrawer3;
 extern vector<Clue> ClueInBlueShelfTop;
 extern vector<Clue> ClueInBlueShelfMid;
 extern vector<Clue> ClueInBlueShelfBtn;
+extern vector<Clue> ClueInWoodShelf;
+extern vector<Clue> ClueSafeTypeCode1;
+extern vector<Clue> ClueSafeOpen1;
 
 extern vector<Clue> ClueInPillow;
 extern vector<Clue> ClueInCurtain;
-extern vector<Clue> AllClue;
+//extern vector<Clue> AllClue;
+
 
 
 /*mouse*/
@@ -89,7 +97,7 @@ void  gameRun(int argc, char** argv);
 
 /*clue action*/
 void nearScence(string, int);
-string typeCode();
+int typeCode(Clue clue);
 void showInCluebox(Clue);
 void changeState(Clue);
 void ClueHit(int, int, vector<Clue>);

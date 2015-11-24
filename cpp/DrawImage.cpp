@@ -143,8 +143,8 @@ void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GL
 
 
 
-void CoverObject(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2){//左下座標  右上座標
-
+void CoverObject(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)	//左下座標  右上座標
+{
 	// Make sure that the polygon mode is set so we draw the polygons filled
 	// (save the state first so we can restore it).
 	GLfloat backgroundHeight = 0.8;
@@ -210,13 +210,15 @@ void CoverObject(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y
 	glPolygonMode(GL_BACK, polygonMode[1]);
 }
 
+
+
 /* showDialog: Show dialog box and dialog content.
 *
 * text - text
 * length - length of text string
 */
-void drawDialog(const char *text, int length,int width,int height){
-
+void drawDialog(const char *text, int length,int width,int height)
+{
 	//draw text
 	glColor3f(0, 0, 0);
 	glMatrixMode(GL_PROJECTION);					// change the current matrix to PROJECTION
@@ -233,7 +235,6 @@ void drawDialog(const char *text, int length,int width,int height){
 	for (int i = 0; i<length; i++){
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font
 	}
-
 
 
 	// Make sure that the polygon mode is set so we draw the polygons filled
@@ -271,20 +272,16 @@ void drawDialog(const char *text, int length,int width,int height){
 	// Restore the polygon mode state.
 	glPolygonMode(GL_FRONT, polygonMode[0]);
 	glPolygonMode(GL_BACK, polygonMode[1]);
-
-
-
-
-
-
 }
+
 
 
 /* DrawWall: Draw four virtual wall to pretend room wall.
 *
 */
 
-void DrawWall(){
+void DrawWall()
+{
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_BLEND); //Enable blending.
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
@@ -324,6 +321,4 @@ void DrawWall(){
 	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, 3 * DIST);
 	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, -3 * DIST);
 	glEnd();
-
-
 }

@@ -57,14 +57,14 @@
 #define CLUE_FILE_END 111111	//the end of one clue file
 
 //clue state code
-#define SHOW_ON_SCENE 0
-#define NOT_SHOW 1
-#define SHOW_IN_CLUEBOX 2
-#define CHANGE_IMG 3
-#define SHOW_ANIMATION 4
-#define SHOW_DIALOG 5
-#define SHOW_NEAR_SCENCE 6
-#define TYPE_CODE 7
+#define SHOW_ON_SCENE		0
+#define NOT_SHOW			1
+#define SHOW_IN_CLUEBOX		2
+#define CHANGE_IMG			3
+#define SHOW_ANIMATION		4
+#define SHOW_DIALOG			5
+#define SHOW_NEAR_SCENE		6
+#define TYPE_CODE			7
 
 
 //cluebox
@@ -76,7 +76,7 @@
 
 //near scence
 #define ROOM				0
-#define NEARSCENCE			1
+#define NEARSCENE			1
 /*#define DRAWER_ST			1
 #define DRAWER_ED			2
 #define DRAWER_RD			3
@@ -99,4 +99,13 @@
 
 #define DIST 5
 #define OFFSET -2
+
+
+/* game state */
+#define STATE1	1
+#define STATE2	2
+#define STATE3	3
+#define STATE4	4
+
+
 #endif

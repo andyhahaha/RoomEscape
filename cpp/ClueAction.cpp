@@ -1,10 +1,61 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
 
-void safeAction(){
+void safeAction(Clue clue)
+{
+	if (!clue.clue_name().compare("safe1"))
+	{
+		mouseState = NEARSCENE;
+		background = imread(ClueInRoom[0].current_2Dimg());
+		ClueInRoom[0].next_state(SHOW_NEAR_SCENE);		//safe next state = show near scene
 
+		if (gameState == STATE1)
+		{
+			ClueOnScreen.assign(ClueSafeTypeCode1.begin(), ClueSafeTypeCode1.end());
+		}
+		else
+		{
+			if (ClueInRoom[1].current_state == SHOW_IN_CLUEBOX || ClueInRoom[1].current_state == NOT_SHOW)	//check key state
+			{
+				ClueOnScreen.clear();
+				ClueOnScreen.push_back(ClueSafeOpen1[0]);	//只剩下back
+			}
+			else
+			{
+				ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
+			}
+		}
+	}
+	else if (!clue.clue_name().compare("safe1_nearscene_back"))
+	{
+		mouseState = ROOM;
+		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+	}
+	else if (!clue.clue_name().compare("safe1_key"))
+	{
+		mouseState = NEARSCENE;
+		ClueInRoom[0].next_2Dimg(2);	//near scene change to opened safe1 (empty)
+		background = imread(ClueInRoom[0].current_2Dimg());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
+		ClueOnScreen.clear();
+		ClueOnScreen.push_back(ClueSafeOpen1[0]);	//只剩下back
+	}
+	else	//點到safe的數字區
+	{
+		if (typeCode(clue))
+		{
+			mouseState = NEARSCENE;
+			ClueInRoom[0].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
+			ClueInRoom[0].next_3Dobj(1);	//opened safe1 3D object
+			background = imread(ClueInRoom[0].current_2Dimg());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
+			
+			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());		//只剩下back和key
+		}
+	}
+	
 
 }
+
+
 void keyAction(){
 
 
@@ -41,13 +92,15 @@ void pillowAction(){
 
 
 }
-void Blue_shelf_TopAction(){
-	//nearScence("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
-	mouseState = NEARSCENCE;
-	background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\2D\\teddy.png");
+void Blue_shelf_TopAction()
+{
+	//nearScence("D:\\resource\\2D\\teddy.png");
+	mouseState = NEARSCENE;
+	background = imread("D:\\resource\\2D\\teddy.png");
 	ClueOnScreen.assign(ClueInBlueShelfTop.begin(),ClueInBlueShelfTop.end());
 
 }
+
 void Blue_shelf_MidAction(){
 
 
@@ -95,26 +148,29 @@ void Wood_shelf_buttonAction(){
 
 
 
-/*void nearScence(string path, int scence){
-
+/*void nearScence(string path, int scence)
+{
 	background = imread(path);
 	mouseState = scence;
 
 }*/
 
-void showInCluebox(Clue clue){
 
+void showInCluebox(Clue clue)
+{
 	clueBox.InsertItem(clue);
-
 }
+
+
+
 void changeState(Clue clue){
 
 	//if (clue.clue_name() = "")
 
 	cout << "clue = " << clue.clue_name() << endl;
 
-	if (!clue.clue_name().compare("safe"))
-		safeAction();
+	if (!clue.clue_name().compare("safe") || !clue.clue_name().compare("1"))
+		safeAction(clue);
 	else if (!clue.clue_name().compare("key"))
 		keyAction();
 	else if (!clue.clue_name().compare("cardD"))
@@ -162,9 +218,9 @@ void changeState(Clue clue){
 
 }
 
-void ClueHit(int x, int y, vector<Clue> _onScreenClue){
+void ClueHit(int x, int y, vector<Clue> _onScreenClue)
+{
 	vector<Clue>::iterator it_clue;
-
 
 	GLdouble  winX, winY, winZ;
 	GLdouble posX, posY, posZ;
@@ -172,12 +228,14 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue){
 	int maxX = -10000, minX = 10000, maxY = -10000, minY = 10000;
 	int i;
 
-	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
+	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) 
+	{
 		maxX = -10000;
 		minX = 10000;
 		maxY = -10000;
 		minY = 10000;
-		for (i = 0; i < it_clue->obj_corner().size(); i++){
+		for (i = 0; i < it_clue->obj_corner().size(); i++)
+		{
 			posX = it_clue->obj_corner()[i].x;
 			posY = it_clue->obj_corner()[i].y;
 			posZ = it_clue->obj_corner()[i].z;
@@ -202,27 +260,23 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue){
 		cout << "minY = " << minY << endl;*/
 		
 
-		if (x <= maxX && x >= minX && y <= maxY && y >= minY){
-
+		if (x <= maxX && x >= minX && y <= maxY && y >= minY)
+		{
 			changeState(*it_clue);
 			//cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
-			}
-
-			//clueBox.InsertItem(*it_clue);
-			
 		}
+		//clueBox.InsertItem(*it_clue);
 	}
+}
 
-void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue){
 
+
+void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue)
+{
 	vector<Clue>::iterator it_clue;
-	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) {
-		
+	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) 
+	{
 		if (x > it_clue->get_2D_coordinate()[0].x&&x<it_clue->get_2D_coordinate()[1].x&&y>it_clue->get_2D_coordinate()[0].y&&y < it_clue->get_2D_coordinate()[1].y)
 			changeState(*it_clue);
 	}
-
-
-
-
 }

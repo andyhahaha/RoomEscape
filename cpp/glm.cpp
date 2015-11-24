@@ -815,7 +815,6 @@ glmPoint(GLMmodel* model)
 	cz = (maxz + minz) / 2.0;
 
 	/*
-	
 			c3-------c2
 	        |         |
 	        |         |
@@ -828,12 +827,7 @@ glmPoint(GLMmodel* model)
 	 |	       |
 	c8---------c5
 
-
-	
-	
 	*/
-
-
 
 	Point3f c1, c2, c3, c4, c5, c6, c7, c8;
 	c1.x = cx + w / 2;
@@ -882,7 +876,6 @@ glmPoint(GLMmodel* model)
 	cout << "c7 = " << c7 << endl;
 	cout << "c8 = " << c8 << endl;*/
 	return corner;
-
 }
 
 
@@ -1092,21 +1085,16 @@ glmRotation(GLMmodel* model, GLint axis, GLfloat angle)
 		if (axis == 0){
 			model->vertices[3 * i + 1] = vy*cosf(angle) - vz*sinf(angle) + cy;
 			model->vertices[3 * i + 2] = vy*sinf(angle) + vz*cosf(angle) + cz;
-
 		}
 		else if (axis == 1){
 			model->vertices[3 * i + 0] = vx*cosf(angle) - vz*sinf(angle) + cx;
 			model->vertices[3 * i + 2] = vx*sinf(angle) + vz*cosf(angle) + cz;
-
-
 		}
 		else if(axis == 2){
 			model->vertices[3 * i + 0] = vx*cosf(angle) - vy*sinf(angle) + cx;
 			model->vertices[3 * i + 1] = vx*sinf(angle) + vy*cosf(angle) + cy;
 		}
-	
 	}
-
 }
 
 

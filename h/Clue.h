@@ -18,7 +18,9 @@ public:
 	Clue(string, int, string, vector<Point2i>);
 	Clue(string);	//read clue initial file
 
-	void set_clue(string, int, string, int, int, int, int);
+	void set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, float trans_x, float trans_y, float trans_z, float rot_x, float rot_y, float rot_z, float scale);
+	void set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner);
+	void set_clue(string, int, string, vector<Point2i>);
 	int set_clue(string);
 
 	void set_room_name(string);
@@ -35,21 +37,22 @@ public:
 
 	int current_state();		//return _state_array(_current_state)
 	void next_state(int);		//assign _current_state
-	void add_state(int);		//加上一個新的state，輸入一個state代號，他會加在目前的state vector的最後面
+	//void add_state(int);		//加上一個新的state，輸入一個state代號，他會加在目前的state vector的最後面
 
 	void set_cluebox_img(string);	//放在clue box的2D圖片路徑
 	Mat get_cluebox_img();
-	int current_2Dimg();			//return _current_2Dimg
+
+	string current_2Dimg();			//return _current_2Dimg
 	void next_2Dimg(int);  			//assign _current_2Dimg
 	void add_2Dimg_path(string);	//add一個image(2D)路徑
 	string get_2Dimg(int);
 
-	int current_3Dobj();			//return _current_3Dobj
+	string current_3Dobj();			//return _current_3Dobj
 	void next_3Dobj(int);  			//assign _current_3Dobj
 	void add_3Dobj_path(string);	//add一個obj(3D)路徑
 	string get_3Dobj(int);
 
-	int current_dialog();		//return _current_dialog
+	string current_dialog();		//return _current_dialog
 	void next_dialog();			//assign _current_dialog
 	void add_dialog(string);	//add一個對話  內容
 	string get_dialog(int); 	//取得第幾個對話

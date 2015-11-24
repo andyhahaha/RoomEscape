@@ -16,7 +16,7 @@ float phi = 1.5292;
 ClueBox clueBox(0, width, 100, 100, 100);
 
 vector<Clue> ClueOnScreen;
-vector<Clue> ClueOnRoom;
+vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
 vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;
@@ -51,29 +51,32 @@ int mouseState = ROOM;
 
 
 
-void clueBoxController(int x){
-
+void clueBoxController(int x)
+{
 	float horizon_space = SPACE*height ;
 	float item_w = ITEM_WIDTH*height ;
-	if (x < ARROW_WIDTH*width){
+	if (x < ARROW_WIDTH*width)
+	{
 		clueBox.set_item_show_first(0);
 		cout << "-" << endl;
 	}
-	else if (x >width - ARROW_WIDTH*width){
+	else if (x >width - ARROW_WIDTH*width)
+	{
 		clueBox.set_item_show_first(1);
 		cout << "+" << endl;
-
 	}
-	else{
+	else
+	{
 		int click = x - (int)(ARROW_WIDTH*width + horizon_space);
 		int selected;
 		for (selected = 0; click  > 0; selected++)
 			click = click - (int)((item_w + horizon_space));
-		if (click - (int)(item_w) < 0){
+
+		if (click - (int)(item_w) < 0)
+		{
 			clueBox.set_item_selected(selected);
 			cout << "selected = " << selected << endl;
 		}
-
 	}
 }
 
@@ -94,15 +97,14 @@ void clueBoxController(int x){
 *
 */
 
-GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num){
-
-	
+GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num)
+{
 	char *path = new char[clue.get_3Dobj(obj_num).length() + 1];
 	strcpy(path, clue.get_3Dobj(obj_num).c_str());
 
-	model = glmReadOBJ(path);				//read obj file
+	model = glmReadOBJ(path);		//read obj file
 
-	glmUnitize(model);						//unitize object to origin and umit cube
+	glmUnitize(model);				//unitize object to origin and umit cube
 
 	glmScale(model, clue.scale());
 	glmTranslate(model, clue.trans_x(), clue.trans_y(), clue.trans_z());
@@ -111,12 +113,10 @@ GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num){
 	glmRotation(model, 2, clue.rot_z());
 	clue.set_obj_corner(glmPoint(model));
 
-		
 	glmFacetNormals(model);
 	glmVertexNormals(model, 90);
 
 	return glmList(model, GLM_MATERIAL | GLM_SMOOTH);
-
 }
 
 
@@ -184,18 +184,16 @@ void mouse(int button, int state, int x, int y)
 
 		if (y > height - (SPACE+ITEM_WIDTH)*height&&y < height - SPACE*height)
 			clueBoxController(x);
-
-
 		else
 		{
 			switch (mouseState)
 			{
-			case ROOM:
-				ClueHit(x, y, ClueOnScreen);
-				break;
-			case NEARSCENCE:
-				ClueHitNearScence(x, y, ClueOnScreen);
-				break;
+				case ROOM:
+					ClueHit(x, y, ClueOnScreen);
+					break;
+				case NEARSCENE:
+					ClueHitNearScence(x, y, ClueOnScreen);
+					break;
 			
 			}
 		}
@@ -274,94 +272,86 @@ void prepare_lighting()
 
 void keyboard(unsigned char key, int x, int y)
 {
-
 	switch (key)
 	{
-	case 'i':
+		case 'i':
+			break;
+
+		case 'j':
+			scence_num--;
+			if (scence_num < 0)
+				scence_num = 179;
 		
-		break;
+			glutPostRedisplay();
+			break;
 
-	case 'j':
+		case 'k':
+			break;
 
-		scence_num--;
-		if (scence_num < 0)
-			scence_num = 179;
+		case 'l':
+			scence_num++;
+			if (scence_num > 179)
+				scence_num = 0;
 		
-		glutPostRedisplay();
-		break;
+			glutPostRedisplay();
+			break;
 
-	case 'k':
-		
-		break;
+		case 'z':
+			glutPostRedisplay();
+			break;
 
-	case 'l':
-		scence_num++;
-		if (scence_num > 179)
-			scence_num = 0;
-		
+		case 'x':
+			glutPostRedisplay();
+			break;
 
-		glutPostRedisplay();
-		break;
+		case 'c':
+			glmRotation(glm_model, 1, 1);
+			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+			glutPostRedisplay();
+			break;
 
-	case 'z':
-		
-		glutPostRedisplay();
-		break;
+		case 'v':
+			glmRotation(glm_model, 1, -1);
+			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+			glutPostRedisplay();
+			break;
 
-	case 'x':
-		
-		glutPostRedisplay();
-		break;
+		case 'b':
+			glmRotation(glm_model, 2, 1);
+			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+			glutPostRedisplay();
+			break;
 
-	case 'c':
-		glmRotation(glm_model, 1, 1);
-		list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-		glutPostRedisplay();
-		break;
+		case 'n':
+			glmRotation(glm_model, 2, -1);
+			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
+			glutPostRedisplay();
+			break;
 
-	case 'v':
-		glmRotation(glm_model, 1, -1);
-		list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-		glutPostRedisplay();
-		break;
+		case 'w':
+			theta -= .05;
+			prepare_lighting();
+			glutPostRedisplay();
+			break;
 
-	case 'b':
-		glmRotation(glm_model, 2, 1);
-		list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-		glutPostRedisplay();
-		break;
+		case 's':
+			theta += .05;
+			prepare_lighting();
+			glutPostRedisplay();
+			break;
 
-	case 'n':
-		glmRotation(glm_model, 2, -1);
-		list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-		glutPostRedisplay();
-		break;
+		case 'a':
+			phi -= .05;
+			prepare_lighting();
+			glutPostRedisplay();
+			break;
 
-	case 'w':
-		theta -= .05;
-		prepare_lighting();
-		glutPostRedisplay();
-		break;
-
-	case 's':
-		theta += .05;
-		prepare_lighting();
-		glutPostRedisplay();
-		break;
-
-	case 'a':
-		phi -= .05;
-		prepare_lighting();
-		glutPostRedisplay();
-		break;
-
-	case 'd':
-		phi += .05;
-		prepare_lighting();
-		glutPostRedisplay();
-		break;
+		case 'd':
+			phi += .05;
+			prepare_lighting();
+			glutPostRedisplay();
+			break;
 	};
-
 }
 
 /* display: display all views on screen.
@@ -372,9 +362,13 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_final\\stitch" + to_string(scence_num) + ".jpg";
+	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_final\\stitch" + to_string(scence_num) + ".jpg";
+
+
 	/* draw background*/
 	if (mouseState == ROOM)
-		background = imread("D:\\image\\finalroom\\position1\\stitch_1\\1_final\\stitch" + to_string(scence_num) + ".jpg");
+		background = imread(finalroom_1_path);
 	
 	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
 
@@ -411,18 +405,21 @@ void display()
 	prepare_lighting();
 
 	/*draw 3D models by call list*/
-	ClueOnRoom.clear();
+	ClueInRoom.clear();
 	vector<Clue>::iterator it_clue;
-	for (it_clue = AllClue.begin(); it_clue != AllClue.end(); ++it_clue) {
+	for (it_clue = AllClue.begin(); it_clue != AllClue.end(); ++it_clue) 
+	{
 		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scence_num))
-			ClueOnRoom.push_back(*it_clue);
+			ClueInRoom.push_back(*it_clue);
 	}
 
 		
 	int i;
-	if (mouseState == ROOM){
-		ClueOnScreen.assign(ClueOnRoom.begin(), ClueOnRoom.end());
-		for (i = 0; i < list_id.size(); i++){
+	if (mouseState == ROOM)
+	{
+		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+		for (i = 0; i < list_id.size(); i++)
+		{
 			glCallList(list_id[i]);
 		}
 	}
@@ -430,7 +427,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	//DrawWall();
+	DrawWall();
 	string text = "andyha yoyoyo";
 	drawDialog(text.data(), text.size(),width,height);
 	clueBox.show_clue_box(clueBox_texture);
@@ -463,8 +460,8 @@ void initializeOpenGL()
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-	// Load background image
-	clueBox_texture = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\paper_texture2.png");
+	// Load clue box background image
+	clueBox_texture = imread("D:\\resource\\paper_texture2.png");
 
 	// Set light
 	prepare_lighting();
@@ -473,8 +470,8 @@ void initializeOpenGL()
 	clueSetting();
 }
 
-void initializeGLUT(int argc, char** argv){
-
+void initializeGLUT(int argc, char** argv)
+{
 	glutInit(&argc, argv);
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);

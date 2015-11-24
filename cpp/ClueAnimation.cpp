@@ -1,6 +1,6 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
-string typeCode()
+int typeCode(Clue clue)
 {
 	//string typeCodeImgPath;
 	//background = imread(typeCodeImgPath);

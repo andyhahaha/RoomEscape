@@ -500,7 +500,7 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 
 		//-- Use only "good" matches (i.e. whose distance is less than 3*min_dist )
 		if (method == METHOD1)
-			good_matches = get_good_dist_matches(sym_matches, 4);
+			good_matches = get_good_dist_matches(sym_matches, 6);
 		else
 			good_matches = get_good_dist_matches(sym_matches, 7);
 
@@ -719,7 +719,7 @@ void PositionImgSetting::Initial3Img(int img_number, int vertical_angle, int sti
 	}
 
 	assert(image_amount > 0);
-	interval = (int)round(img_amount * 5.0 / 360.0);	//img next(left or right) number interval
+	interval = (int)round(img_amount * 3.0 / 360.0);	//img next(left or right) number interval
 
 	central_img = (int)round((float)img_number * 2.0 / 360.0 * (float)img_amount);
 	if (central_img - interval >= 0)		//img max number is (image_amount - 1), min number is 0
