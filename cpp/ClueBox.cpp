@@ -7,7 +7,8 @@
 using namespace cv;
 using namespace std;
 
-ClueBox::ClueBox(int number, int width, int height, int item_width, int item_height){	//_clue_number,_box_width,_box_height
+ClueBox::ClueBox(int number, int width, int height, int item_width, int item_height)	//_clue_number,_box_width,_box_height
+{
 	_clue_number = number;
 	_box_width = width;
 	_box_height = height;
@@ -20,67 +21,86 @@ ClueBox::ClueBox(int number, int width, int height, int item_width, int item_hei
 void ClueBox::set_box_width(int width){
 	_box_width = width;
 }
-void ClueBox::set_box_height(int height){
+
+void ClueBox::set_box_height(int height)
+{
 	_box_height = height;
 }
-void ClueBox::set_item_width(int width){
+
+void ClueBox::set_item_width(int width)
+{
 	_item_width = width;
 }
-void ClueBox::set_item_height(int height){
+
+void ClueBox::set_item_height(int height)
+{
 	_item_height = height;
 }
-void ClueBox::set_item_selected(int index){
+
+void ClueBox::set_item_selected(int index)
+{
 	if (index<=_clue_number)
 		_item_selected = index;
 }
 
 
-int ClueBox::get_clue_number(){
+int ClueBox::get_clue_number()
+{
 	_clue_number = _clue_vector.size();
 	return _clue_number;
 }
-int ClueBox::get_box_width(){
+
+int ClueBox::get_box_width()
+{
 	return _box_width;
 }
-int ClueBox::get_box_height(){
+
+int ClueBox::get_box_height()
+{
 	return _box_height;
 }
-int ClueBox::get_item_width(){
+
+int ClueBox::get_item_width()
+{
 	return _item_width;
 }
-int ClueBox::get_item_height(){
+
+int ClueBox::get_item_height()
+{
 	return _item_height;
 }
-int ClueBox::get_item_selected(){
+
+int ClueBox::get_item_selected()
+{
 	return _item_selected;
 }
 
 
-void ClueBox::show_clue_box(Mat image){	//用clue array裡面存的clue選圖出來show
+void ClueBox::show_clue_box(Mat image)	//用clue array裡面存的clue選圖出來show
+{
 	//printf("show_clue_box\n");
-
-	
 	renderBackgroundGL(image,0,0,1,0.2);
-
-
-
-
-
 }
-void ClueBox::InsertItem(Clue clue){
 
+
+void ClueBox::InsertItem(Clue clue)
+{
 	_clue_vector.push_back(clue);
 	_clue_number = sizeof(_clue_vector) / sizeof(_clue_vector[0]);
-
 }
-void ClueBox::DelItem(int index){
+
+
+void ClueBox::DelItem(int index)
+{
 	vector< Clue >::iterator itor;
 	itor = _clue_vector.begin() + index - 1;
 	_clue_vector.erase(itor);
 	_clue_number = sizeof(_clue_vector) / sizeof(_clue_vector[0]);
 }
-void ClueBox::show_clue(int width, int height){
-	
+
+
+void ClueBox::show_clue(int width, int height)
+{
 	vector<Clue>::iterator it_i;
 	float horizon_space = SPACE*height / width;
 	float item_w = ITEM_WIDTH*height / width;
@@ -94,24 +114,22 @@ void ClueBox::show_clue(int width, int height){
 		i++;
 	}
 	set_item_show_last(i - 1);
-
-	
 }
 
-void ClueBox::set_item_show_first(int toward){
+
+void ClueBox::set_item_show_first(int toward)
+{
 	if (toward == 1 && _item_show_first<_clue_number)
 		_item_show_first +=1;
 	else if (toward == 0 && _item_show_first>1)
 		_item_show_first -= 1;
-
-
 }
-void ClueBox::set_item_show_last(int index){
+
+
+void ClueBox::set_item_show_last(int index)
+{
 	_item_show_last = index;
-
 }
-
-
 
 
 ostream& operator<<(ostream& os, const ClueBox& cluebox)

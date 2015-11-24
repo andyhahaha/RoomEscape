@@ -208,23 +208,24 @@ Clue::Clue(string clue_path)
 }
 
 
-/* set_clue: Initial clue by giving some parameters. 
+/* set_clue: Initial 3D clue by giving some parameters. 
 */
 
-void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down)
+void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, float trans_x, float trans_y, float trans_z, float rot_x, float rot_y, float rot_z, float scale)
 {
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
 
-	/*
-	_row_shift = 0.4;
-	_col_shift = 0.05;
-	_location_row = row;
-	_location_col = column;
-	_width = width;
-	_height = height;
-	*/
+
+	_trans_x = trans_x;
+	_trans_y = trans_y;
+	_trans_z = trans_z;
+	_rot_x = rot_x;
+	_rot_y = rot_y;
+	_rot_z = rot_z;
+	_scale = scale;
+
 
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
@@ -243,6 +244,100 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_state.clear();			//紀錄每個state是什麼代號
 	_current_state = 0;		//線索狀態
 }
+
+
+/* set_clue: Initial 2D clue by giving some parameters.
+*
+*  obj_corner - 3D space coordinate (need 4 points)
+*/
+
+void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner)
+{
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+
+
+	_start_scene_up = start_scene_up;
+	_start_scene_down = start_scene_down;
+	_end_scene_up = end_scene_up;
+	_end_scene_down = end_scene_down;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
+
+	_cluebox_img = "no path";
+
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
+
+	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
+}
+
+
+/* set_clue: Initial near scene clue by giving some parameters.
+*
+*  coordinate - screen coordinate
+*/
+Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
+
+	_cluebox_img = "no path";
+
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
+
+	_2DCoordinate.assign(coordinate.begin(), coordinate.end());
+}
+
+
+
+/*void Clue::set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down)
+{
+	_room_name = room_name;
+	_position_num = position_num;
+	_clue_name = clue_name;
+
+	
+	//_row_shift = 0.4;
+	//_col_shift = 0.05;
+	//_location_row = row;
+	//_location_col = column;
+	//_width = width;
+	//_height = height;
+	
+
+	_start_scene_up = start_scene_up;
+	_start_scene_down = start_scene_down;
+	_end_scene_up = end_scene_up;
+	_end_scene_down = end_scene_down;
+
+	_current_dialog = 0; 	//目前使用到哪一個對話
+	_dialog.clear();
+	_current_2Dimg = 0; 	//目前使用到哪一個2D image
+	_2Dimg_path.clear();
+	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_3Dobj_path.clear();
+
+	_cluebox_img = "no path";
+
+	_state.clear();			//紀錄每個state是什麼代號
+	_current_state = 0;		//線索狀態
+}*/
 
 
 /* set_clue: Initial clue by giving a path of a clue file. 
@@ -451,10 +546,12 @@ void Clue::next_state(int s)
 	_current_state = s;
 }
 
-void Clue::add_state(int state_code)
+/*void Clue::add_state(int state_code)
 {
 	_state.push_back(state_code);
-}
+}*/
+
+
 
 
 /* ---------- Setting image that will be put in the clue box. ------------*/
@@ -477,11 +574,13 @@ Mat Clue::get_cluebox_img()
 }
 
 
+
+
 /* ----------------- Setting 2D images of the clue. ---------------------*/
 
-int Clue::current_2Dimg()
+string Clue::current_2Dimg()
 {
-	return _current_2Dimg;
+	return _2Dimg_path[_current_2Dimg];
 }
 
 void Clue::next_2Dimg(int n)
@@ -505,11 +604,13 @@ string Clue::get_2Dimg(int number)
 }
 
 
+
+
 /* ----------------- Setting 3D objects of the clue. ---------------------*/
 
-int Clue::current_3Dobj()
+string Clue::current_3Dobj()
 {
-	return _current_3Dobj;
+	return _3Dobj_path[_current_3Dobj];
 }
 
 void Clue::next_3Dobj(int n)
@@ -533,11 +634,13 @@ string Clue::get_3Dobj(int number)
 }
 
 
+
+
 /* ----------------- Setting dialogs of the clue. ---------------------*/
 
-int Clue::current_dialog()
+string Clue::current_dialog()
 {
-	return _current_dialog;
+	return _dialog[_current_dialog];
 }
 
 void Clue::next_dialog()
@@ -559,6 +662,8 @@ string Clue::get_dialog(int index)
 	}
 	return _dialog[index];
 }
+
+
 
 
 /* ----------------- Get basic information of the clue. ---------------------*/
@@ -712,6 +817,8 @@ void Clue::_show_animation()
 }
 
 
+
+
 /* ------------ Write the data into a file named by the clue name. ----------------*/
 
 int Clue::write_initial_file()
@@ -831,8 +938,6 @@ Vector<Point2i> Clue::get_2D_coordinate(){
 	return _2DCoordinate;
 
 }
-
-
 
 
 
