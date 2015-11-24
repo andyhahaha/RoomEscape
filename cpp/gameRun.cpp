@@ -374,7 +374,7 @@ void display()
 	
 	/* draw background*/
 	if (mouseState == ROOM)
-		background = imread("D:\\大學\\專題\\RoomEscape\\RoomEscape\\resource\\scence\\final\\stitch" + to_string(scence_num) + ".jpg");
+		background = imread("D:\\image\\finalroom\\position1\\stitch_1\\1_final\\stitch" + to_string(scence_num) + ".jpg");
 	
 	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
 
@@ -382,14 +382,14 @@ void display()
 	/* perspective mode*/
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(115, 1, 0.1, 200);	//sight angle, view rate width/height, nearest side, far side
+	gluPerspective(111, 1, 0.1, 200);	//sight angle, view rate width/height, nearest side, far side
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	/* set camera sight*/
 	gluLookAt(
-		0, 0, 0,
-		sinf(float(scence_num * 2) / 180 * G_PI), 0, -cosf(float(scence_num * 2) / 180 * G_PI),
+		2, 0, 0,
+		sinf(float(scence_num * 2) / 180 * G_PI)+2, 0, -cosf(float(scence_num * 2) / 180 * G_PI),
 		0, 1, 0);
 
 
@@ -430,7 +430,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	DrawWall();
+	//DrawWall();
 	string text = "andyha yoyoyo";
 	drawDialog(text.data(), text.size(),width,height);
 	clueBox.show_clue_box(clueBox_texture);
