@@ -284,7 +284,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 *
 *  coordinate - screen coordinate
 */
-Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
+void Clue::set_clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;

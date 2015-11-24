@@ -24,6 +24,7 @@ vector<Clue> ClueInDrawer3;
 vector<Clue> ClueInBlueShelfTop;
 vector<Clue> ClueInBlueShelfMid;
 vector<Clue> ClueInBlueShelfBtn;
+vector<Clue> ClueInWoodShelf;
 
 vector<Clue> ClueInPillow;
 vector<Clue> ClueInCurtain;

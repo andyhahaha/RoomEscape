@@ -1,5 +1,7 @@
 #include "D:\RoomEscape\h\gameRun.h"
-
+vector<Clue> ClueSafeOpen1;
+vector<Clue> ClueSafeTypeCode1;
+int gameState;
 
 void safeAction(Clue clue)
 {
@@ -15,7 +17,7 @@ void safeAction(Clue clue)
 		}
 		else
 		{
-			if (ClueInRoom[1].current_state == SHOW_IN_CLUEBOX || ClueInRoom[1].current_state == NOT_SHOW)	//check key state
+			if (ClueInRoom[1].current_state() == SHOW_IN_CLUEBOX || ClueInRoom[1].current_state() == NOT_SHOW)	//check key state
 			{
 				ClueOnScreen.clear();
 				ClueOnScreen.push_back(ClueSafeOpen1[0]);	//¥u³Ñ¤Uback
