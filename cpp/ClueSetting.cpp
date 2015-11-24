@@ -73,7 +73,7 @@ void clueSetting(){
 	list_id.push_back(drawObject(glm_model, cardS, 0));
 	AllClue.push_back(cardS);
 
-	Clue cardP("room", 0, "cardP", 147, 29, 147, 29, -0.2*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
+	Clue cardP("room", 0, "cardP", 147, 29, 147, 29, 15.7672, -0.435, -1.59514, 0, 90, 0, 1.0);
 	cardP.add_3Dobj_path("D:\\resource\\3D\\cardP.obj");
 	cardP.set_cluebox_img("D:\\resource\\2D\\P.png");
 	list_id.push_back(drawObject(glm_model, cardP, 0));
