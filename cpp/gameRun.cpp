@@ -15,6 +15,9 @@ float phi = 1.5292;
 
 ClueBox clueBox(0, width, 100, 100, 100);
 
+
+int gameState;
+
 vector<Clue> ClueOnScreen;
 vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
@@ -28,7 +31,10 @@ vector<Clue> ClueInWoodShelf;
 
 vector<Clue> ClueInPillow;
 vector<Clue> ClueInCurtain;
-vector<Clue> AllClue;
+vector<Clue> ClueSafeOpen1;
+vector<Clue> ClueSafeTypeCode1;
+
+//vector<Clue> AllClue;
 
 Mat clueBox_texture;
 
@@ -406,19 +412,26 @@ void display()
 	prepare_lighting();
 
 	/*draw 3D models by call list*/
-	ClueInRoom.clear();
+	//ClueInRoom.clear();
 	vector<Clue>::iterator it_clue;
-	for (it_clue = AllClue.begin(); it_clue != AllClue.end(); ++it_clue) 
+	/*for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
 	{
 		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scence_num))
-			ClueInRoom.push_back(*it_clue);
-	}
+			ClueOnScreen.push_back(*it_clue);
+	}*/
 
 		
 	int i;
 	if (mouseState == ROOM)
 	{
-		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+		ClueOnScreen.clear();
+		for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
+		{
+			if (it_clue->show_to_scene(VERTICAL_CENTRAL, scence_num))
+				ClueOnScreen.push_back(*it_clue);
+		}
+
+		//ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
 		for (i = 0; i < list_id.size(); i++)
 		{
 			glCallList(list_id[i]);
