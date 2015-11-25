@@ -3,6 +3,13 @@ vector<Clue> ClueSafeOpen1;
 vector<Clue> ClueSafeTypeCode1;
 int gameState;
 
+
+int typeCode(Clue clue){
+
+	return 0;
+}
+
+
 void safeAction(Clue clue)
 {
 	if (!clue.clue_name().compare("safe1"))

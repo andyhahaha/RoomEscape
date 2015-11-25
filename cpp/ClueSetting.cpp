@@ -57,7 +57,7 @@ void clueSetting()
 	Clue card_num3;
 	
 	/*safe*/
-	safe1.set_clue("room", 0, "safe1", 0, 45, 0, 45, 2 * DIST, 3 * DIST, -3 * DIST, 0, 90, 0, 2.0);
+	safe1.set_clue("room", 0, "safe1", 0, 45, 0, 45, 2*DIST, 3*DIST, -5*DIST, 0, 90, 0, 5.0);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	list_id.push_back(drawObject(glm_model, safe1, 0));

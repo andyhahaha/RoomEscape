@@ -115,7 +115,7 @@ GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num)
 	clue.set_obj_corner(glmPoint(model));
 
 	glmFacetNormals(model);
-	glmVertexNormals(model, 90);
+	//glmVertexNormals(model, 90);
 
 	return glmList(model, GLM_MATERIAL | GLM_SMOOTH);
 }
@@ -248,19 +248,19 @@ void prepare_lighting()
 
 	//glEnable(lightSource);
 
-	float mat_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
-	float light_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
-	float ambientLight[4] = { 1.0, 1.0, 1.0, 1.0 };
-	float specularLight[4] = { 1.0, 1.0, 1.0, 1.0 };
+	float mat_diffuse[4] = { 0.5, 0.5, 0.5, 1.0 };
+	float light_diffuse[4] = { 0.5, 0.5, 0.5, 1.0 };
+	float ambientLight[4] = { 0.1, 0.1, 0.1, 1.0 };
+	float specularLight[4] = { 0.33, 0.33, 0.33, 1.0 };
 	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 1 };
 
 
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+	
 	glEnable(GL_LIGHT0);
 }
 
@@ -428,7 +428,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	DrawWall();
+	//DrawWall();
 	string text = "andyha yoyoyo";
 	drawDialog(text.data(), text.size(),width,height);
 	clueBox.show_clue_box(clueBox_texture);
