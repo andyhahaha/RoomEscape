@@ -1,7 +1,5 @@
 #include "D:\RoomEscape\h\gameRun.h"
-vector<Clue> ClueSafeOpen1;
-vector<Clue> ClueSafeTypeCode1;
-int gameState;
+
 
 void safeAction(Clue clue)
 {
