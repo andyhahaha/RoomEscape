@@ -121,7 +121,7 @@ GLuint drawObject(GLMmodel *model, Clue &clue, int obj_num)
 	clue.set_obj_corner(glmPoint(model));
 
 	glmFacetNormals(model);
-	//glmVertexNormals(model, 90);
+	glmVertexNormals(model, 90);
 
 	return glmList(model, GLM_MATERIAL | GLM_SMOOTH);
 }
@@ -254,11 +254,12 @@ void prepare_lighting()
 
 	//glEnable(lightSource);
 
-	float mat_diffuse[4] = { 0.5, 0.5, 0.5, 1.0 };
-	float light_diffuse[4] = { 0.5, 0.5, 0.5, 1.0 };
-	float ambientLight[4] = { 0.1, 0.1, 0.1, 1.0 };
-	float specularLight[4] = { 0.33, 0.33, 0.33, 1.0 };
-	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 1 };
+	//float mat_diffuse[4] = { 1, 1, 1, 1.0 };
+	float light_diffuse[4] = { 1, 1, 1, 1.0 };
+	float ambientLight[4] = { 1, 1, 1, 1.0 };
+	float specularLight[4] = { 1, 1, 1, 1.0 };
+	//	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 1 };
+	float light_position[4] = { 0,0,1,0 };
 
 
 	
