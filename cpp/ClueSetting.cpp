@@ -57,7 +57,7 @@ void clueSetting()
 	Clue card_num3;
 	
 	/*safe*/
-	safe1.set_clue("room", 0, "safe1", 0, 45, 0, 45, 2*DIST, 3*DIST, -5*DIST, 0, 90, 0, 5.0);
+	safe1.set_clue("room", 0, "safe1", 0, 180, 0, 180, 0, 0, 0, -3 * DIST, 0, 0, 1.0);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	list_id.push_back(drawObject(glm_model, safe1, 0));
@@ -70,7 +70,7 @@ void clueSetting()
 	ClueInRoom.push_back(key);
 
 	/*card*/
-	cardD.set_clue("room", 0, "cardD", 133, 14, 133, 14, -2 * DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
+	cardD.set_clue("room", 0, "cardD", 133, 14, 133, 14, -9.02471, -8.02489, 13.08, 0, 180, 0, 1.0);
 	cardD.add_3Dobj_path("D:\\resource\\3D\\cardD.obj");
 	cardD.set_cluebox_img("D:\\resource\\2D\\D.png");
 	list_id.push_back(drawObject(glm_model, cardD, 0));
@@ -82,13 +82,13 @@ void clueSetting()
 	list_id.push_back(drawObject(glm_model, cardS, 0));
 	ClueInRoom.push_back(cardS);
 
-	cardP.set_clue("room", 0, "cardP", 147, 29, 147, 29, 15.7672, -0.435, -1.59514, 0, 90, 0, 1.0);
+	cardP.set_clue("room", 0, "cardP", 147, 29, 147, 29, -0.2*DIST, -0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardP.add_3Dobj_path("D:\\resource\\3D\\cardP.obj");
 	cardP.set_cluebox_img("D:\\resource\\2D\\P.png");
 	list_id.push_back(drawObject(glm_model, cardP, 0));
 	ClueInRoom.push_back(cardP);
 
-	card_num1.set_clue("room", 0, "card_num1", 156, 37, 156, 37, 0.7*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
+	card_num1.set_clue("room", 0, "card_num1", 156, 37, 156, 37, 10.8025, -12.1929, -13.2269, 270, 0, 0, 0.7);
 	card_num1.add_3Dobj_path("D:\\resource\\3D\\7.obj");
 	card_num1.set_cluebox_img("D:\\resource\\2D\\7.png");
 	list_id.push_back(drawObject(glm_model, card_num1, 0));
@@ -101,8 +101,8 @@ void clueSetting()
 	ClueInRoom.push_back(card_num2);
 
 	card_num3.set_clue("room", 0, "card_num3", 170, 50, 170, 50, 2.5*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
-	card_num3.add_3Dobj_path("D:\\resource\\3D\\0.obj");
-	card_num3.set_cluebox_img("D:\\resource\\2D\\0.png");
+	card_num3.add_3Dobj_path("D:\\resource\\3D\\3.obj");
+	card_num3.set_cluebox_img("D:\\resource\\2D\\3.png");
 	list_id.push_back(drawObject(glm_model, card_num3, 0));
 	ClueInRoom.push_back(card_num3);
 

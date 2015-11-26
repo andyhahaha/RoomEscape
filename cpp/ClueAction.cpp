@@ -270,6 +270,7 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue)
 		if (x <= maxX && x >= minX && y <= maxY && y >= minY)
 		{
 			changeState(*it_clue);
+			clueBox.InsertItem(*it_clue);
 			//cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
 		}
 		//clueBox.InsertItem(*it_clue);
