@@ -129,7 +129,8 @@ void clueSetting()
 	Clue Wood_shelf_bottom;
 
 	/*curtain*/
-	curtain.set_clue("room", 0, "curtain", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
+	corner = set_corner(-3.19343, 15.5143, -15.0661, 5.64898, 16.1634, -15.6844, 5.84995, 0.778958, -15.6985, - 3.52837, 0.649132, -15.0427);
+	curtain.set_clue("room", 0, "curtain", 142, 32, 142, 32, corner);
 	ClueInRoom.push_back(curtain);
 
 

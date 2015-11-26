@@ -2,10 +2,10 @@
 
 
 
-int typeCode(Clue clue){
+/*int typeCode(Clue clue){
 
 	return 0;
-}
+}*/
 
 
 void safeAction(Clue clue)
@@ -92,7 +92,7 @@ void card_num3Action(){
 
 }
 void curtainAction(){
-
+	cout << "------------- hit curtain --------------\n" << endl;
 
 }
 void pillowAction(){
@@ -270,7 +270,7 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue)
 		if (x <= maxX && x >= minX && y <= maxY && y >= minY)
 		{
 			changeState(*it_clue);
-			clueBox.InsertItem(*it_clue);
+			//clueBox.InsertItem(*it_clue);
 			//cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
 		}
 		//clueBox.InsertItem(*it_clue);
