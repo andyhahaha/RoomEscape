@@ -101,9 +101,8 @@ void pillowAction(){
 }
 void Blue_shelf_TopAction()
 {
-	//nearScence("D:\\resource\\2D\\teddy.png");
 	mouseState = NEARSCENE;
-	background = imread("D:\\resource\\2D\\teddy.png");
+	background = imread("D:\\image\\near_scene\\Blue_shelf.JPG");
 	ClueOnScreen.assign(ClueInBlueShelfTop.begin(),ClueInBlueShelfTop.end());
 
 }

@@ -54,6 +54,8 @@ GLint    viewport[4];
 GLdouble modelview[16];
 GLdouble projection[16];
 
+int sight = 0;
+
 int mouseState = ROOM;
 
 
@@ -211,7 +213,7 @@ void mouse(int button, int state, int x, int y)
 	{
 		record_x += x - old_rot_x;
 		record_y += y - old_rot_y;
-
+		
 		rot_x = 0;   //沒有歸零會有不理想的結果 
 		rot_y = 0;
 	}
@@ -219,6 +221,7 @@ void mouse(int button, int state, int x, int y)
 	{
 		old_rot_x = x;
 		old_rot_y = y;
+	
 	}
 
 	glutPostRedisplay();
@@ -233,9 +236,10 @@ void mouse(int button, int state, int x, int y)
 
 void MotionMouse(int x, int y)
 {
+
 	rot_x = x - old_rot_x;
 	rot_y = y - old_rot_y;
-
+	
 	glutPostRedisplay();
 }
 
@@ -259,7 +263,7 @@ void prepare_lighting()
 	float ambientLight[4] = { 1, 1, 1, 1.0 };
 	float specularLight[4] = { 1, 1, 1, 1.0 };
 	//	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 1 };
-	float light_position[4] = { 0,0,1,0 };
+	float light_position[4] = { 0,0,1,1 };
 
 
 	
@@ -283,6 +287,8 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 		case 'i':
+			sight = 0;
+			glutPostRedisplay();
 			break;
 
 		case 'j':
@@ -294,6 +300,8 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 
 		case 'k':
+			sight = 1;
+			glutPostRedisplay();
 			break;
 
 		case 'l':
@@ -359,6 +367,7 @@ void keyboard(unsigned char key, int x, int y)
 			prepare_lighting();
 			glutPostRedisplay();
 			break;
+		
 	};
 }
 
@@ -369,15 +378,23 @@ void keyboard(unsigned char key, int x, int y)
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	scence_num = rot_x/2 + record_x/2;
+	if (scence_num >= 180)
+		scence_num %= 180;
+	else if (scence_num < 0)
+		while (scence_num < 0)
+			scence_num += 180;
 	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_final\\stitch" + to_string(scence_num) + ".jpg";
 	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_final\\stitch" + to_string(scence_num) + ".jpg";
 
 
 	/* draw background*/
 	if (mouseState == ROOM)
-		background = imread(finalroom_1_path);
-	
+		if (sight == 0)
+			background = imread(finalroom_1_path);
+		else
+			background = imread(finalroom_2_path);
+
 	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
 
 
@@ -388,12 +405,29 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	
 	/* set camera sight*/
-	gluLookAt(
-		2, 0, 0,
-		sinf(float(scence_num * 2) / 180 * G_PI)+2, 0, -cosf(float(scence_num * 2) / 180 * G_PI),
-		0, 1, 0);
+	float angle_theta = float(scence_num) * 2 / 180 * G_PI;
+	float x_Component = sinf(angle_theta);
+	float z_Component = -cosf(angle_theta);
+	float y_Component = -0.53;
+	float angle_phi = atan2f(1, -y_Component);
+	float x_normal = sinf(angle_theta)*sinf(angle_phi);
+	float z_normal = -cosf(angle_theta)*sinf(angle_phi);
+	float y_normal = cosf(angle_phi);
 
+	if (sight == 0)
+		gluLookAt(
+			0, 0, 0,
+			x_Component, 0, z_Component,
+			0, 1, 0);
+	else{
+
+		gluLookAt(
+			0, 0, 0,
+			x_Component, y_Component, z_Component,
+			x_normal, y_normal, z_normal/*0,1,0*/);
+	}
 
 	/* rotate all 3D models*/
 	//glRotatef((float)rot_y + (float)record_y, 1.0, 0.0, 0.0);//上下滑  以x軸當旋轉軸 
@@ -442,7 +476,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	//DrawWall();
+	DrawWall();
 	string text = "andyha yoyoyo";
 	drawDialog(text.data(), text.size(),width,height);
 	clueBox.show_clue_box(clueBox_texture);
