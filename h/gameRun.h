@@ -93,6 +93,9 @@ extern GLdouble modelview[16];
 extern GLdouble projection[16];
 
 
+extern int sight;
+
+
 void  gameRun(int argc, char** argv);
 
 /*clue action*/
