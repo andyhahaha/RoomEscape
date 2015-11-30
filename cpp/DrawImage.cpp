@@ -230,7 +230,7 @@ void drawDialog(const char *text, int length,int width,int height)
 	glLoadIdentity();								// reset it to identity matrix
 	glPushMatrix();									// push current state of MODELVIEW matrix to stack
 	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D
+	glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D, the beging position of the dialog
 
 	for (int i = 0; i<length; i++){
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font

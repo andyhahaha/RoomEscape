@@ -2,26 +2,26 @@
 
 
 
-/*int typeCode(Clue clue){
-
-	return 0;
-}*/
-
 
 void safeAction(Clue clue)
 {
 	if (!clue.clue_name().compare("safe1"))
 	{
-		mouseState = NEARSCENE;
 		background = imread(ClueInRoom[0].current_2Dimg());
 		ClueInRoom[0].next_state(SHOW_NEAR_SCENE);		//safe next state = show near scene
 
 		if (gameState == STATE1)
 		{
+			mouseState = TYPECODE;
+			code[0] = '0';
+			code[1] = '0';
+			code[2] = '0';
+			code[3] = '0';
 			ClueOnScreen.assign(ClueSafeTypeCode1.begin(), ClueSafeTypeCode1.end());
 		}
 		else
 		{
+			mouseState = NEARSCENE;
 			if (ClueInRoom[1].current_state() == SHOW_IN_CLUEBOX || ClueInRoom[1].current_state() == NOT_SHOW)	//check key state
 			{
 				ClueOnScreen.clear();
@@ -46,9 +46,9 @@ void safeAction(Clue clue)
 		ClueOnScreen.clear();
 		ClueOnScreen.push_back(ClueSafeOpen1[0]);	//只剩下back
 	}
-	else	//點到safe的數字區
+	else	//點到safe的數字區, including "clear" and "OK"
 	{
-		if (typeCode(clue))
+		if (typeCode(clue,code))
 		{
 			mouseState = NEARSCENE;
 			ClueInRoom[0].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
@@ -175,7 +175,7 @@ void changeState(Clue clue){
 
 	cout << "clue = " << clue.clue_name() << endl;
 
-	if (!clue.clue_name().compare("safe") || !clue.clue_name().compare("1"))
+	if (!clue.clue_name().compare("safe1") || !clue.clue_name().compare("1") || !clue.clue_name().compare("2") || !clue.clue_name().compare("3"))
 		safeAction(clue);
 	else if (!clue.clue_name().compare("key"))
 		keyAction();

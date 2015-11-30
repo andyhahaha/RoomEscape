@@ -74,9 +74,10 @@
 #define ITEM_WIDTH 0.14	//clue in clue box is a square (width is 0.14% of the screen height)
 #define ARROW_WIDTH 0.02
 
-//near scence
+//mouse state
 #define ROOM				0
 #define NEARSCENE			1
+#define TYPECODE			2
 /*#define DRAWER_ST			1
 #define DRAWER_ED			2
 #define DRAWER_RD			3
@@ -95,6 +96,13 @@
 #define CLOSET				16
 #define PILLOW				17
 #define CURTAIN				18*/
+
+
+/* safe1 code */
+#define CODE0	8
+#define CODE1	7
+#define CODE2	8
+#define CODE3	7
 
 
 #define DIST 5
