@@ -16,7 +16,7 @@ float phi = 1.5292;
 ClueBox clueBox(0, width, 100, 100, 100);
 
 
-int gameState;
+int gameState = STATE1;
 
 vector<Clue> ClueOnScreen;
 vector<Clue> ClueInRoom;
@@ -35,6 +35,9 @@ vector<Clue> ClueSafeOpen1;
 vector<Clue> ClueSafeTypeCode1;
 
 //vector<Clue> AllClue;
+
+char code[4];
+
 
 Mat clueBox_texture;
 
@@ -203,27 +206,31 @@ void mouse(int button, int state, int x, int y)
 				case NEARSCENE:
 					ClueHitNearScence(x, y, ClueOnScreen);
 					break;
-			
+				case TYPECODE:
+					ClueHitNearScence(x, y, ClueOnScreen);
+					break;
 			}
 		}
-		
 	}
 
-	if (state)
+
+	if (mouseState == ROOM)
 	{
-		record_x += x - old_rot_x;
-		record_y += y - old_rot_y;
-		
-		rot_x = 0;   //沒有歸零會有不理想的結果 
-		rot_y = 0;
+		if (state)
+		{
+			record_x += x - old_rot_x;
+			record_y += y - old_rot_y;
+
+			rot_x = 0;   //沒有歸零會有不理想的結果 
+			rot_y = 0;
+		}
+		else
+		{
+			old_rot_x = x;
+			old_rot_y = y;
+		}
 	}
-	else
-	{
-		old_rot_x = x;
-		old_rot_y = y;
 	
-	}
-
 	glutPostRedisplay();
 }
 
@@ -236,11 +243,13 @@ void mouse(int button, int state, int x, int y)
 
 void MotionMouse(int x, int y)
 {
+	if (mouseState == ROOM)
+	{
+		rot_x = x - old_rot_x;
+		rot_y = y - old_rot_y;
 
-	rot_x = x - old_rot_x;
-	rot_y = y - old_rot_y;
-	
-	glutPostRedisplay();
+		glutPostRedisplay();
+	}
 }
 
 
@@ -266,7 +275,6 @@ void prepare_lighting()
 	float light_position[4] = { 0,0,1,1 };
 
 
-	
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
@@ -390,10 +398,12 @@ void display()
 
 	/* draw background*/
 	if (mouseState == ROOM)
+	{
 		if (sight == 0)
 			background = imread(finalroom_1_path);
 		else
 			background = imread(finalroom_2_path);
+	}
 
 	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
 
@@ -477,8 +487,22 @@ void display()
 	/*draw other game interface view*/
 	//DrawClueHit();
 	DrawWall();
-	string text = "andyha yoyoyo";
-	drawDialog(text.data(), text.size(),width,height);
+
+
+
+	/* Draw dialog */
+	string text;
+
+	if (mouseState == TYPECODE)
+	{
+		drawCode(code, width, height);
+	}
+	else
+	{
+		text = "andyha yoyoyo";
+		drawDialog(text.data(), text.size(), width, height);
+	}
+
 	clueBox.show_clue_box(clueBox_texture);
 	clueBox.show_clue(width, height);
 

@@ -71,6 +71,11 @@ extern vector<Clue> ClueInCurtain;
 
 
 
+/* type code */
+extern char code[4];
+
+
+
 /*mouse*/
 extern int mouseState;
 
@@ -100,7 +105,10 @@ void  gameRun(int argc, char** argv);
 
 /*clue action*/
 void nearScence(string, int);
-int typeCode(Clue clue);
+
+int typeCode(Clue clue,char *code);
+void drawCode(char *code, int width, int height);
+
 void showInCluebox(Clue);
 void changeState(Clue);
 void ClueHit(int, int, vector<Clue>);
