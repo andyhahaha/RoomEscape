@@ -33,7 +33,7 @@ Clue::Clue()
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 };
 
 
@@ -71,7 +71,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 }
 
 
@@ -102,7 +102,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 
 	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
 }
@@ -123,7 +123,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i>
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 
 	_2DCoordinate.assign(coordinate.begin(), coordinate.end());
 }
@@ -242,7 +242,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 }
 
 
@@ -274,7 +274,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 
 	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
 }
@@ -299,7 +299,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, vector
 	_cluebox_img = "no path";
 
 	_state.clear();			//紀錄每個state是什麼代號
-	_current_state = 0;		//線索狀態
+	_current_state = SHOW_ON_SCENE;		//線索狀態
 
 	_2DCoordinate.assign(coordinate.begin(), coordinate.end());
 }
@@ -440,24 +440,6 @@ void Clue::set_clue_name(string s)
 	_clue_name = s;
 }
 
-/*void Clue::set_location_row(float row)
-{
-	_location_row=row;
-}
-void Clue::set_location_col(float column)
-{
-	_location_col=column;
-}
-
-void Clue::set_width(int w)
-{
-	_width = w;
-}
-
-void Clue::set_height(int h)
-{
-	_height = h;
-}*/
 
 void Clue::set_start_scene_up(int i)
 {
@@ -578,7 +560,12 @@ Mat Clue::get_cluebox_img()
 
 /* ----------------- Setting 2D images of the clue. ---------------------*/
 
-string Clue::current_2Dimg()
+int Clue::current_2Dimg()
+{
+	return _current_2Dimg;
+}
+
+string Clue::current_2Dimg_path()
 {
 	return _2Dimg_path[_current_2Dimg];
 }
@@ -608,7 +595,12 @@ string Clue::get_2Dimg(int number)
 
 /* ----------------- Setting 3D objects of the clue. ---------------------*/
 
-string Clue::current_3Dobj()
+int Clue::current_3Dobj()
+{
+	return _current_3Dobj;
+}
+
+string Clue::current_3Dobj_path()
 {
 	return _3Dobj_path[_current_3Dobj];
 }
@@ -763,27 +755,9 @@ float Clue::location_col_now(int vertical, int scene_now)
 		else
 			return _location_col + (scene_now - _start_scene_down)*_col_shift;
 	}
-}
-
-float Clue::location_row()
-{
-	return _location_row;
-}
-
-float Clue::location_col()
-{
-	return _location_col;
-}
-
-float Clue::width()
-{
-	return _width;
-}
-
-float Clue::height()
-{
-	return _height;
 }*/
+
+
 
 int Clue::start_scene_up()
 {
@@ -804,6 +778,47 @@ int Clue::end_scene_down()
 {
 	return _end_scene_down;
 }
+
+float Clue::trans_x()
+{
+	return _trans_x;
+}
+
+float Clue::trans_y()
+{
+	return _trans_y;
+}
+
+float Clue::trans_z()
+{
+	return _trans_z;
+}
+
+float Clue::rot_x()
+{
+	return _rot_x;
+}
+
+float Clue::rot_y()
+{
+	return _rot_y;
+}
+
+float Clue::rot_z()
+{
+	return _rot_z;
+}
+
+float Clue::scale()
+{
+	return _scale;
+}
+
+Vector<Point2i> Clue::get_2D_coordinate()
+{
+	return _2DCoordinate;
+}
+
 
 Vector<Point3f> Clue::obj_corner()
 {
@@ -896,49 +911,7 @@ int Clue::write_initial_file()
 	fwrite(&end, sizeof(int), 1, fp);
 	fclose(fp);
 	return 1;
-};
-
-float Clue::trans_x(){
-	return _trans_x;
-
-
-};
-float Clue::trans_y(){
-	return _trans_y;
-
 }
-float Clue::trans_z(){
-	return _trans_z;
-
-
-}
-float Clue::rot_x(){
-	return _rot_x;
-
-
-}
-float Clue::rot_y(){
-	return _rot_y;
-
-
-
-}
-float Clue::rot_z(){
-	return _rot_z;
-
-
-}
-float Clue::scale(){
-	return _scale;
-
-}
-
-Vector<Point2i> Clue::get_2D_coordinate(){
-
-	return _2DCoordinate;
-
-}
-
 
 
 ostream& operator<<(ostream& os, const Clue& clue)

@@ -1,16 +1,14 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
 
-
-
 void safeAction(Clue clue)
 {
 	if (!clue.clue_name().compare("safe1"))
 	{
-		background = imread(ClueInRoom[0].current_2Dimg());
+		background = imread(ClueInRoom[0].current_2Dimg_path());
 		ClueInRoom[0].next_state(SHOW_NEAR_SCENE);		//safe next state = show near scene
 
-		if (gameState == STATE1)
+		if (ClueInRoom[0].current_2Dimg() == 0)		//current 2D img of safe1 is typecode img
 		{
 			mouseState = TYPECODE;
 			code[0] = '0';
@@ -19,18 +17,16 @@ void safeAction(Clue clue)
 			code[3] = '0';
 			ClueOnScreen.assign(ClueSafeTypeCode1.begin(), ClueSafeTypeCode1.end());
 		}
-		else
+		else if (ClueInRoom[0].current_2Dimg() == 2)	//safe1 is opened and empty
 		{
 			mouseState = NEARSCENE;
-			if (ClueInRoom[1].current_state() == SHOW_IN_CLUEBOX || ClueInRoom[1].current_state() == NOT_SHOW)	//check key state
-			{
-				ClueOnScreen.clear();
-				ClueOnScreen.push_back(ClueSafeOpen1[0]);	//쪀넘짾back
-			}
-			else
-			{
-				ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
-			}
+			ClueOnScreen.clear();
+			ClueOnScreen.push_back(ClueSafeOpen1[0]);	//쪀넘짾back
+		}
+		else	//safe1 is opened and with key inside
+		{
+			mouseState = NEARSCENE;
+			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
 		}
 	}
 	else if (!clue.clue_name().compare("safe1_nearscene_back"))
@@ -42,7 +38,7 @@ void safeAction(Clue clue)
 	{
 		mouseState = NEARSCENE;
 		ClueInRoom[0].next_2Dimg(2);	//near scene change to opened safe1 (empty)
-		background = imread(ClueInRoom[0].current_2Dimg());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
+		background = imread(ClueInRoom[0].current_2Dimg_path());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
 		ClueOnScreen.clear();
 		ClueOnScreen.push_back(ClueSafeOpen1[0]);	//쪀넘짾back
 	}
@@ -53,52 +49,134 @@ void safeAction(Clue clue)
 			mouseState = NEARSCENE;
 			ClueInRoom[0].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
 			ClueInRoom[0].next_3Dobj(1);	//opened safe1 3D object
-			background = imread(ClueInRoom[0].current_2Dimg());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
-			
+			background = imread(ClueInRoom[0].current_2Dimg_path());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());		//쪀넘짾back쯑key
+
+			//change key state
+			ClueInRoom[1].next_state(SHOW_ON_SCENE);
 		}
 	}
+}
+
+
+
+
+/* the key of the safe1 */
+void keyAction(Clue clue)
+{
+	if (clue.current_state() == SHOW_ON_SCENE)
+	{
+		ClueInRoom[1].next_state(SHOW_IN_CLUEBOX);
+	}
+	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
+	{
+
+	}*/
+}
+
+
+/* card D */
+void cardDAction(Clue clue)
+{
+	if (clue.current_state() == SHOW_ON_SCENE)
+	{
+		ClueInRoom[2].next_state(SHOW_IN_CLUEBOX);
+	}
+	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
+	{
+
+	}*/
+}
+
+/* card S */
+void cardSAction(Clue clue)
+{
+	if (clue.current_state() == SHOW_ON_SCENE)
+	{
+		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
+	}
+	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
+	{
+
+	}*/
+
+}
+
+
+/* card P */
+void cardPAction(Clue clue)
+{
+
+
+}
+
+/* card 7 */
+void card_num1Action(Clue clue)
+{
+	if (clue.current_state() == SHOW_ON_SCENE)
+	{
+		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
+	}
+	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
+	{
+
+	}*/
+}
+
+/* card 2 */
+void card_num2Action(Clue clue)
+{
+
+
+}
+
+/* card 3 */
+void card_num3Action(Clue clue)
+{
 	
+}
+
+void curtainAction()
+{
+	cout << "---------- hit curtain ----------\n" << endl;
 
 }
 
-
-void keyAction(){
-
-
+void pillowAction(Clue clue)
+{
+	cout << "---------- hit pillow -----------\n" << endl;
+	if (!clue.clue_name().compare("pillow"))
+	{
+		mouseState = NEARSCENE;
+		ClueInRoom[9].next_2Dimg(0);
+		background = imread(ClueInRoom[9].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
+		ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
+	}
+	else if (!clue.clue_name().compare("pillow_nearscene_back"))
+	{
+		if (ClueInRoom[9].current_2Dimg() == 0)		//pillow with paper
+		{
+			mouseState = ROOM;
+			ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+		}
+		else	//paper near scene
+		{
+			mouseState = NEARSCENE;
+			ClueInRoom[9].next_2Dimg(0);
+			background = imread(ClueInRoom[9].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
+			ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
+		}
+	}
+	else if (!clue.clue_name().compare("pillow_paper"))
+	{
+		mouseState = NEARSCENE;
+		ClueInRoom[9].next_2Dimg(1);		//paper near scene
+		background = imread(ClueInRoom[9].current_2Dimg_path());	//show paper near scene
+		ClueOnScreen.clear();
+		ClueOnScreen.push_back(ClueInPillow[0]);	//only "pillow_nearscene_back"
+	}
 }
-void cardDAction(){
 
-
-}
-void cardSAction(){
-
-
-}
-void cardPAction(){
-
-
-}
-void card_num1Action(){
-
-
-}
-void card_num2Action(){
-
-
-}
-void card_num3Action(){
-
-
-}
-void curtainAction(){
-	cout << "------------- hit curtain --------------\n" << endl;
-
-}
-void pillowAction(){
-
-
-}
 void Blue_shelf_TopAction()
 {
 	mouseState = NEARSCENE;
@@ -107,22 +185,30 @@ void Blue_shelf_TopAction()
 
 }
 
-void Blue_shelf_MidAction(){
+void Blue_shelf_MidAction()
+{
 
 
 }
-void Blue_shelf_buttonAction(){
+
+void Blue_shelf_buttonAction()
+{
 
 
 }
-void Orange_shelf_TopAction(){
+
+void Orange_shelf_TopAction()
+{
 
 
 }
-void Orange_shelf_MidAction(){
+
+void Orange_shelf_MidAction()
+{
 
 
 }
+
 void Orange_shelf_buttonAction(){
 
 
@@ -169,32 +255,40 @@ void showInCluebox(Clue clue)
 
 
 
-void changeState(Clue clue){
-
+void changeState(Clue clue)
+{
+	vector<Clue>::iterator it_clue;
 	//if (clue.clue_name() = "")
 
 	cout << "clue = " << clue.clue_name() << endl;
 
-	if (!clue.clue_name().compare("safe1") || !clue.clue_name().compare("1") || !clue.clue_name().compare("2") || !clue.clue_name().compare("3"))
+	if (!clue.clue_name().compare("safe1"))
 		safeAction(clue);
-	else if (!clue.clue_name().compare("key"))
-		keyAction();
+
+	for (it_clue = ClueSafeTypeCode1.begin(); it_clue != ClueSafeTypeCode1.end(); ++it_clue)
+	{
+		if (!clue.clue_name().compare(it_clue->clue_name()))
+			safeAction(clue);
+	}
+
+	if (!clue.clue_name().compare("key"))
+		keyAction(clue);
 	else if (!clue.clue_name().compare("cardD"))
-		cardDAction();
+		cardDAction(clue);
 	else if (!clue.clue_name().compare("cardS"))
-		cardSAction();
+		cardSAction(clue);
 	else if (!clue.clue_name().compare("cardP"))
-		cardPAction();
+		cardPAction(clue);
 	else if (!clue.clue_name().compare("card_num1"))
-		card_num1Action();
+		card_num1Action(clue);
 	else if (!clue.clue_name().compare("card_num2"))
-		card_num2Action();
+		card_num2Action(clue);
 	else if (!clue.clue_name().compare("card_num3"))
-		card_num3Action();
+		card_num3Action(clue);
 	else if (!clue.clue_name().compare("curtain"))
 		curtainAction();
 	else if (!clue.clue_name().compare("pillow"))
-		pillowAction();
+		pillowAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
 		Blue_shelf_TopAction();
 	else if (!clue.clue_name().compare("Blue_shelf_Mid"))
@@ -219,9 +313,6 @@ void changeState(Clue clue){
 		Wood_shelf_MidAction();
 	else if (!clue.clue_name().compare("Wood_shelf_button"))
 		Wood_shelf_buttonAction();
-
-
-
 }
 
 void ClueHit(int x, int y, vector<Clue> _onScreenClue)
@@ -283,7 +374,7 @@ void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue)
 	vector<Clue>::iterator it_clue;
 	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) 
 	{
-		if (x > it_clue->get_2D_coordinate()[0].x&&x<it_clue->get_2D_coordinate()[1].x&&y>it_clue->get_2D_coordinate()[0].y&&y < it_clue->get_2D_coordinate()[1].y)
+		if (x > it_clue->get_2D_coordinate()[0].x && x<it_clue->get_2D_coordinate()[1].x && y>it_clue->get_2D_coordinate()[0].y && y < it_clue->get_2D_coordinate()[1].y)
 			changeState(*it_clue);
 	}
 }
