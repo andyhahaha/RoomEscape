@@ -230,7 +230,11 @@ void drawDialog(const char *text, int length,int width,int height)
 	glLoadIdentity();								// reset it to identity matrix
 	glPushMatrix();									// push current state of MODELVIEW matrix to stack
 	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D, the beging position of the dialog
+
+	if (text[0]=='b' && text[1]=='a' && text[2]=='c' && text[3]=='k')
+		glRasterPos2i(width*0.9, height*0.25);
+	else
+		glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D, the beging position of the dialog
 
 	for (int i = 0; i<length; i++){
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]); // generation of characters in our text with 9 by 15 GLU font
@@ -260,10 +264,22 @@ void drawDialog(const char *text, int length,int width,int height)
 
 	glBegin(GL_QUADS);
 	glColor4f(0.62, 0.6, 0.55, 0.7);
-	glVertex3f(0.05, 0.25, 0.0);
-	glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25, 0.0);
-	glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25 + (75.0 / height), 0.0);
-	glVertex3f(0.05, 0.25 + (75.0 / height), 0.0);
+
+
+	if (text[0] == 'b' && text[1] == 'a' && text[2] == 'c' && text[3] == 'k')
+	{
+		glVertex3f(0.885, 0.23, 0.0);
+		glVertex3f(0.885 + (length + 2)*(12.0 / width), 0.23, 0.0);
+		glVertex3f(0.885 + (length + 2)*(12.0 / width), 0.23 + (50.0 / height), 0.0);
+		glVertex3f(0.885, 0.23 + (50.0 / height), 0.0);
+	}
+	else
+	{
+		glVertex3f(0.05, 0.25, 0.0);
+		glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25, 0.0);
+		glVertex3f(0.05 + (length + 2)*(12.0 / width), 0.25 + (75.0 / height), 0.0);
+		glVertex3f(0.05, 0.25 + (75.0 / height), 0.0);
+	}
 	glEnd();
 
 	// Clear the depth buffer so the texture forms the background.

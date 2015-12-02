@@ -3,7 +3,8 @@
 int width = 1080;      //Width of the background in pixels.
 int height = 720;     //Height of the background in pixels.		
 
-int scence_num = 0;
+int scene_num = 0;
+int scene_temp = 0;
 Mat background;
 
 GLMmodel *glm_model;
@@ -216,18 +217,21 @@ void mouse(int button, int state, int x, int y)
 
 	if (mouseState == ROOM)
 	{
-		if (state)
+		if (state == GLUT_UP)
 		{
-			record_x += x - old_rot_x;
-			record_y += y - old_rot_y;
+			//record_x += x - old_rot_x;
+			//record_y += y - old_rot_y;
 
 			rot_x = 0;   //沒有歸零會有不理想的結果 
 			rot_y = 0;
+
+			scene_temp = scene_num;
 		}
-		else
+		else if (state == GLUT_DOWN)
 		{
 			old_rot_x = x;
 			old_rot_y = y;
+			scene_temp = scene_num;
 		}
 	}
 	
@@ -247,6 +251,9 @@ void MotionMouse(int x, int y)
 	{
 		rot_x = x - old_rot_x;
 		rot_y = y - old_rot_y;
+
+		//old_rot_x = x;
+		//old_rot_y = y;
 
 		glutPostRedisplay();
 	}
@@ -300,9 +307,9 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 
 		case 'j':
-			scence_num--;
-			if (scence_num < 0)
-				scence_num = 179;
+			scene_num--;
+			if (scene_num < 0)
+				scene_num = 179;
 		
 			glutPostRedisplay();
 			break;
@@ -313,9 +320,9 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 
 		case 'l':
-			scence_num++;
-			if (scence_num > 179)
-				scence_num = 0;
+			scene_num++;
+			if (scene_num > 179)
+				scene_num = 0;
 		
 			glutPostRedisplay();
 			break;
@@ -386,14 +393,22 @@ void keyboard(unsigned char key, int x, int y)
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scence_num = rot_x/2 + record_x/2;
-	if (scence_num >= 180)
-		scence_num %= 180;
-	else if (scence_num < 0)
-		while (scence_num < 0)
-			scence_num += 180;
-	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_final\\stitch" + to_string(scence_num) + ".jpg";
-	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_final\\stitch" + to_string(scence_num) + ".jpg";
+	//scene_num = rot_x/2 + record_x/2;
+	scene_num = rot_x / (width*0.01) + scene_temp;
+	cout << "rot_x / (width*0.05) = " << rot_x / (width*0.01) << endl;
+
+	if (scene_num >= 180)
+	{
+		scene_num %= 180;
+	}
+	else if (scene_num < 0)
+	{
+		while (scene_num < 0)
+			scene_num += 180;
+	}
+		
+	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_final\\stitch" + to_string(scene_num) + ".jpg";
+	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_final\\stitch" + to_string(scene_num) + ".jpg";
 
 
 	/* draw background*/
@@ -417,7 +432,7 @@ void display()
 
 	
 	/* set camera sight*/
-	float angle_theta = float(scence_num) * 2 / 180 * G_PI;
+	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
 	float x_Component = sinf(angle_theta);
 	float z_Component = -cosf(angle_theta);
 	float y_Component = -0.53;
@@ -461,7 +476,7 @@ void display()
 	vector<Clue>::iterator it_clue;
 	/*for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
 	{
-		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scence_num))
+		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scene_num))
 			ClueOnScreen.push_back(*it_clue);
 	}*/
 
@@ -472,7 +487,7 @@ void display()
 		ClueOnScreen.clear();
 		for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
 		{
-			if (it_clue->show_to_scene(VERTICAL_CENTRAL, scence_num))
+			if (it_clue->show_to_scene(VERTICAL_CENTRAL, scene_num) && it_clue->current_state() != NOT_SHOW && it_clue->current_state() != SHOW_IN_CLUEBOX)
 				ClueOnScreen.push_back(*it_clue);
 		}
 
@@ -482,20 +497,26 @@ void display()
 			glCallList(list_id[i]);
 		}
 	}
-	cout <<"scence = "<< scence_num << endl;
+	cout <<"scence = "<< scene_num << endl;
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	DrawWall();
+	//DrawWall();
 
 
 
 	/* Draw dialog */
 	string text;
+	string back = "back";
 
 	if (mouseState == TYPECODE)
 	{
 		drawCode(code, width, height);
+		drawDialog(back.data(), back.size(), width, height);
+	}
+	else if (mouseState == NEARSCENE)
+	{
+		drawDialog(back.data(), back.size(), width, height);
 	}
 	else
 	{

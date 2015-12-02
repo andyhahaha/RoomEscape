@@ -35,19 +35,21 @@ public:
 	void set_obj_corner(Vector<Point3f>);
 	void set_2D_coordinate(Vector<Point2i>);
 
-	int current_state();		//return _state_array(_current_state)
+	int current_state();		//return _current_state
 	void next_state(int);		//assign _current_state
 	//void add_state(int);		//加上一個新的state，輸入一個state代號，他會加在目前的state vector的最後面
 
 	void set_cluebox_img(string);	//放在clue box的2D圖片路徑
 	Mat get_cluebox_img();
 
-	string current_2Dimg();			//return _current_2Dimg
+	int current_2Dimg();			//return _current_2Dimg
+	string current_2Dimg_path();			//return _current_2Dimg
 	void next_2Dimg(int);  			//assign _current_2Dimg
 	void add_2Dimg_path(string);	//add一個image(2D)路徑
 	string get_2Dimg(int);
 
-	string current_3Dobj();			//return _current_3Dobj
+	int current_3Dobj();			//return _current_3Dobj
+	string current_3Dobj_path();			//return _current_2Dimg
 	void next_3Dobj(int);  			//assign _current_3Dobj
 	void add_3Dobj_path(string);	//add一個obj(3D)路徑
 	string get_3Dobj(int);
@@ -56,9 +58,6 @@ public:
 	void next_dialog();			//assign _current_dialog
 	void add_dialog(string);	//add一個對話  內容
 	string get_dialog(int); 	//取得第幾個對話
-
-	Vector<Point2i> get_2D_coordinate();
-
 	
 	
 	/* Get Clue basic information */
@@ -79,10 +78,9 @@ public:
 	int start_scene_down();
 	int end_scene_down();
 	Vector<Point3f> obj_corner();
+	Vector<Point2i> get_2D_coordinate();
 
 	int show_to_scene(int, int);	//check if the clue is in the current scene
-
-
 
 	int write_initial_file();	//write the basic information of the clue to a file
 	friend ostream& operator<<(ostream& , const Clue& );
@@ -106,8 +104,6 @@ private:
 	float _rot_y;
 	float _rot_z;
 	float _scale;
-
-
 
 
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置

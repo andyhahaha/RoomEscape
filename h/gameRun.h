@@ -37,7 +37,7 @@ extern int height;     //Height of the background in pixels.
 
 
 /*scence*/
-extern int scence_num;
+extern int scene_num;
 extern Mat background;
 
 /*3D object*/

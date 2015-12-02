@@ -13,9 +13,6 @@
 
 int typeCode(Clue clue, char *code)
 {
-	//string typeCodeImgPath;
-	//background = imread(typeCodeImgPath);
-
 	if (!clue.clue_name().compare("OK"))
 	{
 		if (code[0] == '8' && code[1] == '7' && code[2] == '8' && code[3] == '7')
@@ -30,17 +27,10 @@ int typeCode(Clue clue, char *code)
 	}
 	else	//hit the number 1~9
 	{
-		//char input_code[1];
-		//strcpy(input_code, clue.clue_name().c_str());
-		
 		/* Find the first place that the number is not 0. */
 		int current_code = 0;
 		for (; code[current_code] != '0'; current_code++);	
-		if (current_code >= 4)
-			return 0;
-
-		//int input_code;
-		//input_code = atoi(number);
+		if (current_code >= 4)	return 0;
 
 		code[current_code] = clue.clue_name()[0];
 	}
@@ -54,31 +44,12 @@ int typeCode(Clue clue, char *code)
 void drawCode(char *code, int width, int height)
 {
 	int space;
-	space = (int)round(4.0 / 1080.0*width);
+	space = (int)ceil(4.0 / 1080.0*width);
 	cout << "space = " << space << endl;
 
 	char spacechar = ' ';
-	//char codetext[16] = { '0', ' ', ' ', ' ', ' ', '0', ' ', ' ', ' ', ' ', '0', ' ', ' ', ' ', ' ', '0' };
-	/*char *codetext;
-	codetext = (char*)malloc((space * 3 + 4)*sizeof(char));
 
-	for (int i = 0; i < 4; i+=(space+1))
-	{
-		codetext[i] = code[i];
-
-		for (int j = 0; j < space; j++)
-		{
-			codetext[i + j] = ' ';
-		}
-	}
-	codetext[space*3+3] = code[3];
-
-	for (int k = 0; k < (space * 3 + 4); k++)
-		printf("%c ",codetext[k]);
-
-	cout << endl;*/
-
-	//draw text
+	//draw code
 	glColor3f(0, 0, 0);
 	glMatrixMode(GL_PROJECTION);					// change the current matrix to PROJECTION
 	double matrix[16];								// 16 doubles in stack memory
@@ -89,7 +60,7 @@ void drawCode(char *code, int width, int height)
 	glLoadIdentity();								// reset it to identity matrix
 	glPushMatrix();									// push current state of MODELVIEW matrix to stack
 	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.44, height*0.77);		// raster position in 2D
+	glRasterPos2i(width*0.44, height*0.73);		// raster position in 2D
 
 	for (int i = 0; i<3; i ++)
 	{
@@ -119,18 +90,6 @@ void drawCode(char *code, int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// Draw the image.
-	/*glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_BLEND);								//Enable blending.
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-
-	glBegin(GL_QUADS);
-	glColor4f(0.62, 0.6, 0.55, 0.7);
-	glVertex3f(455/width, 0.25, 0.0);
-	glVertex3f(455 / width + (length + 2)*(12.0 / width), 0.25, 0.0);
-	glVertex3f(455 / width + (length + 2)*(12.0 / width), 0.25 + (75.0 / height), 0.0);
-	glVertex3f(455 / width, 0.25 + (75.0 / height), 0.0);
-	glEnd();*/
 
 	// Clear the depth buffer so the texture forms the background.
 	glClear(GL_DEPTH_BUFFER_BIT);
