@@ -5,6 +5,7 @@ int height = 720;     //Height of the background in pixels.
 
 int scene_num = 0;
 int scene_temp = 0;
+
 Mat background;
 
 GLMmodel *glm_model;
@@ -19,19 +20,37 @@ ClueBox clueBox(0, width, 100, 100, 100);
 
 int gameState = STATE1;
 
+
 vector<Clue> ClueOnScreen;
 vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
+vector<Clue> ClueInPillow;
+vector<Clue> ClueInCurtain;
+
 vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;
 vector<Clue> ClueInDrawer3;
+
 vector<Clue> ClueInBlueShelfTop;
 vector<Clue> ClueInBlueShelfMid;
 vector<Clue> ClueInBlueShelfBtn;
-vector<Clue> ClueInWoodShelf;
 
-vector<Clue> ClueInPillow;
-vector<Clue> ClueInCurtain;
+vector<Clue> ClueInOrangeShelfTop;
+vector<Clue> ClueInOrangeShelfMid;
+vector<Clue> ClueInOrangeShelfBtn;
+
+vector<Clue> ClueInGreenShelfTop;
+vector<Clue> ClueInGreenShelfMid;
+vector<Clue> ClueInGreenShelfBtn;
+
+vector<Clue> ClueInWoodShelf;
+vector<Clue> ClueInWoodShelfTop;
+vector<Clue> ClueInWoodShelfMid;
+vector<Clue> ClueInWoodShelfBtn;
+
+vector<Clue> ClueInPaint;
+vector<Clue> ClueInBoat;
+
 vector<Clue> ClueSafeOpen1;
 vector<Clue> ClueSafeTypeCode1;
 
@@ -52,16 +71,17 @@ int old_rot_x = 0;
 int old_rot_y = 0;
 int old_rot_z = 0;
 
+
 float cam_z = 0;
 
 GLint    viewport[4];
 GLdouble modelview[16];
 GLdouble projection[16];
 
-int sight = 0;
+int sight = VERTICAL_CENTRAL;
 
 int mouseState = ROOM;
-
+int Ismove = 0;
 
 
 void clueBoxController(int x)
@@ -168,7 +188,7 @@ void mouse(int button, int state, int x, int y)
 	if ((button == 3) || (button == 4)) // It's a wheel event
 	{
 		// Each wheel event reports like a button click, GLUT_DOWN then GLUT_UP
-		if (state == GLUT_UP) return; // Disregard redundant GLUT_UP events
+		//if (state == GLUT_UP) return; // Disregard redundant GLUT_UP events
 		if (button == 3)
 		{
 			printf("Scroll %s At %d %d\n", "Up", x, y);
@@ -182,25 +202,26 @@ void mouse(int button, int state, int x, int y)
 			glutPostRedisplay();
 		}
 	}
-	else if (state == GLUT_DOWN)	// normal button event
+	else if (state == GLUT_UP)	// normal button event
 	{  
-		printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
-		glutPostRedisplay();
-		GLdouble posX, posY, posZ;
-		GLdouble  winX, winY, winZ = 0.994;
-		winX = (float)x;
-		winY = (float)viewport[3] - (float)y;
-		//glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-		gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
-		cout << "x = " << posX << endl << "y = " << posY << "z = " << posZ << endl;
-		
+		if (Ismove == 0){
+			printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
+			glutPostRedisplay();
+			GLdouble posX, posY, posZ;
+			GLdouble  winX, winY, winZ = 0.994;
+			winX = (float)x;
+			winY = (float)viewport[3] - (float)y;
+			//glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+			gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+			cout << "x = " << posX << endl << "y = " << posY << "z = " << posZ << endl;
 
-		if (y > height - (SPACE+ITEM_WIDTH)*height&&y < height - SPACE*height)
-			clueBoxController(x);
-		else
-		{
-			switch (mouseState)
+
+			if (y > height - (SPACE + ITEM_WIDTH)*height&&y < height - SPACE*height)
+				clueBoxController(x);
+			else
 			{
+				switch (mouseState)
+				{
 				case ROOM:
 					ClueHit(x, y, ClueOnScreen);
 					break;
@@ -210,11 +231,12 @@ void mouse(int button, int state, int x, int y)
 				case TYPECODE:
 					ClueHitNearScence(x, y, ClueOnScreen);
 					break;
+				}
 			}
 		}
 	}
 
-
+	Ismove = 0;
 	if (mouseState == ROOM)
 	{
 		if (state == GLUT_UP)
@@ -247,6 +269,8 @@ void mouse(int button, int state, int x, int y)
 
 void MotionMouse(int x, int y)
 {
+
+	Ismove = 1;
 	if (mouseState == ROOM)
 	{
 		rot_x = x - old_rot_x;
@@ -302,7 +326,7 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 		case 'i':
-			sight = 0;
+			sight = VERTICAL_CENTRAL;
 			glutPostRedisplay();
 			break;
 
@@ -315,7 +339,7 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 
 		case 'k':
-			sight = 1;
+			sight = VERTICAL_DOWN_20;
 			glutPostRedisplay();
 			break;
 
@@ -414,7 +438,7 @@ void display()
 	/* draw background*/
 	if (mouseState == ROOM)
 	{
-		if (sight == 0)
+		if (sight == VERTICAL_CENTRAL)
 			background = imread(finalroom_1_path);
 		else
 			background = imread(finalroom_2_path);
@@ -435,13 +459,13 @@ void display()
 	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
 	float x_Component = sinf(angle_theta);
 	float z_Component = -cosf(angle_theta);
-	float y_Component = -0.53;
+	float y_Component = -0.53;/*
 	float angle_phi = atan2f(1, -y_Component);
 	float x_normal = sinf(angle_theta)*sinf(angle_phi);
 	float z_normal = -cosf(angle_theta)*sinf(angle_phi);
 	float y_normal = cosf(angle_phi);
-
-	if (sight == 0)
+	*/
+	if (sight == VERTICAL_CENTRAL)
 		gluLookAt(
 			0, 0, 0,
 			x_Component, 0, z_Component,
@@ -451,7 +475,7 @@ void display()
 		gluLookAt(
 			0, 0, 0,
 			x_Component, y_Component, z_Component,
-			x_normal, y_normal, z_normal/*0,1,0*/);
+			/*x_normal, y_normal, z_normal*/0,1,0);
 	}
 
 	/* rotate all 3D models*/
@@ -460,8 +484,8 @@ void display()
 
 	/* convert opengl coordinate to screen coordinate*/
 
-	GLdouble  winX, winY, winZ;
-	GLdouble posX, posY, posZ;
+	//GLdouble  winX, winY, winZ;
+	//GLdouble posX, posY, posZ;
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
@@ -469,25 +493,25 @@ void display()
 
 	
 	/*light*/
-	prepare_lighting();
+	//prepare_lighting();
 
 	/*draw 3D models by call list*/
 	//ClueInRoom.clear();
-	vector<Clue>::iterator it_clue;
+	
 	/*for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
 	{
 		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scene_num))
 			ClueOnScreen.push_back(*it_clue);
 	}*/
 
-		
+	vector<Clue>::iterator it_clue;
 	int i;
 	if (mouseState == ROOM)
 	{
 		ClueOnScreen.clear();
 		for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
 		{
-			if (it_clue->show_to_scene(VERTICAL_CENTRAL, scene_num) && it_clue->current_state() != NOT_SHOW && it_clue->current_state() != SHOW_IN_CLUEBOX)
+			if (it_clue->show_to_scene(sight, scene_num) && it_clue->current_state() != NOT_SHOW && it_clue->current_state() != SHOW_IN_CLUEBOX)
 				ClueOnScreen.push_back(*it_clue);
 		}
 
@@ -527,7 +551,7 @@ void display()
 	clueBox.show_clue_box(clueBox_texture);
 	clueBox.show_clue(width, height);
 
-	glFlush();
+	//glFlush();
 	glutSwapBuffers();
 }
 
