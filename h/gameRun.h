@@ -55,18 +55,37 @@ extern int gameState;
 extern vector<Clue> ClueOnScreen;
 extern vector<Clue> ClueInRoom;
 extern vector<Clue> ClueInCloset;
+extern vector<Clue> ClueInPillow;
+extern vector<Clue> ClueInCurtain;
+
 extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;
 extern vector<Clue> ClueInDrawer3;
+
 extern vector<Clue> ClueInBlueShelfTop;
 extern vector<Clue> ClueInBlueShelfMid;
 extern vector<Clue> ClueInBlueShelfBtn;
+
+extern vector<Clue> ClueInOrangeShelfTop;
+extern vector<Clue> ClueInOrangeShelfMid;
+extern vector<Clue> ClueInOrangeShelfBtn;
+
+extern vector<Clue> ClueInGreenShelfTop;
+extern vector<Clue> ClueInGreenShelfMid;
+extern vector<Clue> ClueInGreenShelfBtn;
+
 extern vector<Clue> ClueInWoodShelf;
+extern vector<Clue> ClueInWoodShelfTop;
+extern vector<Clue> ClueInWoodShelfMid;
+extern vector<Clue> ClueInWoodShelfBtn;
+
+extern vector<Clue> ClueInPaint;
+extern vector<Clue> ClueInBoat;
+
 extern vector<Clue> ClueSafeTypeCode1;
 extern vector<Clue> ClueSafeOpen1;
 
-extern vector<Clue> ClueInPillow;
-extern vector<Clue> ClueInCurtain;
+
 //extern vector<Clue> AllClue;
 
 

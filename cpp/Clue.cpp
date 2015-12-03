@@ -685,6 +685,12 @@ int Clue::show_to_scene(int vertical, int scene_now)
 			return -1;
 		}
 
+		if (_start_scene_up == -1)
+		{
+			
+			return 0;
+		}
+
 		if (_start_scene_up < _end_scene_up)
 		{
 			if (scene_now >= _start_scene_up && scene_now <= _end_scene_up)
@@ -703,7 +709,11 @@ int Clue::show_to_scene(int vertical, int scene_now)
 			cout << "ERROR: Start scene down undefined!" << endl;
 			return -1;
 		}
+		if (_start_scene_down == -1)
+		{
 
+			return 0;
+		}
 		if (_start_scene_down < _end_scene_down)
 		{
 			if (scene_now >= _start_scene_down && scene_now <= _end_scene_down)

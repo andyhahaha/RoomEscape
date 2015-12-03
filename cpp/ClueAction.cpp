@@ -29,7 +29,7 @@ void safeAction(Clue clue)
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
 		}
 	}
-	else if (!clue.clue_name().compare("safe1_nearscene_back"))
+	else if (!clue.clue_name().compare("back"))
 	{
 		mouseState = ROOM;
 		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
@@ -81,6 +81,7 @@ void cardDAction(Clue clue)
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
 		ClueInRoom[2].next_state(SHOW_IN_CLUEBOX);
+		showInCluebox(clue);
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -94,6 +95,7 @@ void cardSAction(Clue clue)
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
 		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
+		showInCluebox(clue);
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -106,7 +108,7 @@ void cardSAction(Clue clue)
 /* card P */
 void cardPAction(Clue clue)
 {
-
+	showInCluebox(clue);
 
 }
 
@@ -116,6 +118,7 @@ void card_num1Action(Clue clue)
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
 		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
+		showInCluebox(clue);
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -126,13 +129,14 @@ void card_num1Action(Clue clue)
 /* card 2 */
 void card_num2Action(Clue clue)
 {
-
+	showInCluebox(clue);
 
 }
 
 /* card 3 */
 void card_num3Action(Clue clue)
 {
+	showInCluebox(clue);
 	
 }
 
@@ -177,52 +181,86 @@ void pillowAction(Clue clue)
 	}
 }
 
-void Blue_shelf_TopAction()
+void Blue_shelf_TopAction(Clue clue)
 {
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\near_scene\\Blue_shelf.JPG");
-	ClueOnScreen.assign(ClueInBlueShelfTop.begin(),ClueInBlueShelfTop.end());
-
+	
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Top.JPG");
+		ClueOnScreen.assign(ClueInBlueShelfTop.begin(), ClueInBlueShelfTop.end());
+	
 }
 
-void Blue_shelf_MidAction()
+void Blue_shelf_MidAction(Clue clue)
 {
-
-
+	
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Mid.JPG");
+		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
+	
+	
 }
 
-void Blue_shelf_buttonAction()
+void Blue_shelf_buttonAction(Clue clue)
 {
-
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Button.JPG");
+		ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
 
 }
 
 void Orange_shelf_TopAction()
 {
-
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Top.JPG");
+	ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
 
 }
 
 void Orange_shelf_MidAction()
 {
-
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Mid.JPG");
+	ClueOnScreen.assign(ClueInOrangeShelfMid.begin(), ClueInOrangeShelfMid.end());
 
 }
 
 void Orange_shelf_buttonAction(){
 
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Button.JPG");
+	ClueOnScreen.assign(ClueInOrangeShelfBtn.begin(), ClueInOrangeShelfBtn.end());
 
 }
+
+
 void Green_shelf_TopAction(){
 
-
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Top.JPG");
+	ClueOnScreen.assign(ClueInGreenShelfTop.begin(), ClueInGreenShelfTop.end());
 }
 void Green_shelf_MidAction(){
 
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Mid.JPG");
+	ClueOnScreen.assign(ClueInGreenShelfMid.begin(), ClueInGreenShelfMid.end());
 
 }
 void Green_shelf_buttonAction(){
 
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Button.JPG");
+	ClueOnScreen.assign(ClueInGreenShelfBtn.begin(), ClueInGreenShelfBtn.end());
+
+}
+
+
+
+void Wood_shelfAction(){
+
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Wood_Shelf.JPG");
+	ClueOnScreen.assign(ClueInWoodShelf.begin(), ClueInWoodShelf.end());
 
 }
 void Wood_shelf_TopAction(){
@@ -238,14 +276,21 @@ void Wood_shelf_buttonAction(){
 
 }
 
+void BoatAction(){
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat.JPG");
+	ClueOnScreen.assign(ClueInBoat.begin(), ClueInBoat.end());
+
+}
+
+void PaintAction(){
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint.JPG");
+	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
+
+}
 
 
-/*void nearScence(string path, int scence)
-{
-	background = imread(path);
-	mouseState = scence;
-
-}*/
 
 
 void showInCluebox(Clue clue)
@@ -290,11 +335,11 @@ void changeState(Clue clue)
 	else if (!clue.clue_name().compare("pillow"))
 		pillowAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
-		Blue_shelf_TopAction();
+		Blue_shelf_TopAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_Mid"))
-		Blue_shelf_MidAction();
+		Blue_shelf_MidAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_button"))
-		Blue_shelf_buttonAction();
+		Blue_shelf_buttonAction(clue);
 	else if (!clue.clue_name().compare("Orange_shelf_Top"))
 		Orange_shelf_TopAction();
 	else if (!clue.clue_name().compare("Orange_shelf_Mid"))
@@ -307,12 +352,19 @@ void changeState(Clue clue)
 		Green_shelf_MidAction();
 	else if (!clue.clue_name().compare("Green_shelf_button"))
 		Green_shelf_buttonAction();
+	else if (!clue.clue_name().compare("Wood_shelf"))
+		Wood_shelfAction();
 	else if (!clue.clue_name().compare("Wood_shelf_Top"))
 		Wood_shelf_TopAction();
 	else if (!clue.clue_name().compare("Wood_shelf_Mid"))
 		Wood_shelf_MidAction();
 	else if (!clue.clue_name().compare("Wood_shelf_button"))
 		Wood_shelf_buttonAction();
+	else if (!clue.clue_name().compare("boat"))
+		BoatAction();
+	else if (!clue.clue_name().compare("paint"))
+		PaintAction();
+
 }
 
 void ClueHit(int x, int y, vector<Clue> _onScreenClue)
@@ -378,3 +430,4 @@ void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue)
 			changeState(*it_clue);
 	}
 }
+
