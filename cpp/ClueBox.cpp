@@ -79,7 +79,7 @@ int ClueBox::get_item_selected()
 void ClueBox::show_clue_box(Mat image)	//用clue array裡面存的clue選圖出來show
 {
 	//printf("show_clue_box\n");
-	renderBackgroundGL(image,0,0,1,0.2);
+	renderBackgroundGL(image,0,0,1,0.15);
 }
 
 

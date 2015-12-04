@@ -83,6 +83,8 @@ int sight = VERTICAL_CENTRAL;
 int mouseState = ROOM;
 int Ismove = 0;
 
+void display();
+
 
 void clueBoxController(int x)
 {
@@ -206,7 +208,7 @@ void mouse(int button, int state, int x, int y)
 	{  
 		if (Ismove == 0){
 			printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
-			glutPostRedisplay();
+			//glutPostRedisplay();
 			GLdouble posX, posY, posZ;
 			GLdouble  winX, winY, winZ = 0.994;
 			winX = (float)x;
@@ -257,7 +259,7 @@ void mouse(int button, int state, int x, int y)
 		}
 	}
 	
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 
@@ -278,8 +280,8 @@ void MotionMouse(int x, int y)
 
 		//old_rot_x = x;
 		//old_rot_y = y;
-
-		glutPostRedisplay();
+		//glutPostRedisplay();
+		display();
 	}
 }
 
@@ -327,7 +329,6 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		case 'i':
 			sight = VERTICAL_CENTRAL;
-			glutPostRedisplay();
 			break;
 
 		case 'j':
@@ -335,12 +336,10 @@ void keyboard(unsigned char key, int x, int y)
 			if (scene_num < 0)
 				scene_num = 179;
 		
-			glutPostRedisplay();
 			break;
 
 		case 'k':
 			sight = VERTICAL_DOWN_20;
-			glutPostRedisplay();
 			break;
 
 		case 'l':
@@ -348,66 +347,56 @@ void keyboard(unsigned char key, int x, int y)
 			if (scene_num > 179)
 				scene_num = 0;
 		
-			glutPostRedisplay();
 			break;
 
 		case 'z':
-			glutPostRedisplay();
 			break;
 
 		case 'x':
-			glutPostRedisplay();
 			break;
 
 		case 'c':
 			glmRotation(glm_model, 1, 1);
 			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-			glutPostRedisplay();
 			break;
 
 		case 'v':
 			glmRotation(glm_model, 1, -1);
 			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-			glutPostRedisplay();
 			break;
 
 		case 'b':
 			glmRotation(glm_model, 2, 1);
 			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-			glutPostRedisplay();
 			break;
 
 		case 'n':
 			glmRotation(glm_model, 2, -1);
 			list_id[2] = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
-			glutPostRedisplay();
 			break;
 
 		case 'w':
 			theta -= .05;
 			prepare_lighting();
-			glutPostRedisplay();
 			break;
 
 		case 's':
 			theta += .05;
 			prepare_lighting();
-			glutPostRedisplay();
 			break;
 
 		case 'a':
 			phi -= .05;
 			prepare_lighting();
-			glutPostRedisplay();
 			break;
 
 		case 'd':
 			phi += .05;
 			prepare_lighting();
-			glutPostRedisplay();
 			break;
 		
 	};
+	glutPostRedisplay();
 }
 
 /* display: display all views on screen.
@@ -416,6 +405,15 @@ void keyboard(unsigned char key, int x, int y)
 
 void display()
 {
+
+	clock_t display_start, display_end;
+	clock_t start1, end1;
+	clock_t start2, end2;
+	clock_t start3, end3;
+	clock_t start4, end4;
+
+	display_start = clock();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//scene_num = rot_x/2 + record_x/2;
 	scene_num = rot_x / (width*0.01) + scene_temp;
@@ -430,21 +428,26 @@ void display()
 		while (scene_num < 0)
 			scene_num += 180;
 	}
-		
-	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_final\\stitch" + to_string(scene_num) + ".jpg";
-	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_final\\stitch" + to_string(scene_num) + ".jpg";
+	
+	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_small\\stitch" + to_string(scene_num) + ".jpg";
+	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_small\\stitch" + to_string(scene_num) + ".jpg";
 
-
+	
 	/* draw background*/
 	if (mouseState == ROOM)
 	{
-		if (sight == VERTICAL_CENTRAL)
+		if (sight == VERTICAL_CENTRAL){
+			//start1 = clock();
 			background = imread(finalroom_1_path);
+			//end1 = clock();
+		}
 		else
 			background = imread(finalroom_2_path);
 	}
-
-	renderBackgroundGL(background, 0, 0.2, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
+	
+	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
+	
+	//cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 
 	/* perspective mode*/
@@ -503,7 +506,7 @@ void display()
 		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scene_num))
 			ClueOnScreen.push_back(*it_clue);
 	}*/
-
+	start2 = clock();
 	vector<Clue>::iterator it_clue;
 	int i;
 	if (mouseState == ROOM)
@@ -514,6 +517,8 @@ void display()
 			if (it_clue->show_to_scene(sight, scene_num) && it_clue->current_state() != NOT_SHOW && it_clue->current_state() != SHOW_IN_CLUEBOX)
 				ClueOnScreen.push_back(*it_clue);
 		}
+		end2 = clock();
+		cout << "clue time = " << ((double)(end2 - start2) / CLOCKS_PER_SEC) << "s" << endl;
 
 		//ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
 		for (i = 0; i < list_id.size(); i++)
@@ -550,7 +555,8 @@ void display()
 
 	clueBox.show_clue_box(clueBox_texture);
 	clueBox.show_clue(width, height);
-
+	display_end = clock();
+	cout << "display time = " << ((double)(display_start - display_end) / CLOCKS_PER_SEC) << "s" << endl;
 	//glFlush();
 	glutSwapBuffers();
 }
