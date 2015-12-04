@@ -27,7 +27,7 @@ Clue::Clue()
 	_dialog.clear();	
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();		
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();		
 
 	_cluebox_img = "no path";
@@ -65,7 +65,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_dialog.clear();		
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();		
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -85,8 +85,6 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_position_num = position_num;
 	_clue_name = clue_name;
 
-
-
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
 	_end_scene_up = end_scene_up;
@@ -96,7 +94,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 	_dialog.clear();
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -117,7 +115,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i>
 	_dialog.clear();
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -236,7 +234,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_dialog.clear();
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -257,8 +255,6 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_position_num = position_num;
 	_clue_name = clue_name;
 
-
-
 	_start_scene_up = start_scene_up;
 	_start_scene_down = start_scene_down;
 	_end_scene_up = end_scene_up;
@@ -268,7 +264,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 	_dialog.clear();
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -293,7 +289,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, vector
 	_dialog.clear();
 	_current_2Dimg = 0; 	//目前使用到哪一個2D image
 	_2Dimg_path.clear();
-	_current_3Dobj = 0; 	//目前使用到哪一個3D obj
+	_current_3Dobj = NO_3DOBJ_PATH; 	//目前使用到哪一個3D obj
 	_3Dobj_path.clear();
 
 	_cluebox_img = "no path";
@@ -613,6 +609,7 @@ void Clue::next_3Dobj(int n)
 void Clue::add_3Dobj_path(string path)
 {
 	_3Dobj_path.push_back(path);
+	_current_3Dobj = 0;
 }
 
 string Clue::get_3Dobj(int number)

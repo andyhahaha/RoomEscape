@@ -43,13 +43,14 @@ extern Mat background;
 /*3D object*/
 extern GLMmodel *glm_model;
 extern vector<GLuint>list_id;
+extern vector<int>list_id_show;
 
 /*clue box*/
 extern ClueBox clueBox;
 
 
 /* game state */
-extern int gameState;
+//extern int gameState;
 
 /*Clue vector*/
 extern vector<Clue> ClueOnScreen;
@@ -62,6 +63,7 @@ extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;
 extern vector<Clue> ClueInDrawer3;
 
+extern vector<Clue> ClueBookInside;
 extern vector<Clue> ClueInBlueShelfTop;
 extern vector<Clue> ClueInBlueShelfMid;
 extern vector<Clue> ClueInBlueShelfBtn;
@@ -86,21 +88,11 @@ extern vector<Clue> ClueSafeTypeCode1;
 extern vector<Clue> ClueSafeOpen1;
 
 
-//extern vector<Clue> AllClue;
-
-
-
-/* type code */
-extern char code[4];
-
-
 
 /*mouse*/
 extern int mouseState;
 
 /*mouse roatation event*/
-extern int record_x;
-extern int record_y;
 extern int rot_x;
 extern int rot_y;
 extern int rot_z;
@@ -119,14 +111,19 @@ extern GLdouble projection[16];
 
 extern int sight;
 
-
 void  gameRun(int argc, char** argv);
+void  display();
+
 
 /*clue action*/
 void nearScence(string, int);
 
+extern char code[4];	//code of the safe
 int typeCode(Clue clue,char *code);
-void drawCode(char *code, int width, int height);
+void drawCode(char *code);
+
+extern char bookpage[4];	//correct page of DSP
+int bookInside(Clue clue, char *bookpage);
 
 void showInCluebox(Clue);
 void changeState(Clue);

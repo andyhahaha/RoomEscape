@@ -10,7 +10,7 @@ Mat background;
 
 GLMmodel *glm_model;
 vector<GLuint>list_id;
-
+vector<int>list_id_show;
 
 float theta = -1.0792;
 float phi = 1.5292;
@@ -18,7 +18,7 @@ float phi = 1.5292;
 ClueBox clueBox(0, width, 100, 100, 100);
 
 
-int gameState = STATE1;
+//int gameState = STATE1;
 
 
 vector<Clue> ClueOnScreen;
@@ -31,6 +31,7 @@ vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;
 vector<Clue> ClueInDrawer3;
 
+vector<Clue> ClueBookInside;
 vector<Clue> ClueInBlueShelfTop;
 vector<Clue> ClueInBlueShelfMid;
 vector<Clue> ClueInBlueShelfBtn;
@@ -56,14 +57,9 @@ vector<Clue> ClueSafeTypeCode1;
 
 //vector<Clue> AllClue;
 
-char code[4];
-
-
 Mat clueBox_texture;
 
 
-int record_x = 0;
-int record_y = 0;
 int rot_x = 0;
 int rot_y = 0;
 int rot_z = 0;
@@ -243,12 +239,8 @@ void mouse(int button, int state, int x, int y)
 	{
 		if (state == GLUT_UP)
 		{
-			//record_x += x - old_rot_x;
-			//record_y += y - old_rot_y;
-
 			rot_x = 0;   //沒有歸零會有不理想的結果 
 			rot_y = 0;
-
 			scene_temp = scene_num;
 		}
 		else if (state == GLUT_DOWN)
@@ -258,7 +250,6 @@ void mouse(int button, int state, int x, int y)
 			scene_temp = scene_num;
 		}
 	}
-	
 	//glutPostRedisplay();
 }
 
@@ -278,8 +269,17 @@ void MotionMouse(int x, int y)
 		rot_x = x - old_rot_x;
 		rot_y = y - old_rot_y;
 
-		//old_rot_x = x;
-		//old_rot_y = y;
+		scene_num = -rot_x / (width*0.01) + scene_temp;
+
+		if (scene_num >= 180)
+		{
+			scene_num %= 180;
+		}
+		else if (scene_num < 0)
+		{
+			while (scene_num < 0)
+				scene_num += 180;
+		}
 		//glutPostRedisplay();
 		display();
 	}
@@ -315,6 +315,7 @@ void prepare_lighting()
 	
 	glEnable(GL_LIGHT0);
 }
+
 
 /* keyboard: Processed keyboard signal.
 *
@@ -399,64 +400,59 @@ void keyboard(unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
+
+
 /* display: display all views on screen.
 *
 */
 
+/* display time 2015/12/4 by cindy
+*  
+*  Room: 
+*  display() time: 0.155s
+*  draw background time: 0.12s
+*  set camera time: 0s
+*  draw clue time: 0.003s
+*  draw dialog time: 0.001s
+*  clue box time: 0.011s
+*  
+*/
+
 void display()
 {
-
 	clock_t display_start, display_end;
 	clock_t start1, end1;
-	clock_t start2, end2;
-	clock_t start3, end3;
-	clock_t start4, end4;
 
 	display_start = clock();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//scene_num = rot_x/2 + record_x/2;
-	scene_num = rot_x / (width*0.01) + scene_temp;
-	cout << "rot_x / (width*0.05) = " << rot_x / (width*0.01) << endl;
-
-	if (scene_num >= 180)
-	{
-		scene_num %= 180;
-	}
-	else if (scene_num < 0)
-	{
-		while (scene_num < 0)
-			scene_num += 180;
-	}
 	
 	string finalroom_1_path = "D:\\image\\finalroom\\position1\\stitch\\1_small\\stitch" + to_string(scene_num) + ".jpg";
 	string finalroom_2_path = "D:\\image\\finalroom\\position1\\stitch\\2_small\\stitch" + to_string(scene_num) + ".jpg";
 
 	
 	/* draw background*/
+	start1 = clock();
+
 	if (mouseState == ROOM)
 	{
-		if (sight == VERTICAL_CENTRAL){
-			//start1 = clock();
+		if (sight == VERTICAL_CENTRAL)
 			background = imread(finalroom_1_path);
-			//end1 = clock();
-		}
 		else
 			background = imread(finalroom_2_path);
 	}
 	
-	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，又上座標(x2,y2)
-	
-	//cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
+	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
+	end1 = clock();
+	cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
-
+	start1 = clock();
 	/* perspective mode*/
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(111, 1, 0.1, 200);	//sight angle, view rate width/height, nearest side, far side
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
 	
 	/* set camera sight*/
 	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
@@ -469,27 +465,27 @@ void display()
 	float y_normal = cosf(angle_phi);
 	*/
 	if (sight == VERTICAL_CENTRAL)
+	{
 		gluLookAt(
 			0, 0, 0,
 			x_Component, 0, z_Component,
 			0, 1, 0);
-	else{
-
+	}
+	else
+	{
 		gluLookAt(
 			0, 0, 0,
 			x_Component, y_Component, z_Component,
 			/*x_normal, y_normal, z_normal*/0,1,0);
 	}
+	end1 = clock();
+	cout << "set camera time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 	/* rotate all 3D models*/
 	//glRotatef((float)rot_y + (float)record_y, 1.0, 0.0, 0.0);//上下滑  以x軸當旋轉軸 
 	//glRotatef((float)rot_x + (float)record_x, 0.0, 1.0, 0.0);//左右滑  以y軸當旋轉軸 
 
 	/* convert opengl coordinate to screen coordinate*/
-
-	//GLdouble  winX, winY, winZ;
-	//GLdouble posX, posY, posZ;
-
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
 	glGetDoublev(GL_PROJECTION_MATRIX, projection);
@@ -499,16 +495,9 @@ void display()
 	//prepare_lighting();
 
 	/*draw 3D models by call list*/
-	//ClueInRoom.clear();
-	
-	/*for (it_clue = ClueInRoom.begin(); it_clue != ClueInRoom.end(); ++it_clue)
-	{
-		if (it_clue->show_to_scene(VERTICAL_CENTRAL,scene_num))
-			ClueOnScreen.push_back(*it_clue);
-	}*/
-	start2 = clock();
+	start1 = clock();
 	vector<Clue>::iterator it_clue;
-	int i;
+
 	if (mouseState == ROOM)
 	{
 		ClueOnScreen.clear();
@@ -517,30 +506,30 @@ void display()
 			if (it_clue->show_to_scene(sight, scene_num) && it_clue->current_state() != NOT_SHOW && it_clue->current_state() != SHOW_IN_CLUEBOX)
 				ClueOnScreen.push_back(*it_clue);
 		}
-		end2 = clock();
-		cout << "clue time = " << ((double)(end2 - start2) / CLOCKS_PER_SEC) << "s" << endl;
 
-		//ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
-		for (i = 0; i < list_id.size(); i++)
+		for (int i = 0; i < list_id.size(); i++)
 		{
-			glCallList(list_id[i]);
+			if (list_id_show[i] != NOT_SHOW && list_id_show[i] != SHOW_IN_CLUEBOX)
+				glCallList(list_id[i]);
 		}
 	}
 	cout <<"scence = "<< scene_num << endl;
+	end1 = clock();
+	cout << "clue time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 	/*draw other game interface view*/
 	//DrawClueHit();
 	//DrawWall();
 
 
-
+	start1 = clock();
 	/* Draw dialog */
 	string text;
 	string back = "back";
 
 	if (mouseState == TYPECODE)
 	{
-		drawCode(code, width, height);
+		drawCode(code);
 		drawDialog(back.data(), back.size(), width, height);
 	}
 	else if (mouseState == NEARSCENE)
@@ -552,11 +541,19 @@ void display()
 		text = "andyha yoyoyo";
 		drawDialog(text.data(), text.size(), width, height);
 	}
+	end1 = clock();
+	cout << "draw dialog time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
+
+	start1 = clock();
 	clueBox.show_clue_box(clueBox_texture);
 	clueBox.show_clue(width, height);
+	end1 = clock();
+	cout << "cluebox time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
+
+
 	display_end = clock();
-	cout << "display time = " << ((double)(display_start - display_end) / CLOCKS_PER_SEC) << "s" << endl;
+	cout << "display time = " << ((double)(display_end - display_start) / CLOCKS_PER_SEC) << "s" << endl << endl << endl;
 	//glFlush();
 	glutSwapBuffers();
 }
@@ -584,8 +581,13 @@ void initializeOpenGL()
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Load clue box background image
-	clueBox_texture = imread("D:\\resource\\paper_texture2.png");
+	clueBox_texture = imread("D:\\resource\\paper_texture_small.png");
+	//clueBox.show_clue_box(clueBox_texture);
+	//clueBox.show_clue(width, height);
 
 	// Set light
 	prepare_lighting();
