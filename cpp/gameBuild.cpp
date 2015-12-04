@@ -36,7 +36,9 @@ void SetResourceImg()
 	int findH_to = 22;
 	//choose_image(room_final, position_num, VERTICAL_CENTRAL, findH_from, findH_to);
 	
-	resize_all(room_final, position_num, VERTICAL_UP_20, 50);
+	resize_all(room_final, position_num, VERTICAL_DOWN_20, 58);
+
+	//resize_all(room_final, position_num, VERTICAL_UP_20, 50);
 	//resize_all(room_final, position_num, VERTICAL_CENTRAL, 50);
 	//resize_all(room_final, position_num, VERTICAL_DOWN_20, 50);
 	//resize_all(room_final, position_num, VERTICAL_DOWN_40, 50);
@@ -62,7 +64,7 @@ void SetAllSceneImg()
 
 void gameBuild()
 {
-	//SetResourceImg();
-	SetAllSceneImg();
+	SetResourceImg();
+	//SetAllSceneImg();
 	//SetAllClue();
 }
