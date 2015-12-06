@@ -67,10 +67,11 @@ void clueSetting()
 	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -0.746502, 1.45153, 0, 180, 0, 2.0);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
-	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_typecode.jpg");
+	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_typecode_small.jpg");
 	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_open_key.jpg");
 	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg");
 	list_id.push_back(drawObject(glm_model, safe1, 0));
+	list_id_show.push_back(safe1.current_state());
 	ClueInRoom.push_back(safe1);
 
 
@@ -124,48 +125,55 @@ void clueSetting()
 
 
 	/* key		ClueInRoom[1] */
-	/*key.set_clue(room_name, position_num, "key", 133, 14, 133, 14, -2 * DIST, 3 * DIST, -3 * DIST, 0, 0, 0, 1.0);
+	key.set_clue(room_name, position_num, "key", 133, 14, 133, 14, -2 * DIST, 3 * DIST, -3 * DIST, 0, 0, 0, 1.0);
 	key.next_state(NOT_SHOW);
 	key.add_3Dobj_path("D:\\resource\\3D\\key.obj");
 	list_id.push_back(drawObject(glm_model, key, 0));
-	ClueInRoom.push_back(key);*/
+	list_id_show.push_back(key.current_state());
+	ClueInRoom.push_back(key);
 
 	/* card			ClueInRoom[2~7] */
 	cardD.set_clue(room_name, position_num, "cardD", 82, 136, 80, 140, -12.2961, -9.70452, 16.0501, 0, 180, 0, 1.0);
 	cardD.add_3Dobj_path("D:\\resource\\3D\\cardD.obj");
-	cardD.set_cluebox_img("D:\\resource\\2D\\D.PNG");
+	cardD.set_cluebox_img("D:\\resource\\2D\\D_small.PNG");
 	list_id.push_back(drawObject(glm_model, cardD, 0));
+	list_id_show.push_back(cardD.current_state());
 	ClueInRoom.push_back(cardD);
 
-	/*cardS.set_clue(room_name, position_num, "cardS", 139, 21, 139, 21, -1.1*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
+	cardS.set_clue(room_name, position_num, "cardS", 139, 21, 139, 21, -1.1*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardS.add_3Dobj_path("D:\\resource\\3D\\cardS.obj");
 	cardS.set_cluebox_img("D:\\resource\\2D\\S.png");
 	list_id.push_back(drawObject(glm_model, cardS, 0));
-	ClueInRoom.push_back(cardS);*/
+	list_id_show.push_back(cardS.current_state());
+	ClueInRoom.push_back(cardS);
 
-	/*cardP.set_clue(room_name, position_num, "cardP", 147, 29, 147, 29, -0.2*DIST, -0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
+	cardP.set_clue(room_name, position_num, "cardP", 147, 29, 147, 29, -0.2*DIST, -0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
 	cardP.add_3Dobj_path("D:\\resource\\3D\\cardP.obj");
 	cardP.set_cluebox_img("D:\\resource\\2D\\P.png");
 	list_id.push_back(drawObject(glm_model, cardP, 0));
-	ClueInRoom.push_back(cardP);*/
+	list_id_show.push_back(cardP.current_state());
+	ClueInRoom.push_back(cardP);
 
 	card_num1.set_clue(room_name, position_num, "card_num1", 156, 37, 156, 37, 8.84962, -11.6952, -13.1585, 270, 0, 0, 0.7);
 	card_num1.add_3Dobj_path("D:\\resource\\3D\\7.obj");
-	card_num1.set_cluebox_img("D:\\resource\\2D\\7.png");
+	card_num1.set_cluebox_img("D:\\resource\\2D\\7_small.png");
 	list_id.push_back(drawObject(glm_model, card_num1, 0));
+	list_id_show.push_back(card_num1.current_state());
 	ClueInRoom.push_back(card_num1);
 
 	card_num2.set_clue(room_name, position_num, "card_num2", -1, -1, 112, 155, -9.38933, -16.8268, 0.622, 0, 270, 0, 2.0);
 	card_num2.add_3Dobj_path("D:\\resource\\3D\\2.obj");
-	card_num2.set_cluebox_img("D:\\resource\\2D\\2.png");
+	card_num2.set_cluebox_img("D:\\resource\\2D\\2_small.png");
 	list_id.push_back(drawObject(glm_model, card_num2, 0));
+	list_id_show.push_back(card_num2.current_state());
 	ClueInRoom.push_back(card_num2);
 
-	/*card_num3.set_clue(room_name, position_num, "card_num3", -1, -1, 108, 157, -9.38933, -16.8268, 0.622, 0, 270, 0, 2.0);
+	card_num3.set_clue(room_name, position_num, "card_num3", -1, -1, 108, 157, -9.38933, -16.8268, 0.622, 0, 270, 0, 2.0);
 	card_num3.add_3Dobj_path("D:\\resource\\3D\\3.obj");
 	card_num3.set_cluebox_img("D:\\resource\\2D\\3.png");
 	list_id.push_back(drawObject(glm_model, card_num3, 0));
-	ClueInRoom.push_back(card_num3);*/
+	list_id_show.push_back(card_num3.current_state());
+	ClueInRoom.push_back(card_num3);
 
 
 	/*near scene*/
@@ -192,6 +200,7 @@ void clueSetting()
 	pillow.set_clue(room_name, position_num, "pillow", 143, 0, 143, 0, corner);
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow0_2.jpg");
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow1_2.jpg");
+	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\PillowWithPaper.jpg");
 	ClueInRoom.push_back(pillow);
 
 	
@@ -205,7 +214,6 @@ void clueSetting()
 	coordinate = set_coordinate(0, 0, 100, 100);
 	textbook.set_clue(room_name, position_num, "textbook", coordinate);
 	ClueInBlueShelfTop.push_back(textbook);
-
 	ClueInBlueShelfTop.push_back(back);
 
 	//************************************************************

@@ -52,6 +52,7 @@
 
 
 /*Clue Setting--------------------------------*/
+#define NO_3DOBJ_PATH -1
 
 #define NOT_SHOW_CLUE -2	//clue will not be shown in these scenes
 #define CLUE_FILE_END 111111	//the end of one clue file
@@ -71,13 +72,14 @@
 #define SPACE 0.03		//clue in the clue box space(horizon and vertical is both 0.03% of the screen height)
 #define BOX_HEIGHT 0.2
 #define BOX_WIDTH 1
-#define ITEM_WIDTH 0.14	//clue in clue box is a square (width is 0.14% of the screen height)
+#define ITEM_WIDTH 0.09	//clue in clue box is a square (width is 0.09% of the screen height)
 #define ARROW_WIDTH 0.02
 
 //mouse state
 #define ROOM				0
 #define NEARSCENE			1
 #define TYPECODE			2
+#define BOOKINSIDE			3
 /*#define DRAWER_ST			1
 #define DRAWER_ED			2
 #define DRAWER_RD			3

@@ -1,5 +1,8 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
+char code[4];
+char bookpage[4];
+
 
 void safeAction(Clue clue)
 {
@@ -82,6 +85,7 @@ void cardDAction(Clue clue)
 	{
 		ClueInRoom[2].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
+		list_id_show[2] = SHOW_IN_CLUEBOX;
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -96,6 +100,7 @@ void cardSAction(Clue clue)
 	{
 		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
+		list_id_show[3] = SHOW_IN_CLUEBOX;
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -109,6 +114,7 @@ void cardSAction(Clue clue)
 void cardPAction(Clue clue)
 {
 	showInCluebox(clue);
+	list_id_show[4] = SHOW_IN_CLUEBOX;
 
 }
 
@@ -119,6 +125,7 @@ void card_num1Action(Clue clue)
 	{
 		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
+		list_id_show[5] = SHOW_IN_CLUEBOX;
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -130,6 +137,7 @@ void card_num1Action(Clue clue)
 void card_num2Action(Clue clue)
 {
 	showInCluebox(clue);
+	list_id_show[6] = SHOW_IN_CLUEBOX;
 
 }
 
@@ -137,7 +145,7 @@ void card_num2Action(Clue clue)
 void card_num3Action(Clue clue)
 {
 	showInCluebox(clue);
-	
+	list_id_show[7] = SHOW_IN_CLUEBOX;
 }
 
 void curtainAction()
@@ -192,12 +200,39 @@ void Blue_shelf_TopAction(Clue clue)
 
 void Blue_shelf_MidAction(Clue clue)
 {
-	
+	if (!clue.clue_name().compare("Blue_shelf_Mid"))
+	{
 		mouseState = NEARSCENE;
 		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Mid.JPG");
 		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
-	
-	
+	}
+	else if (!clue.clue_name().compare("Book1"))
+	{
+		mouseState = BOOKINSIDE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookCover1.JPG");
+		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+	}
+	else if (!clue.clue_name().compare("Book2"))
+	{
+		mouseState = BOOKINSIDE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookCover2.JPG");
+		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage))			//press OK and page is right
+		{
+			mouseState = BOOKINSIDE;
+			background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookPageWithCode.JPG");
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+		else if (bookInside(clue, bookpage)==-1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookPageNoCode.JPG");
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
 
 void Blue_shelf_buttonAction(Clue clue)
@@ -365,6 +400,7 @@ void changeState(Clue clue)
 	else if (!clue.clue_name().compare("paint"))
 		PaintAction();
 
+	display();
 }
 
 void ClueHit(int x, int y, vector<Clue> _onScreenClue)

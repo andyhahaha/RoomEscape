@@ -14,19 +14,6 @@ PositionImgSetting PosSet1(room_final, 1);
 
 vector<Clue> clue_1;
 
-/*void SetAllClue()
-{
-	Clue clue0(room_final, 1, "teddy", 0, 0, 0, 0), clue1;
-
-	clue0.add_dialog("This is a teddy!");
-	clue0.add_state(SHOW_ON_SCENE);
-	clue0.add_2Dimg_path("No image~~~");
-
-	clue0.write_initial_file();
-
-	clue1.set_clue("D:\\clue\\AR1\\position1\\teddy");
-}*/
-
 
 void SetResourceImg()
 {
@@ -36,6 +23,8 @@ void SetResourceImg()
 	int findH_to = 22;
 	//choose_image(room_final, position_num, VERTICAL_CENTRAL, findH_from, findH_to);
 	
+
+	string path = "D:\\image\\" + room_final + "\\position1" + "\\";
 	resize_all(room_final, position_num, VERTICAL_DOWN_20, 58);
 
 	//resize_all(room_final, position_num, VERTICAL_UP_20, 50);
@@ -66,5 +55,4 @@ void gameBuild()
 {
 	SetResourceImg();
 	//SetAllSceneImg();
-	//SetAllClue();
 }
