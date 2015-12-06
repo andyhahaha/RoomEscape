@@ -75,51 +75,51 @@ void clueSetting()
 	ClueInRoom.push_back(safe1);
 
 
-	coordinate = set_coordinate(960, 505, 1025, 550);
+	coordinate = set_coordinate(0.888888889*width, 0.701388889*height, 0.949074074*width, 0.763888889*height);
 	back.set_clue(room_name, position_num, "back", coordinate);
 	ClueSafeTypeCode1.push_back(back);
 
-	coordinate = set_coordinate(470, 275, 510, 310);
+	coordinate = set_coordinate(0.442592593*width, 0.3375*height, 0.47962963*width, 0.393055556*height);
 	safe1_OK.set_clue(room_name, position_num, "OK", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_OK);
 
-	coordinate = set_coordinate(470, 275, 510, 310);
+	coordinate = set_coordinate(0.535185185*width, 0.343055556*height, 0.571296296*width, 0.397222222*height);
 	safe1_clear.set_clue(room_name, position_num, "clear", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_clear);
 
-	coordinate = set_coordinate(470, 275, 510, 310);
+	coordinate = set_coordinate(0.442592593*width, 0.438888889*height, 0.477777778*width, 0.486111111*height);
 	safe1_1.set_clue(room_name, position_num, "1", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_1);
 
-	coordinate = set_coordinate(525, 275, 565, 310);
+	coordinate = set_coordinate(0.488888889*width, 0.440277778*height, 0.523148148*width, 0.488888889*height);
 	safe1_2.set_clue(room_name, position_num, "2", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_2);
 
-	coordinate = set_coordinate(580, 275, 620, 310);
+	coordinate = set_coordinate(0.535185185*width, 0.438888889*height, 0.57037037*width, 0.4875*height);
 	safe1_3.set_clue(room_name, position_num, "3", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_3);
 
-	coordinate = set_coordinate(300, 0, 100, 100);
+	coordinate = set_coordinate(0.439814815*width, 0.505555556*height, 0.475925926*width, 0.555555556*height);
 	safe1_4.set_clue(room_name, position_num, "4", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_4);
 
-	coordinate = set_coordinate(400, 0, 100, 100);
+	coordinate = set_coordinate(0.487037037*width, 0.505555556*height, 0.521296296*width, 0.554166667*height);
 	safe1_5.set_clue(room_name, position_num, "5", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_5);
 
-	coordinate = set_coordinate(500, 0, 100, 100);
+	coordinate = set_coordinate(0.535185185*width, 0.504166667*height, 0.57037037*width, 0.554166667*height);
 	safe1_6.set_clue(room_name, position_num, "6", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_6);
 
-	coordinate = set_coordinate(600, 0, 100, 100);
+	coordinate = set_coordinate(0.439814815*width, 0.576388889*height, 0.475*width, 0.626388889*height);
 	safe1_7.set_clue(room_name, position_num, "7", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_7);
 
-	coordinate = set_coordinate(700, 0, 100, 100);
+	coordinate = set_coordinate(0.487037037*width, 0.573611111*height, 0.523148148*width, 0.625*height);
 	safe1_8.set_clue(room_name, position_num, "8", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_8);
 
-	coordinate = set_coordinate(800, 0, 100, 100);
+	coordinate = set_coordinate(0.535185185*width, 0.572222222*height, 0.569444444*width, 0.623611111*height);
 	safe1_9.set_clue(room_name, position_num, "9", coordinate);
 	ClueSafeTypeCode1.push_back(safe1_9);
 
@@ -184,6 +184,7 @@ void clueSetting()
 	Clue boat;
 	Clue paint;
 	Clue Blue_shelf_Top, Blue_shelf_Mid, Blue_shelf_bottom;
+	Clue DSP, Computer_Networks, probability, calculus, math;
 	Clue textbook;
 	Clue Orange_shelf_Top, Orange_shelf_Mid, Orange_shelf_bottom;
 	Clue Green_shelf_Top, Green_shelf_Mid, Green_shelf_bottom;
@@ -252,6 +253,14 @@ void clueSetting()
 
 
 	ClueInBlueShelfMid.push_back(back);
+	coordinate = set_coordinate(0.531481481*width, 0.261111111*height, 0.611111111*width, 0.688888889*height);
+	DSP.set_clue(room_name, position_num, "DSP", coordinate);
+	ClueInBlueShelfMid.push_back(DSP);
+	
+	coordinate = set_coordinate(0.615740741*width, 0.279166667*height, 0.687962963*width, 0.6875*height);
+	Computer_Networks.set_clue(room_name, position_num, "Computer_Networks", coordinate);
+	ClueInBlueShelfMid.push_back(Computer_Networks);
+
 	//************************************************************
 
 	corner = set_corner(10.4534, -13.1441, -8.66771
@@ -262,6 +271,20 @@ void clueSetting()
 	ClueInRoom.push_back(Blue_shelf_bottom);
 
 	ClueInBlueShelfBtn.push_back(back);
+
+	coordinate = set_coordinate(0.507407407*width, 0.231944444*height, 0.590740741*width, 0.716666667*height);
+	math.set_clue(room_name, position_num, "math", coordinate);
+	ClueInBlueShelfBtn.push_back(math);
+
+	coordinate = set_coordinate(0.683333333*width, 0.188888889*height, 0.769444444*width, 0.729166667*height);
+	calculus.set_clue(room_name, position_num, "calculus", coordinate);
+	ClueInBlueShelfBtn.push_back(calculus);
+
+	coordinate = set_coordinate(0.305555556*width, 0.280555556*height, 0.360185185*width, 0.681944444*height);
+	probability.set_clue(room_name, position_num, "probability", coordinate);
+	ClueInBlueShelfBtn.push_back(probability);
+	
+
 	//************************************************************
 
 
