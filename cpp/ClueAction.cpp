@@ -339,6 +339,36 @@ void guitarAction(){
 
 }
 
+void DSPAction(){
+	cout << "DSPAction" << endl;
+
+
+
+}
+void Computer_NetworksAction(){
+
+	cout << "Computer_NetworksAction" << endl;
+
+
+}
+void mathAction(){
+
+
+	cout << "mathAction" << endl;
+
+}
+void calculusAction(){
+
+	cout << "calculusAction" << endl;
+
+
+}
+void probabilityAction(){
+
+	cout << "probabilityAction" << endl;
+
+}
+
 
 void showInCluebox(Clue clue)
 {
@@ -413,9 +443,17 @@ void changeState(Clue clue)
 		Wood_shelf_buttonAction();
 	else if (!clue.clue_name().compare("boat"))
 		BoatAction();
-	else if (!clue.clue_name().compare("paint"))
-		PaintAction();
-
+	else if (!clue.clue_name().compare("DSP"))
+		DSPAction();
+	else if (!clue.clue_name().compare("Computer_Networks"))
+		Computer_NetworksAction();
+	else if (!clue.clue_name().compare("math"))
+		mathAction();
+	else if (!clue.clue_name().compare("calculus"))
+		calculusAction();
+	else if (!clue.clue_name().compare("probability"))
+		probabilityAction();
+	
 	display();
 }
 

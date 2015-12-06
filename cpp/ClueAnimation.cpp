@@ -20,10 +20,10 @@ int typeCode(Clue clue, char *code)
 	}
 	else if (!clue.clue_name().compare("clear"))
 	{
-		code[0] = 0;
-		code[1] = 0;
-		code[2] = 0;
-		code[3] = 0;
+		code[0] = '0';
+		code[1] = '0';
+		code[2] = '0';
+		code[3] = '0';
 	}
 	else	//hit the number 1~9
 	{
@@ -60,7 +60,7 @@ void drawCode(char *code)
 	glLoadIdentity();								// reset it to identity matrix
 	glPushMatrix();									// push current state of MODELVIEW matrix to stack
 	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.44, height*0.73);		// raster position in 2D
+	glRasterPos2i(width*0.445, height*0.705);		// raster position in 2D
 
 	for (int i = 0; i<3; i ++)
 	{
