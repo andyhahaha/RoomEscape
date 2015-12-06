@@ -64,7 +64,7 @@ void clueSetting()
 	
 	
 	/* safe		ClueInRoom[0] */
-	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -0.746502, 1.45153, 0, 180, 0, 2.0);
+	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -3.00133, 2.017423, 0, 180, 0, 2.0);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_typecode_small.jpg");
@@ -133,7 +133,7 @@ void clueSetting()
 	ClueInRoom.push_back(key);
 
 	/* card			ClueInRoom[2~7] */
-	cardD.set_clue(room_name, position_num, "cardD", 82, 136, 80, 140, -12.2961, -9.70452, 16.0501, 0, 180, 0, 1.0);
+	cardD.set_clue(room_name, position_num, "cardD", 82, 136, 80, 140, -9.73474, -8.14931, 11.924, 0, 180, 0, 1.0);
 	cardD.add_3Dobj_path("D:\\resource\\3D\\cardD.obj");
 	cardD.set_cluebox_img("D:\\resource\\2D\\D_small.PNG");
 	list_id.push_back(drawObject(glm_model, cardD, 0));
@@ -154,14 +154,14 @@ void clueSetting()
 	list_id_show.push_back(cardP.current_state());
 	ClueInRoom.push_back(cardP);
 
-	card_num1.set_clue(room_name, position_num, "card_num1", 156, 37, 156, 37, 8.84962, -11.6952, -13.1585, 270, 0, 0, 0.7);
+	card_num1.set_clue(room_name, position_num, "card_num1", 156, 37, 156, 37, 1.32711, -8.77139, -15.3917, 0, 0, 0, 0.7);
 	card_num1.add_3Dobj_path("D:\\resource\\3D\\7.obj");
 	card_num1.set_cluebox_img("D:\\resource\\2D\\7_small.png");
 	list_id.push_back(drawObject(glm_model, card_num1, 0));
 	list_id_show.push_back(card_num1.current_state());
 	ClueInRoom.push_back(card_num1);
 
-	card_num2.set_clue(room_name, position_num, "card_num2", -1, -1, 112, 155, -9.38933, -16.8268, 0.622, 0, 270, 0, 2.0);
+	card_num2.set_clue(room_name, position_num, "card_num2", -1, -1, 112, 155, -8.93859, -16.0023, 0.53914, 0, 270, 0, 2.0);
 	card_num2.add_3Dobj_path("D:\\resource\\3D\\2.obj");
 	card_num2.set_cluebox_img("D:\\resource\\2D\\2_small.png");
 	list_id.push_back(drawObject(glm_model, card_num2, 0));
@@ -179,6 +179,8 @@ void clueSetting()
 	/*near scene*/
 	Clue curtain;
 	Clue pillow;
+	Clue guitar;
+	Clue closet;
 	Clue boat;
 	Clue paint;
 	Clue Blue_shelf_Top, Blue_shelf_Mid, Blue_shelf_bottom;
@@ -190,24 +192,48 @@ void clueSetting()
 
 
 	/* curtain		ClueInRoom[8] */
-	corner = set_corner(-3.19343, 15.5143, -15.0661, 5.64898, 16.1634, -15.6844, 5.84995, 0.778958, -15.6985, -3.52837, 0.649132, -15.0427);
+	corner = set_corner(-5.59876, 15.801, -15.3917
+		, 4.06429, 15.6143, -15.9317
+		, 4.10576, -0.933127, -15.3917
+		, 5.80612, -1.11975, -15.3917);
 	curtain.set_clue(room_name, position_num, "curtain", 147, 32, 147, 32, corner);
 	ClueInRoom.push_back(curtain);
 
 
 	/* pillow		ClueInRoom[9] */
-	corner = set_corner(-12.2539, -12.2539, -9.95853, -9.57411, -8.58477, -12.0522, -7.74, -9.76673, -13.4821, -10.097, -13.6859, -11.6437);
+	corner = set_corner(-12.5246, -12.1307, -15.3917
+		, -7.21618, -12.6905, -15.3917
+		, -15.2618, -18.201, -7.77332
+		, -9.49716, -17.9261, -7.91897);
 	pillow.set_clue(room_name, position_num, "pillow", 143, 0, 143, 0, corner);
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow0_2.jpg");
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow1_2.jpg");
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\PillowWithPaper.jpg");
 	ClueInRoom.push_back(pillow);
 
+	/*closet*/
+	corner = set_corner(2.82012, 8.7099, 15.3917
+		, -9.746, 8.52256, 15.3917
+		, -9.58011, -10.5132, 15.3917
+		, 2.32245, -10.5132, 15.3917);
+	closet.set_clue(room_name, position_num, "closet", 70, 135, 69, 133, corner);
+	ClueInRoom.push_back(closet);
+
+	/*guitar*/
+	corner = set_corner(8.12857, 3.60809, -15.3917
+		, 10.534, 3.60809, -15.3917
+		, 11.7781, -10.2022, -15.3917
+		, 7.63091, -9.5179, -15.3917);
+	guitar.set_clue(room_name, position_num, "guitar", 166, 44, 164, 45, corner);
+	ClueInRoom.push_back(guitar);
 	
 	/*book shelf*/
 
 	/*Blue*/
-	corner = set_corner(14.9873, -3.9595, -11.8497, 15.1778, -3.75, -6.39466, 15.1778, -8.65738, -6.3946, 14.9888, -8.7244, -11.805);
+	corner = set_corner(15.3917, -6.5941, -10.4096
+		, 15.3917, -6.34526, -5.47434
+		, 15.3917, -10.451, -5.51582
+		, 15.3917, -10.5754, -10.3681);
 	Blue_shelf_Top.set_clue(room_name, position_num, "Blue_shelf_Top", 179, 62, 179, 62, corner);
 	ClueInRoom.push_back(Blue_shelf_Top);
 
@@ -217,10 +243,10 @@ void clueSetting()
 	ClueInBlueShelfTop.push_back(back);
 
 	//************************************************************
-	corner = set_corner(15.3917, -10.0156, -10.3266
-		,15.3917, -9.89115, -5.64023
-		,15.3917, -13.3126, -10.4925
-		,15.3917, -13.3126, -5.22551);
+	corner = set_corner(15.3917, -11.633, -10.534
+		, 15.3917, -11.5086, -5.51582
+		, 15.3917, -15.4899, -5.51582
+		, 15.3917, -15.4899, -10.534);
 	Blue_shelf_Mid.set_clue(room_name, position_num, "Blue_shelf_Mid", 179, 62, 179, 62, corner);
 	ClueInRoom.push_back(Blue_shelf_Mid);
 
@@ -228,7 +254,11 @@ void clueSetting()
 	ClueInBlueShelfMid.push_back(back);
 	//************************************************************
 
-	Blue_shelf_bottom.set_clue(room_name, position_num, "Blue_shelf_bottom", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
+	corner = set_corner(10.4534, -13.1441, -8.66771
+		, 10.5117, -13.0342, -4.68637
+		, 8.55987, -16.7169, -4.1887
+		, 8.38508, -17.0467, -8.12857);
+	Blue_shelf_bottom.set_clue(room_name, position_num, "Blue_shelf_bottom", -1, -1, 4, 61, corner);
 	ClueInRoom.push_back(Blue_shelf_bottom);
 
 	ClueInBlueShelfBtn.push_back(back);
@@ -236,57 +266,64 @@ void clueSetting()
 
 
 	/*Orange*/
-	corner = set_corner(15.3917, -5.1633, 2.32245
-		,15.3917, -4.85226, 6.46968
-		,15.3917, -8.29393, 2.252981
-		,15.3917, -7.71385, 6.30379);
+	corner = set_corner(15.3917, -6.5941, 2.2098
+		, 15.3917, -6.53189, 6.71852
+		, 15.3917, -9.95336, 6.71852
+		, 15.3917, -10.3888, 2.28098);
 	Orange_shelf_Top.set_clue(room_name, position_num, "Orange_shelf_Top", 27, 81, 27, 81, corner);
 	ClueInRoom.push_back(Orange_shelf_Top);
 	ClueInOrangeShelfTop.push_back(back);
 	//************************************************************
 
-	corner = set_corner(15.3917, -9.33127, 2.28098
-		,15.3917, -9.02023, 6.46948
-		,15.3917, -13.1882, 2.15656
-		,15.3917, -13.0638, 6.34526);
+	corner = set_corner(15.3917, -11.1975, 2.23951
+		, 15.3917, -11.0109, 6.67704
+		, 15.3917, -15.4277, 6.67704
+		, 15.3917, -15.4277, 2.19803);
 	Orange_shelf_Mid.set_clue(room_name, position_num, "Orange_shelf_Mid", 33, 75, 33, 75, corner);
 	ClueInRoom.push_back(Orange_shelf_Mid);
 	ClueInOrangeShelfMid.push_back(back);
 	//************************************************************
-
-	Orange_shelf_bottom.set_clue(room_name, position_num, "Orange_shelf_bottom", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
+	corner = set_corner(10.3078, -13.419, 1.70037
+		, 10.366, -13.309, 5.3914
+		, 8.96772, -15.9474, 5.18404
+		, 8.88032, -16.1123, 1.78331);
+	Orange_shelf_bottom.set_clue(room_name, position_num, "Orange_shelf_bottom", -1, -1, 30, 83, corner);
 	ClueInRoom.push_back(Orange_shelf_bottom);
 
 	ClueInOrangeShelfBtn.push_back(back);
 	//************************************************************
 
 	/*Green*/
-	corner = set_corner(15.3917, -5.03889, 10.534
-		,15.3917, -5.03889, 13.8932
-		,15.3917, -839814, 10.5754
-		,15.3917, -8.3359, 13.8518);
+	corner = set_corner(15.3917, -6.22085, 10.2851
+		, 15.3917, -6.34526, 14.1835
+		, 15.3917, -10.6999, 14.1835
+		, 15.3917, -10.8243, 10.2851);
 	Green_shelf_Top.set_clue(room_name, position_num, "Green_shelf_Top", 36, 95, 33, 97, corner);
 	ClueInRoom.push_back(Green_shelf_Top);
 	ClueInGreenShelfTop.push_back(back);
 	//************************************************************
-	corner = set_corner(15.3917, -10.0156, 10.4096
-		,15.3917, -10.0156, 13.6859
-		,15.3917, -13.126, 10.2851
-		,15.3917, -13.126, 13.6444);
+	corner = set_corner(15.3917, -11.7574, 10.2022
+		, 15.3917, -11.4464, 14.2665
+		, 15.3917, -15.4277, 14.1006
+		, 15.3917, -15.4277, 10.2022);
 	Green_shelf_Mid.set_clue(room_name, position_num, "Green_shelf_Mid", 40, 91, 179, 62, corner);
 	ClueInRoom.push_back(Green_shelf_Mid);
 	ClueInGreenShelfMid.push_back(back);
 	//************************************************************
-	Green_shelf_bottom.set_clue(room_name, position_num, "Green_shelf_bottom", 0, 45, 0, 45, -0.5*DIST, 0.5*DIST, -3 * DIST, 0, 0, 0, 2.0);
+	corner = set_corner(10.5117, -13.0342, 8.46035
+		, 10.5117, -13.0342, 11.7367
+		, 9.14251, -15.6176, 11.1561
+		, 9.05512, -15.7825, 804563);
+	Green_shelf_bottom.set_clue(room_name, position_num, "Green_shelf_bottom", -1, -1, 35, 98, corner);
 	ClueInRoom.push_back(Green_shelf_bottom);
 	ClueInGreenShelfBtn.push_back(back);
 	//************************************************************
 
 	/*Wood*/
-	corner = set_corner(-15.3917, -5.66097, 14.93
-		,-15.3917, -5.59876, 10.534
-		,-15.3917, -10.3888, 15.0545
-		,-15.3917, -10.451, 14.9715);
+	corner = set_corner(-15.3917, -6.90514, 15.2203
+		, -15.3917, -6.65631, 10.3266
+		, -15.3917, -15.3655, 13.9347
+		, -15.3917, -15.4277, 15.2618);
 	Wood_shelf.set_clue(room_name, position_num, "Wood_shelf", 86, 146, 86, 146, corner);
 	ClueInRoom.push_back(Wood_shelf);
 	ClueInWoodShelf.push_back(back);
@@ -304,20 +341,20 @@ void clueSetting()
 
 
 	/*boat*/
-	corner = set_corner(-15.3917, 0.31104, 13.1467
-		,-15.3917, 0.559876, 10.7828
-		,-15.3917, -3.04822, 10.7413
-		,-15.3917, -3.2975, 13.1882);
+	corner = set_corner(-15.3917, -0.870919, 13.2297
+		, -15.3917, -0.684293, 10.8243
+		, -15.3917, -4.47901, 10.9487
+		, -15.3917, -4.72784, 13.2297);
 	boat.set_clue(room_name, position_num, "boat", 87, 145,87 , 145, corner);
 	ClueInRoom.push_back(boat);
 	ClueInBoat.push_back(back);
 
 
 	/*paint*/
-	corner = set_corner(-15.3917, 2.1773, -0.290306
-		,-15.3917, 2.30171, -3.02748
-		,-15.3917, 0.311042, -2.94453
-		,-15.3917, 0.0622085, -0.497668);
+	corner = set_corner(-15.3917, 1.11975, -0.331779
+		, -15.3917, 1.43079, -2.98601
+		, -15.3917, -1.30638, -2.98601
+		, -15.3917, -1.43079, -0.497668);
 	paint.set_clue(room_name, position_num, "paint", 109, 168, 109, 168, corner);
 	ClueInRoom.push_back(paint);
 	ClueInPaint.push_back(back);

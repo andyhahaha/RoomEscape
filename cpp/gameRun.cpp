@@ -211,7 +211,7 @@ void mouse(int button, int state, int x, int y)
 			winY = (float)viewport[3] - (float)y;
 			//glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
 			gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
-			cout << "x = " << posX << endl << "y = " << posY << "z = " << posZ << endl;
+			cout << "x = " << posX << endl << "y = " << posY << endl<<"z = " << posZ << endl;
 
 
 			if (y > height - (SPACE + ITEM_WIDTH)*height&&y < height - SPACE*height)
@@ -441,7 +441,7 @@ void display()
 		else
 			background = imread(finalroom_2_path);
 	}
-	
+
 	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
 	end1 = clock();
 	cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
@@ -458,12 +458,12 @@ void display()
 	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
 	float x_Component = sinf(angle_theta);
 	float z_Component = -cosf(angle_theta);
-	float y_Component = -0.53;/*
+	float y_Component = -0.53;
 	float angle_phi = atan2f(1, -y_Component);
 	float x_normal = sinf(angle_theta)*sinf(angle_phi);
 	float z_normal = -cosf(angle_theta)*sinf(angle_phi);
 	float y_normal = cosf(angle_phi);
-	*/
+	
 	if (sight == VERTICAL_CENTRAL)
 	{
 		gluLookAt(
@@ -473,6 +473,9 @@ void display()
 	}
 	else
 	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(106, 1, 0.1, 200);
 		gluLookAt(
 			0, 0, 0,
 			x_Component, y_Component, z_Component,
@@ -519,7 +522,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	//DrawWall();
+	DrawWall();
 
 
 	start1 = clock();

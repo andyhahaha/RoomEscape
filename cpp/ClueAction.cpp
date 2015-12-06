@@ -325,7 +325,19 @@ void PaintAction(){
 
 }
 
+void closetAction(){
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\closet_closed.JPG");
+	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
 
+}
+
+void guitarAction(){
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Guitar.JPG");
+	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
+
+}
 
 
 void showInCluebox(Clue clue)
@@ -369,23 +381,27 @@ void changeState(Clue clue)
 		curtainAction();
 	else if (!clue.clue_name().compare("pillow"))
 		pillowAction(clue);
+	else if (!clue.clue_name().compare("closet"))
+		closetAction();
+	else if (!clue.clue_name().compare("guitar"))
+		guitarAction();
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
 		Blue_shelf_TopAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_Mid"))
 		Blue_shelf_MidAction(clue);
-	else if (!clue.clue_name().compare("Blue_shelf_button"))
+	else if (!clue.clue_name().compare("Blue_shelf_bottom"))
 		Blue_shelf_buttonAction(clue);
 	else if (!clue.clue_name().compare("Orange_shelf_Top"))
 		Orange_shelf_TopAction();
 	else if (!clue.clue_name().compare("Orange_shelf_Mid"))
 		Orange_shelf_MidAction();
-	else if (!clue.clue_name().compare("Orange_shelf_button"))
+	else if (!clue.clue_name().compare("Orange_shelf_bottom"))
 		Orange_shelf_buttonAction();
 	else if (!clue.clue_name().compare("Green_shelf_Top"))
 		Green_shelf_TopAction();
 	else if (!clue.clue_name().compare("Green_shelf_Mid"))
 		Green_shelf_MidAction();
-	else if (!clue.clue_name().compare("Green_shelf_button"))
+	else if (!clue.clue_name().compare("Green_shelf_bottom"))
 		Green_shelf_buttonAction();
 	else if (!clue.clue_name().compare("Wood_shelf"))
 		Wood_shelfAction();
@@ -448,6 +464,7 @@ void ClueHit(int x, int y, vector<Clue> _onScreenClue)
 		if (x <= maxX && x >= minX && y <= maxY && y >= minY)
 		{
 			changeState(*it_clue);
+			break;
 			//clueBox.InsertItem(*it_clue);
 			//cout << "~~~~~~~~~~~~~~~~~~Insert clue = " << it_clue->clue_name() << endl;
 		}
