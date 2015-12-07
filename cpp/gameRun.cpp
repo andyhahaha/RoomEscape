@@ -25,7 +25,8 @@ vector<Clue> ClueOnScreen;
 vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
 vector<Clue> ClueInPillow;
-vector<Clue> ClueInCurtain;
+vector<Clue> ClueInCurtainClosed;
+vector<Clue> ClueInCurtainOpened;
 
 vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;

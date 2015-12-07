@@ -118,4 +118,37 @@
 #define STATE4	4
 
 
+
+/* clue in room */
+#define INROOM_SAFE				0
+#define INROOM_CARDD			1
+#define INROOM_CARD7			2
+#define INROOM_CARD2			3
+#define INROOM_CURTAIN			4
+#define INROOM_PILLOW			5
+#define INROOM_CLOSET			6
+#define INROOM_GUITAR			7
+#define INROOM_BLUESHELF1		8
+#define INROOM_BLUESHELF2		9
+#define INROOM_BLUESHELF3		10
+#define INROOM_ORANGESHELF1		11
+#define INROOM_ORANGESHELF2		12
+#define INROOM_ORANGESHELF3		13
+#define INROOM_GREENSHELF1		14
+#define INROOM_GREENSHELF2		15
+#define INROOM_GREENSHELF3		16
+#define INROOM_WOODSHELF		17
+#define INROOM_BOAT				18
+#define INROOM_PAINT			19
+
+
+
+/* blue sheif book chosen */
+#define NOT_CHOOSE		-1
+#define ADSP			0
+#define COMPUTER		1
+#define MATH			2
+#define CALCULUS		3
+#define PROBABILITY		4
+
 #endif

@@ -2,16 +2,24 @@
 
 char code[4];
 char bookpage[4];
+int current_book;
+Clue book;
+
+void backAction()
+{
+	mouseState = ROOM;
+	ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+}
 
 
 void safeAction(Clue clue)
 {
 	if (!clue.clue_name().compare("safe1"))
 	{
-		background = imread(ClueInRoom[0].current_2Dimg_path());
-		ClueInRoom[0].next_state(SHOW_NEAR_SCENE);		//safe next state = show near scene
+		background = imread(ClueInRoom[INROOM_SAFE].current_2Dimg_path());
+		ClueInRoom[INROOM_SAFE].next_state(SHOW_NEAR_SCENE);		//safe next state = show near scene
 
-		if (ClueInRoom[0].current_2Dimg() == 0)		//current 2D img of safe1 is typecode img
+		if (ClueInRoom[INROOM_SAFE].current_2Dimg() == 0)		//current 2D img of safe1 is typecode img
 		{
 			mouseState = TYPECODE;
 			code[0] = '0';
@@ -20,11 +28,11 @@ void safeAction(Clue clue)
 			code[3] = '0';
 			ClueOnScreen.assign(ClueSafeTypeCode1.begin(), ClueSafeTypeCode1.end());
 		}
-		else if (ClueInRoom[0].current_2Dimg() == 2)	//safe1 is opened and empty
+		else if (ClueInRoom[INROOM_SAFE].current_2Dimg() == 2)	//safe1 is opened and empty
 		{
 			mouseState = NEARSCENE;
 			ClueOnScreen.clear();
-			ClueOnScreen.push_back(ClueSafeOpen1[0]);	//只剩下back
+			ClueOnScreen.push_back(back);	//只剩下back
 		}
 		else	//safe1 is opened and with key inside
 		{
@@ -32,31 +40,26 @@ void safeAction(Clue clue)
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
 		}
 	}
-	else if (!clue.clue_name().compare("back"))
-	{
-		mouseState = ROOM;
-		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
-	}
 	else if (!clue.clue_name().compare("safe1_key"))
 	{
 		mouseState = NEARSCENE;
-		ClueInRoom[0].next_2Dimg(2);	//near scene change to opened safe1 (empty)
-		background = imread(ClueInRoom[0].current_2Dimg_path());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
+		ClueInRoom[INROOM_SAFE].next_2Dimg(2);	//near scene change to opened safe1 (empty)
+		background = imread(ClueInRoom[INROOM_SAFE].current_2Dimg_path());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
 		ClueOnScreen.clear();
-		ClueOnScreen.push_back(ClueSafeOpen1[0]);	//只剩下back
+		ClueOnScreen.push_back(back);	//只剩下back
 	}
 	else	//點到safe的數字區, including "clear" and "OK"
 	{
 		if (typeCode(clue,code))
 		{
 			mouseState = NEARSCENE;
-			ClueInRoom[0].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
-			ClueInRoom[0].next_3Dobj(1);	//opened safe1 3D object
-			background = imread(ClueInRoom[0].current_2Dimg_path());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
+			ClueInRoom[INROOM_SAFE].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
+			ClueInRoom[INROOM_SAFE].next_3Dobj(1);	//opened safe1 3D object
+			background = imread(ClueInRoom[INROOM_SAFE].current_2Dimg_path());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());		//只剩下back和key
 
 			//change key state
-			ClueInRoom[1].next_state(SHOW_ON_SCENE);
+			//ClueInRoom[1].next_state(SHOW_ON_SCENE);
 		}
 	}
 }
@@ -69,7 +72,7 @@ void keyAction(Clue clue)
 {
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
-		ClueInRoom[1].next_state(SHOW_IN_CLUEBOX);
+		//ClueInRoom[1].next_state(SHOW_IN_CLUEBOX);
 	}
 	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
 	{
@@ -83,9 +86,9 @@ void cardDAction(Clue clue)
 {
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
-		ClueInRoom[2].next_state(SHOW_IN_CLUEBOX);
+		ClueInRoom[INROOM_CARDD].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
-		list_id_show[2] = SHOW_IN_CLUEBOX;
+		list_id_show[INROOM_CARDD] = SHOW_IN_CLUEBOX;
 	}
 }
 
@@ -95,7 +98,7 @@ void card_num1Action(Clue clue)
 {
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
-		ClueInRoom[5].next_state(SHOW_IN_CLUEBOX);
+		ClueInRoom[INROOM_CARD7].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
 		list_id_show[3] = SHOW_IN_CLUEBOX;
 	}
@@ -106,7 +109,7 @@ void card_num2Action(Clue clue)
 {
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
-		ClueInRoom[6].next_state(SHOW_IN_CLUEBOX);
+		ClueInRoom[INROOM_CARD2].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
 		list_id_show[4] = SHOW_IN_CLUEBOX;
 	}
@@ -119,13 +122,43 @@ void curtainAction(Clue clue)
 	if (!clue.clue_name().compare("curtain"))
 	{
 		mouseState = NEARSCENE;
-		ClueInRoom[9].next_2Dimg(0);
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Curtain_open_P.JPG");		//The first 2D img of the pillow (_2Dimg_path[0])
-		ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
+		ClueInRoom[INROOM_CURTAIN].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_CURTAIN].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInCurtainClosed.begin(), ClueInCurtainClosed.end());
 	}
+	else if (!clue.clue_name().compare("curtain_down"))
+	{
+		mouseState = NEARSCENE;
 
-
-
+		if (ClueInCurtainOpened[2].current_state() == SHOW_IN_CLUEBOX)	//If card P is in the clue box, show the image with no card P.
+		{
+			ClueInRoom[INROOM_CURTAIN].next_2Dimg(2);
+			background = imread(ClueInRoom[INROOM_CURTAIN].current_2Dimg_path());
+			ClueOnScreen.assign(ClueInCurtainOpened.begin(), ClueInCurtainOpened.end() - 1);
+		}
+		else
+		{
+			ClueInRoom[INROOM_CURTAIN].next_2Dimg(1);
+			background = imread(ClueInRoom[INROOM_CURTAIN].current_2Dimg_path());
+			ClueOnScreen.assign(ClueInCurtainOpened.begin(), ClueInCurtainOpened.end());
+		}
+	}
+	else if (!clue.clue_name().compare("curtain_up"))
+	{
+		mouseState = NEARSCENE;
+		ClueInRoom[INROOM_CURTAIN].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_CURTAIN].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInCurtainClosed.begin(), ClueInCurtainClosed.end());
+	}
+	else if (!clue.clue_name().compare("cardP"))
+	{
+		ClueInCurtainOpened[2].next_state(SHOW_IN_CLUEBOX);		//card P show in clue box
+		showInCluebox(clue);
+		mouseState = NEARSCENE;
+		ClueInRoom[INROOM_CURTAIN].next_2Dimg(2);
+		background = imread(ClueInRoom[INROOM_CURTAIN].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInCurtainOpened.begin(), ClueInCurtainOpened.end() - 1);
+	}
 }
 
 void pillowAction(Clue clue)
@@ -134,13 +167,13 @@ void pillowAction(Clue clue)
 	if (!clue.clue_name().compare("pillow"))
 	{
 		mouseState = NEARSCENE;
-		ClueInRoom[9].next_2Dimg(0);
-		background = imread(ClueInRoom[9].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
+		ClueInRoom[INROOM_PILLOW].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_PILLOW].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
 		ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
 	}
 	else if (!clue.clue_name().compare("pillow_nearscene_back"))
 	{
-		if (ClueInRoom[9].current_2Dimg() == 0)		//pillow with paper
+		if (ClueInRoom[INROOM_PILLOW].current_2Dimg() == 0)		//pillow with paper
 		{
 			mouseState = ROOM;
 			ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
@@ -148,16 +181,16 @@ void pillowAction(Clue clue)
 		else	//paper near scene
 		{
 			mouseState = NEARSCENE;
-			ClueInRoom[9].next_2Dimg(0);
-			background = imread(ClueInRoom[9].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
+			ClueInRoom[INROOM_PILLOW].next_2Dimg(0);
+			background = imread(ClueInRoom[INROOM_PILLOW].current_2Dimg_path());		//The first 2D img of the pillow (_2Dimg_path[0])
 			ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
 		}
 	}
 	else if (!clue.clue_name().compare("pillow_paper"))
 	{
 		mouseState = NEARSCENE;
-		ClueInRoom[9].next_2Dimg(1);		//paper near scene
-		background = imread(ClueInRoom[9].current_2Dimg_path());	//show paper near scene
+		ClueInRoom[INROOM_PILLOW].next_2Dimg(1);		//paper near scene
+		background = imread(ClueInRoom[INROOM_PILLOW].current_2Dimg_path());	//show paper near scene
 		ClueOnScreen.clear();
 		ClueOnScreen.push_back(ClueInPillow[1]);	//only "pillow_nearscene_back"
 	}
@@ -165,10 +198,9 @@ void pillowAction(Clue clue)
 
 void Blue_shelf_TopAction(Clue clue)
 {
-	
-		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Top.JPG");
-		ClueOnScreen.assign(ClueInBlueShelfTop.begin(), ClueInBlueShelfTop.end());
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Top.JPG");
+	ClueOnScreen.assign(ClueInBlueShelfTop.begin(), ClueInBlueShelfTop.end());
 	
 }
 
@@ -177,44 +209,35 @@ void Blue_shelf_MidAction(Clue clue)
 	if (!clue.clue_name().compare("Blue_shelf_Mid"))
 	{
 		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Mid.JPG");
+		background = imread(ClueInRoom[INROOM_BLUESHELF2].current_2Dimg_path());
 		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
 	}
-	else if (!clue.clue_name().compare("Book1"))
+	else if (!clue.clue_name().compare("DSP"))
 	{
 		mouseState = BOOKINSIDE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookCover1.JPG");
+		current_book = ADSP;
+		background = imread(ClueInBlueShelfMid[1].current_2Dimg_path());	//DSP cover
 		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
 	}
-	else if (!clue.clue_name().compare("Book2"))
+	else if (!clue.clue_name().compare("Computer_Networks"))
 	{
 		mouseState = BOOKINSIDE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookCover2.JPG");
+		current_book = COMPUTER;
+		background = imread(ClueInBlueShelfMid[2].current_2Dimg_path());	//computer network cover
 		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
 	}
-	else
+	else if (!clue.clue_name().compare("BlueShelfMid_back"))
 	{
-		if (bookInside(clue, bookpage))			//press OK and page is right
-		{
-			mouseState = BOOKINSIDE;
-			background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookPageWithCode.JPG");
-			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
-		}
-		else if (bookInside(clue, bookpage)==-1)	//press OK but page is not right
-		{
-			mouseState = BOOKINSIDE;
-			background = imread("D:\\image\\finalroom\\position1\\near_scene\\BookPageNoCode.JPG");
-			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
-		}
+		mouseState = ROOM;
+		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
 	}
 }
 
 void Blue_shelf_buttonAction(Clue clue)
 {
-		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Button.JPG");
-		ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
-
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Button.JPG");
+	ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
 }
 
 void Orange_shelf_TopAction()
@@ -222,7 +245,6 @@ void Orange_shelf_TopAction()
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Top.JPG");
 	ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
-
 }
 
 void Orange_shelf_MidAction()
@@ -230,136 +252,201 @@ void Orange_shelf_MidAction()
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Mid.JPG");
 	ClueOnScreen.assign(ClueInOrangeShelfMid.begin(), ClueInOrangeShelfMid.end());
-
 }
 
-void Orange_shelf_buttonAction(){
-
+void Orange_shelf_buttonAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Button.JPG");
 	ClueOnScreen.assign(ClueInOrangeShelfBtn.begin(), ClueInOrangeShelfBtn.end());
-
 }
 
 
-void Green_shelf_TopAction(){
-
+void Green_shelf_TopAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Top.JPG");
 	ClueOnScreen.assign(ClueInGreenShelfTop.begin(), ClueInGreenShelfTop.end());
 }
-void Green_shelf_MidAction(){
 
+void Green_shelf_MidAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Mid.JPG");
 	ClueOnScreen.assign(ClueInGreenShelfMid.begin(), ClueInGreenShelfMid.end());
-
 }
-void Green_shelf_buttonAction(){
 
+void Green_shelf_buttonAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Button.JPG");
 	ClueOnScreen.assign(ClueInGreenShelfBtn.begin(), ClueInGreenShelfBtn.end());
-
 }
 
 
 
-void Wood_shelfAction(){
-
+void Wood_shelfAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Wood_Shelf.JPG");
 	ClueOnScreen.assign(ClueInWoodShelf.begin(), ClueInWoodShelf.end());
-
 }
-void Wood_shelf_TopAction(){
 
-
-}
-void Wood_shelf_MidAction(){
-
-
-}
-void Wood_shelf_buttonAction(){
+void Wood_shelf_TopAction()
+{
 
 
 }
 
-void BoatAction(Clue clue){
-	if (!clue.clue_name().compare("boat")){
+void Wood_shelf_MidAction()
+{
+
+
+}
+
+void Wood_shelf_buttonAction()
+{
+
+
+}
+
+void BoatAction(Clue clue)
+{
+	if (!clue.clue_name().compare("boat"))
+	{
 		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat_3.JPG");
+		background = imread(ClueInRoom[INROOM_BOAT].current_2Dimg_path());
 		ClueOnScreen.assign(ClueInBoat.begin(), ClueInBoat.end());
 	}
-	else if (!clue.clue_name().compare("card_num3")){
+	else if (!clue.clue_name().compare("card_num3"))
+	{
 		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat.JPG");
+		ClueInRoom[INROOM_BOAT].next_2Dimg(1);
+		background = imread(ClueInRoom[INROOM_BOAT].current_2Dimg_path());
 		showInCluebox(clue);
 		ClueOnScreen.clear();
-		ClueOnScreen.push_back(ClueInBoat[1]);
-
+		ClueOnScreen.push_back(back);
 	}
-
 }
 
-void PaintAction(Clue clue){
-	if (!clue.clue_name().compare("paint")){
+void PaintAction(Clue clue)
+{
+	if (!clue.clue_name().compare("paint"))
+	{
 		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint_S.JPG");
+		background = imread(ClueInRoom[INROOM_PAINT].current_2Dimg_path());
 		ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
 	}
-	else if (!clue.clue_name().compare("cardS")){
+	else if (!clue.clue_name().compare("cardS"))
+	{
 		mouseState = NEARSCENE;
-		background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint.JPG");
+		ClueInRoom[INROOM_PAINT].next_2Dimg(1);
+		background = imread(ClueInRoom[INROOM_PAINT].current_2Dimg_path());
 		showInCluebox(clue);
 		ClueOnScreen.clear();
-		ClueOnScreen.push_back(ClueInPaint[1]);
+		ClueOnScreen.push_back(back);
 	}
 }
 
-void closetAction(){
+void closetAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\closet_closed.JPG");
 	ClueOnScreen.clear();
 	ClueOnScreen.push_back(back);
 }
 
-void guitarAction(){
+void guitarAction()
+{
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Guitar.JPG");
 	ClueOnScreen.clear();
 	ClueOnScreen.push_back(back);
-
 }
 
-void DSPAction(){
+void DSPAction(Clue clue)
+{
 	cout << "DSPAction" << endl;
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\finalroom\\position1\\near_scene\\DSP_cover.jpg");
-	ClueOnScreen.clear();
-	ClueOnScreen.push_back(back);
+	int current_page = 0;
 
+	if (!clue.clue_name().compare("BlueShelfMid_back"))
+	{
+		mouseState = NEARSCENE;
+		current_book = NOT_CHOOSE;
+		ClueInBlueShelfMid[1].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_BLUESHELF2].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage,1))			//press OK and page is right
+		{
+			mouseState = BOOKINSIDE;
+			ClueInBlueShelfMid[1].next_2Dimg(6);
+			background = imread(ClueInBlueShelfMid[1].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+		else if (bookInside(clue, bookpage, 1) == -1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			current_page = ClueInBlueShelfMid[1].current_2Dimg() + 1;
+			if (current_page >= 5)
+				current_page = 1;
 
+			ClueInBlueShelfMid[1].next_2Dimg(current_page);
+			background = imread(ClueInBlueShelfMid[1].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
-void Computer_NetworksAction(){
 
+void Computer_NetworksAction(Clue clue)
+{
 	cout << "Computer_NetworksAction" << endl;
+	int current_page = 0;
 
+	if (!clue.clue_name().compare("BlueShelfMid_back"))
+	{
+		mouseState = NEARSCENE;
+		current_book = NOT_CHOOSE;
+		ClueInBlueShelfMid[2].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_BLUESHELF2].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage, 0) == -1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			current_page = ClueInBlueShelfMid[2].current_2Dimg() + 1;
+			if (current_page >= 5)
+				current_page = 1;
 
+			ClueInBlueShelfMid[2].next_2Dimg(current_page);
+			background = imread(ClueInBlueShelfMid[2].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
-void mathAction(){
+
+void mathAction(Clue clue)
+{
 
 
 	cout << "mathAction" << endl;
 
 }
-void calculusAction(){
+
+void calculusAction(Clue clue)
+{
 
 	cout << "calculusAction" << endl;
 
 
 }
-void probabilityAction(){
+
+void probabilityAction(Clue clue)
+{
 
 	cout << "probabilityAction" << endl;
 
@@ -379,6 +466,9 @@ void changeState(Clue clue)
 	//if (clue.clue_name() = "")
 
 	cout << "clue = " << clue.clue_name() << endl;
+
+	if (!clue.clue_name().compare("back"))
+		backAction();
 
 	if (!clue.clue_name().compare("safe1"))
 		safeAction(clue);
@@ -417,7 +507,7 @@ void changeState(Clue clue)
 		guitarAction();
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
 		Blue_shelf_TopAction(clue);
-	else if (!clue.clue_name().compare("Blue_shelf_Mid"))
+	else if (!clue.clue_name().compare("Blue_shelf_Mid") || !clue.clue_name().compare("DSP") || !clue.clue_name().compare("Computer_Networks") || (!clue.clue_name().compare("BlueShelfMid_back") && current_book==NOT_CHOOSE))
 		Blue_shelf_MidAction(clue);
 	else if (!clue.clue_name().compare("Blue_shelf_bottom"))
 		Blue_shelf_buttonAction(clue);
@@ -445,8 +535,8 @@ void changeState(Clue clue)
 		BoatAction(clue);
 	else if (!clue.clue_name().compare("paint"))
 		PaintAction(clue);
-	else if (!clue.clue_name().compare("DSP"))
-		DSPAction();
+	/*else if (!clue.clue_name().compare("DSP"))
+		DSPAction(clue);
 	else if (!clue.clue_name().compare("Computer_Networks"))
 		Computer_NetworksAction();
 	else if (!clue.clue_name().compare("math"))
@@ -454,7 +544,22 @@ void changeState(Clue clue)
 	else if (!clue.clue_name().compare("calculus"))
 		calculusAction();
 	else if (!clue.clue_name().compare("probability"))
-		probabilityAction();
+		probabilityAction();*/
+
+
+	for (it_clue = ClueBookInside.begin(); it_clue != ClueBookInside.end(); ++it_clue)
+	{
+		if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == ADSP)
+			DSPAction(clue);
+		else if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == COMPUTER)
+			Computer_NetworksAction(clue);
+		else if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == MATH)
+			mathAction(clue);
+		else if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == CALCULUS)
+			calculusAction(clue);
+		else if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == PROBABILITY)
+			probabilityAction(clue);
+	}
 	
 	display();
 }

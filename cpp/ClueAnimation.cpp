@@ -102,7 +102,7 @@ void drawCode(char *code)
 
 
 
-int bookInside(Clue clue, char *bookpage)
+int bookInside(Clue clue, char *bookpage, int correctBook)
 {
 	if (!clue.clue_name().compare("OK"))
 	{

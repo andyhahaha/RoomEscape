@@ -57,7 +57,8 @@ extern vector<Clue> ClueOnScreen;
 extern vector<Clue> ClueInRoom;
 extern vector<Clue> ClueInCloset;
 extern vector<Clue> ClueInPillow;
-extern vector<Clue> ClueInCurtain;
+extern vector<Clue> ClueInCurtainClosed;
+extern vector<Clue> ClueInCurtainOpened;
 
 extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;
@@ -124,7 +125,7 @@ int typeCode(Clue clue,char *code);
 void drawCode(char *code);
 
 extern char bookpage[4];	//correct page of DSP
-int bookInside(Clue clue, char *bookpage);
+int bookInside(Clue clue, char *bookpage, int correctBook);
 
 void showInCluebox(Clue);
 void changeState(Clue);
