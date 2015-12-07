@@ -87,70 +87,44 @@ void cardDAction(Clue clue)
 		showInCluebox(clue);
 		list_id_show[2] = SHOW_IN_CLUEBOX;
 	}
-	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
-	{
-
-	}*/
 }
 
-/* card S */
-void cardSAction(Clue clue)
-{
-	if (clue.current_state() == SHOW_ON_SCENE)
-	{
-		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
-		showInCluebox(clue);
-		list_id_show[3] = SHOW_IN_CLUEBOX;
-	}
-	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
-	{
-
-	}*/
-
-}
-
-
-/* card P */
-void cardPAction(Clue clue)
-{
-	showInCluebox(clue);
-	list_id_show[4] = SHOW_IN_CLUEBOX;
-
-}
 
 /* card 7 */
 void card_num1Action(Clue clue)
 {
 	if (clue.current_state() == SHOW_ON_SCENE)
 	{
-		ClueInRoom[3].next_state(SHOW_IN_CLUEBOX);
+		ClueInRoom[5].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
-		list_id_show[5] = SHOW_IN_CLUEBOX;
+		list_id_show[3] = SHOW_IN_CLUEBOX;
 	}
-	/*else if (clue.current_state() == SHOW_IN_CLUEBOX)
-	{
-
-	}*/
 }
 
 /* card 2 */
 void card_num2Action(Clue clue)
 {
-	showInCluebox(clue);
-	list_id_show[6] = SHOW_IN_CLUEBOX;
-
+	if (clue.current_state() == SHOW_ON_SCENE)
+	{
+		ClueInRoom[6].next_state(SHOW_IN_CLUEBOX);
+		showInCluebox(clue);
+		list_id_show[4] = SHOW_IN_CLUEBOX;
+	}
 }
 
-/* card 3 */
-void card_num3Action(Clue clue)
-{
-	showInCluebox(clue);
-	list_id_show[7] = SHOW_IN_CLUEBOX;
-}
 
-void curtainAction()
+void curtainAction(Clue clue)
 {
 	cout << "---------- hit curtain ----------\n" << endl;
+	if (!clue.clue_name().compare("curtain"))
+	{
+		mouseState = NEARSCENE;
+		ClueInRoom[9].next_2Dimg(0);
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Curtain_open_P.JPG");		//The first 2D img of the pillow (_2Dimg_path[0])
+		ClueOnScreen.assign(ClueInPillow.begin(), ClueInPillow.end());
+	}
+
+
 
 }
 
@@ -185,7 +159,7 @@ void pillowAction(Clue clue)
 		ClueInRoom[9].next_2Dimg(1);		//paper near scene
 		background = imread(ClueInRoom[9].current_2Dimg_path());	//show paper near scene
 		ClueOnScreen.clear();
-		ClueOnScreen.push_back(ClueInPillow[0]);	//only "pillow_nearscene_back"
+		ClueOnScreen.push_back(ClueInPillow[1]);	//only "pillow_nearscene_back"
 	}
 }
 
@@ -311,37 +285,59 @@ void Wood_shelf_buttonAction(){
 
 }
 
-void BoatAction(){
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat.JPG");
-	ClueOnScreen.assign(ClueInBoat.begin(), ClueInBoat.end());
+void BoatAction(Clue clue){
+	if (!clue.clue_name().compare("boat")){
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat_3.JPG");
+		ClueOnScreen.assign(ClueInBoat.begin(), ClueInBoat.end());
+	}
+	else if (!clue.clue_name().compare("card_num3")){
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\boat.JPG");
+		showInCluebox(clue);
+		ClueOnScreen.clear();
+		ClueOnScreen.push_back(ClueInBoat[1]);
+
+	}
 
 }
 
-void PaintAction(){
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint.JPG");
-	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
-
+void PaintAction(Clue clue){
+	if (!clue.clue_name().compare("paint")){
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint_S.JPG");
+		ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
+	}
+	else if (!clue.clue_name().compare("cardS")){
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\paint.JPG");
+		showInCluebox(clue);
+		ClueOnScreen.clear();
+		ClueOnScreen.push_back(ClueInPaint[1]);
+	}
 }
 
 void closetAction(){
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\closet_closed.JPG");
-	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
-
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
 }
 
 void guitarAction(){
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Guitar.JPG");
-	ClueOnScreen.assign(ClueInPaint.begin(), ClueInPaint.end());
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
 
 }
 
 void DSPAction(){
 	cout << "DSPAction" << endl;
-
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\DSP_cover.jpg");
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
 
 
 }
@@ -398,18 +394,22 @@ void changeState(Clue clue)
 	else if (!clue.clue_name().compare("cardD"))
 		cardDAction(clue);
 	else if (!clue.clue_name().compare("cardS"))
-		cardSAction(clue);
+		PaintAction(clue);
 	else if (!clue.clue_name().compare("cardP"))
-		cardPAction(clue);
+		curtainAction(clue);
 	else if (!clue.clue_name().compare("card_num1"))
 		card_num1Action(clue);
 	else if (!clue.clue_name().compare("card_num2"))
 		card_num2Action(clue);
 	else if (!clue.clue_name().compare("card_num3"))
-		card_num3Action(clue);
+		BoatAction(clue);
 	else if (!clue.clue_name().compare("curtain"))
-		curtainAction();
+		curtainAction(clue);
 	else if (!clue.clue_name().compare("pillow"))
+		pillowAction(clue);
+	else if (!clue.clue_name().compare("pillow_paper"))
+		pillowAction(clue);
+	else if (!clue.clue_name().compare("pillow_nearscene_back"))
 		pillowAction(clue);
 	else if (!clue.clue_name().compare("closet"))
 		closetAction();
@@ -442,7 +442,9 @@ void changeState(Clue clue)
 	else if (!clue.clue_name().compare("Wood_shelf_button"))
 		Wood_shelf_buttonAction();
 	else if (!clue.clue_name().compare("boat"))
-		BoatAction();
+		BoatAction(clue);
+	else if (!clue.clue_name().compare("paint"))
+		PaintAction(clue);
 	else if (!clue.clue_name().compare("DSP"))
 		DSPAction();
 	else if (!clue.clue_name().compare("Computer_Networks"))
