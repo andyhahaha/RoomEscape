@@ -87,6 +87,7 @@ extern vector<Clue> ClueInBoat;
 extern vector<Clue> ClueSafeTypeCode1;
 extern vector<Clue> ClueSafeOpen1;
 
+extern Clue back;
 
 
 /*mouse*/

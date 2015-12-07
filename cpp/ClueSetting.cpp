@@ -1,5 +1,8 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
+Clue back;
+
+
 /* Set the 4 corner of the near scene in room 
 *  The coordinate is 3D coordinate.
 */
@@ -60,7 +63,6 @@ void clueSetting()
 	Clue safe1_1, safe1_2, safe1_3, safe1_4, safe1_5, safe1_6, safe1_7, safe1_8, safe1_9, safe1_OK, safe1_clear;
 	Clue cardD, cardS, cardP;
 	Clue card_num1, card_num2, card_num3;
-	Clue back;
 	
 	
 	/* safe		ClueInRoom[0] */
@@ -75,6 +77,7 @@ void clueSetting()
 	ClueInRoom.push_back(safe1);
 
 
+	/* ClueSafeTypeCode1 */
 	coordinate = set_coordinate(0.888888889*width, 0.701388889*height, 0.949074074*width, 0.763888889*height);
 	back.set_clue(room_name, position_num, "back", coordinate);
 	ClueSafeTypeCode1.push_back(back);
@@ -124,6 +127,11 @@ void clueSetting()
 	ClueSafeTypeCode1.push_back(safe1_9);
 
 
+	/* ClueSafeOpen1 */
+	ClueSafeOpen1.push_back(back);
+	//ClueSafeOpen1.push_back(back);
+
+
 	/* key		ClueInRoom[1] */
 	key.set_clue(room_name, position_num, "key", 133, 14, 133, 14, -2 * DIST, 3 * DIST, -3 * DIST, 0, 0, 0, 1.0);
 	key.next_state(NOT_SHOW);
@@ -140,19 +148,19 @@ void clueSetting()
 	list_id_show.push_back(cardD.current_state());
 	ClueInRoom.push_back(cardD);
 
-	cardS.set_clue(room_name, position_num, "cardS", 139, 21, 139, 21, -1.1*DIST, 0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
-	cardS.add_3Dobj_path("D:\\resource\\3D\\cardS.obj");
-	cardS.set_cluebox_img("D:\\resource\\2D\\S.png");
-	list_id.push_back(drawObject(glm_model, cardS, 0));
-	list_id_show.push_back(cardS.current_state());
-	ClueInRoom.push_back(cardS);
 
-	cardP.set_clue(room_name, position_num, "cardP", 147, 29, 147, 29, -0.2*DIST, -0 * DIST, -3 * DIST, 0, 0, 0, 2.0);
-	cardP.add_3Dobj_path("D:\\resource\\3D\\cardP.obj");
+	coordinate = set_coordinate(0.426851852*width, 0.302777778*height, 0.487037037*width, 0.4125*height);
+	cardS.set_clue(room_name, position_num, "cardS", coordinate);
+	cardS.set_cluebox_img("D:\\resource\\2D\\S_small.png");
+	ClueInPaint.push_back(cardS);
+
+
+
+	coordinate = set_coordinate(0.677777778*width, 0.575*height, 0.703703704*width, 0.620833333*height);
+	cardP.set_clue(room_name, position_num, "cardP", coordinate);
 	cardP.set_cluebox_img("D:\\resource\\2D\\P.png");
-	list_id.push_back(drawObject(glm_model, cardP, 0));
-	list_id_show.push_back(cardP.current_state());
-	ClueInRoom.push_back(cardP);
+	ClueInCurtain.push_back(cardP);
+
 
 	card_num1.set_clue(room_name, position_num, "card_num1", 156, 37, 156, 37, 1.32711, -8.77139, -15.3917, 0, 0, 0, 0.7);
 	card_num1.add_3Dobj_path("D:\\resource\\3D\\7.obj");
@@ -168,17 +176,14 @@ void clueSetting()
 	list_id_show.push_back(card_num2.current_state());
 	ClueInRoom.push_back(card_num2);
 
-	card_num3.set_clue(room_name, position_num, "card_num3", -1, -1, 108, 157, -9.38933, -16.8268, 0.622, 0, 270, 0, 2.0);
-	card_num3.add_3Dobj_path("D:\\resource\\3D\\3.obj");
+	coordinate = set_coordinate(0.348148148*width, 0.290277778*height, 0.439814815*width, 0.473611111*height);
+	card_num3.set_clue(room_name, position_num, "card_num3", coordinate);
 	card_num3.set_cluebox_img("D:\\resource\\2D\\3.png");
-	list_id.push_back(drawObject(glm_model, card_num3, 0));
-	list_id_show.push_back(card_num3.current_state());
-	ClueInRoom.push_back(card_num3);
-
+	ClueInBoat.push_back(card_num3);
 
 	/*near scene*/
 	Clue curtain;
-	Clue pillow;
+	Clue pillow, pillow_papper, pillow_nearscene_back;
 	Clue guitar;
 	Clue closet;
 	Clue boat;
@@ -208,9 +213,17 @@ void clueSetting()
 		, -9.49716, -17.9261, -7.91897);
 	pillow.set_clue(room_name, position_num, "pillow", 143, 0, 143, 0, corner);
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow0_2.jpg");
-	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow1_2.jpg");
+	//pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\pillow1_2.jpg");
 	pillow.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\PillowWithPaper.jpg");
 	ClueInRoom.push_back(pillow);
+
+	coordinate = set_coordinate(0.871296*width, 0.4125*height, 0.939814*width, 0.68472222*height);
+	pillow_papper.set_clue(room_name, position_num, "pillow_paper", coordinate);
+	ClueInPillow.push_back(pillow_papper);
+
+	coordinate = set_coordinate(0.888888889*width, 0.701388889*height, 0.949074074*width, 0.763888889*height);
+	pillow_nearscene_back.set_clue(room_name, position_num, "pillow_nearscene_back", coordinate);
+	ClueInPillow.push_back(pillow_nearscene_back);
 
 	/*closet*/
 	corner = set_corner(2.82012, 8.7099, 15.3917

@@ -522,7 +522,7 @@ void display()
 
 	/*draw other game interface view*/
 	//DrawClueHit();
-	DrawWall();
+	//DrawWall();
 
 
 	start1 = clock();
