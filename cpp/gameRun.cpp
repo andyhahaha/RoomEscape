@@ -33,22 +33,21 @@ vector<Clue> ClueInDrawer2;
 vector<Clue> ClueInDrawer3;
 
 vector<Clue> ClueBookInside;
-vector<Clue> ClueInBlueShelfTop;
 vector<Clue> ClueInBlueShelfMid;
-vector<Clue> ClueInBlueShelfBtn;
+vector<Clue> ClueInBlueShelfBtm;
 
 vector<Clue> ClueInOrangeShelfTop;
 vector<Clue> ClueInOrangeShelfMid;
-vector<Clue> ClueInOrangeShelfBtn;
+vector<Clue> ClueInOrangeShelfBtm;
 
 vector<Clue> ClueInGreenShelfTop;
 vector<Clue> ClueInGreenShelfMid;
-vector<Clue> ClueInGreenShelfBtn;
+vector<Clue> ClueInGreenShelfBtm;
 
 vector<Clue> ClueInWoodShelf;
 vector<Clue> ClueInWoodShelfTop;
 vector<Clue> ClueInWoodShelfMid;
-vector<Clue> ClueInWoodShelfBtn;
+vector<Clue> ClueInWoodShelfBtm;
 
 vector<Clue> ClueInPaint;
 vector<Clue> ClueInBoat;
@@ -203,7 +202,8 @@ void mouse(int button, int state, int x, int y)
 	}
 	else if (state == GLUT_UP)	// normal button event
 	{  
-		if (Ismove == 0){
+		if (Ismove == 0)
+		{
 			printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 			//glutPostRedisplay();
 			GLdouble posX, posY, posZ;
@@ -225,9 +225,8 @@ void mouse(int button, int state, int x, int y)
 					ClueHit(x, y, ClueOnScreen);
 					break;
 				case NEARSCENE:
-					ClueHitNearScence(x, y, ClueOnScreen);
-					break;
 				case TYPECODE:
+				case BOOKINSIDE:
 					ClueHitNearScence(x, y, ClueOnScreen);
 					break;
 				}
@@ -534,6 +533,11 @@ void display()
 	if (mouseState == TYPECODE)
 	{
 		drawCode(code);
+		drawDialog(back.data(), back.size(), width, height);
+	}
+	else if (mouseState == BOOKINSIDE)
+	{
+		drawPageNumber(bookpage);
 		drawDialog(back.data(), back.size(), width, height);
 	}
 	else if (mouseState == NEARSCENE)

@@ -1,6 +1,7 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
-void drawPageNumber(char *bookpage);
+
+
 
 /* typeCode: When hit the clue that is on the safe1 (number 1~9 , "clear" and "OK")
 *  
@@ -104,31 +105,39 @@ void drawCode(char *code)
 
 int bookInside(Clue clue, char *bookpage, int correctBook)
 {
-	if (!clue.clue_name().compare("OK"))
+	if (!clue.clue_name().compare("OK_book"))
 	{
-		if (bookpage[0] == '7' && bookpage[1] == '2' && bookpage[2] == '3')
+		if (bookpage[0] == '-' && bookpage[1] == '-' && bookpage[2] == '-')
+			return 0;
+		else if (lastpage[0] == bookpage[0] && lastpage[1] == bookpage[1] && lastpage[2] == bookpage[2])
+			return 0;
+		
+		lastpage[0] = bookpage[0];
+		lastpage[1] = bookpage[1];
+		lastpage[2] = bookpage[2];
+
+		if (bookpage[0] == '7' && bookpage[1] == '2' && bookpage[2] == '3' && correctBook == 1)
 			return 1;
 		else
 			return -1;
+			
 	}
-	else if (!clue.clue_name().compare("clear"))
+	else if (!clue.clue_name().compare("clear_book"))
 	{
-		bookpage[0] = 0;
-		bookpage[1] = 0;
-		bookpage[2] = 0;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+		book_current_num = 0;
 	}
-	else	//hit the number 1~9
+	else	//hit the number 0~9
 	{
-		/* Find the first place that the number is not 0. */
-		int current_num = 0;
-		for (; bookpage[current_num] != '0'; current_num++);
-		if (current_num >= 3)	return 0;
+		if (book_current_num >= 3)	return 0;
 
-		bookpage[current_num] = clue.clue_name()[0];
+		bookpage[book_current_num] = clue.clue_name()[0];
+		book_current_num++;
 	}
 
 	drawPageNumber(bookpage);
-
 	return 0;
 }
 
@@ -136,12 +145,6 @@ int bookInside(Clue clue, char *bookpage, int correctBook)
 
 void drawPageNumber(char *bookpage)
 {
-	int space;
-	space = (int)ceil(4.0 / 1080.0*width);
-	cout << "space = " << space << endl;
-
-	char spacechar = ' ';
-
 	//draw code
 	glColor3f(0, 0, 0);
 	glMatrixMode(GL_PROJECTION);					// change the current matrix to PROJECTION
@@ -153,19 +156,12 @@ void drawPageNumber(char *bookpage)
 	glLoadIdentity();								// reset it to identity matrix
 	glPushMatrix();									// push current state of MODELVIEW matrix to stack
 	glLoadIdentity();								// reset it again. (may not be required, but it my convention)
-	glRasterPos2i(width*0.44, height*0.73);		// raster position in 2D
+	glRasterPos2i(width*0.78, height*0.66);		// raster position in 2D
 
 	for (int i = 0; i<3; i++)
 	{
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)bookpage[i]); // generation of characters in our text with 9 by 15 GLU font
-
-		for (int j = 0; j < space; j++)
-		{
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)spacechar);
-		}
 	}
-	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)bookpage[3]);
-
 
 	// Make sure that the polygon mode is set so we draw the polygons filled
 	// (save the state first so we can restore it).

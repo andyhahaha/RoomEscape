@@ -175,12 +175,13 @@ void clueSetting()
 	Clue boat;
 	Clue paint;
 	Clue Blue_shelf_Top, Blue_shelf_Mid, Blue_shelf_bottom;
-	Clue BlueShelfMid_back;
+	Clue BlueShelf_back;
 	Clue DSP, Computer_Networks, probability, calculus, math;
 	Clue Orange_shelf_Top, Orange_shelf_Mid, Orange_shelf_bottom;
 	Clue Green_shelf_Top, Green_shelf_Mid, Green_shelf_bottom;
 	Clue Wood_shelf;
 	Clue Wood_shelf_Top, Wood_shelf_Mid, Wood_shelf_bottom;
+	Clue book_0, book_1, book_2, book_3, book_4, book_5, book_6, book_7, book_8, book_9, book_OK, book_clear;
 
 
 	/* curtain		ClueInRoom[4] */
@@ -238,7 +239,7 @@ void clueSetting()
 		, -9.746, 8.52256, 15.3917
 		, -9.58011, -10.5132, 15.3917
 		, 2.32245, -10.5132, 15.3917);
-	closet.set_clue(room_name, position_num, "closet", 70, 135, 69, 133, corner);
+	closet.set_clue(room_name, position_num, "closet", 70, 132, 69, 130, corner);
 	ClueInRoom.push_back(closet);
 
 
@@ -274,10 +275,7 @@ void clueSetting()
 	Blue_shelf_Mid.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Mid.JPG");
 	ClueInRoom.push_back(Blue_shelf_Mid);
 
-
-	coordinate = set_coordinate(0.888888889*width, 0.701388889*height, 0.949074074*width, 0.763888889*height);
-	BlueShelfMid_back.set_clue(room_name, position_num, "BlueShelfMid_back", coordinate);
-	ClueInBlueShelfMid.push_back(BlueShelfMid_back);
+	ClueInBlueShelfMid.push_back(back);
 
 	coordinate = set_coordinate(0.531481481*width, 0.261111111*height, 0.611111111*width, 0.688888889*height);
 	DSP.set_clue(room_name, position_num, "DSP", coordinate);
@@ -292,12 +290,12 @@ void clueSetting()
 	
 	coordinate = set_coordinate(0.615740741*width, 0.279166667*height, 0.687962963*width, 0.6875*height);
 	Computer_Networks.set_clue(room_name, position_num, "Computer_Networks", coordinate);
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_cover.JPG");
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_1.JPG");
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_2.JPG");
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_3.JPG");
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_4.JPG");
-	DSP.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_5.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_cover.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_1.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_2.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_3.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_4.JPG");
+	Computer_Networks.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\computer_5.JPG");
 	ClueInBlueShelfMid.push_back(Computer_Networks);
 
 	//************************************************************
@@ -307,26 +305,97 @@ void clueSetting()
 		, 8.55987, -16.7169, -4.1887
 		, 8.38508, -17.0467, -8.12857);
 	Blue_shelf_bottom.set_clue(room_name, position_num, "Blue_shelf_bottom", -1, -1, 4, 61, corner);
+	Blue_shelf_bottom.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Button.JPG");
 	ClueInRoom.push_back(Blue_shelf_bottom);
 
-	ClueInBlueShelfBtn.push_back(back);
+	ClueInBlueShelfBtm.push_back(back);
 
 	coordinate = set_coordinate(0.507407407*width, 0.231944444*height, 0.590740741*width, 0.716666667*height);
 	math.set_clue(room_name, position_num, "math", coordinate);
-	ClueInBlueShelfBtn.push_back(math);
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_cover.JPG");
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_1.JPG");
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_2.JPG");
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_3.JPG");
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_4.JPG");
+	math.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\math_5.JPG");
+	ClueInBlueShelfBtm.push_back(math);
 
 	coordinate = set_coordinate(0.683333333*width, 0.188888889*height, 0.769444444*width, 0.729166667*height);
 	calculus.set_clue(room_name, position_num, "calculus", coordinate);
-	ClueInBlueShelfBtn.push_back(calculus);
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_cover.JPG");
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_1.JPG");
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_2.JPG");
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_3.JPG");
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_4.JPG");
+	calculus.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\calculus_5.JPG");
+	ClueInBlueShelfBtm.push_back(calculus);
 
 	coordinate = set_coordinate(0.305555556*width, 0.280555556*height, 0.360185185*width, 0.681944444*height);
 	probability.set_clue(room_name, position_num, "probability", coordinate);
-	ClueInBlueShelfBtn.push_back(probability);
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_cover.JPG");
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_1.JPG");
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_2.JPG");
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_3.JPG");
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_4.JPG");
+	probability.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\probability_5.JPG");
+	ClueInBlueShelfBtm.push_back(probability);
 	
 
+
+	/* type book page */
+	coordinate = set_coordinate(0.888888889*width, 0.701388889*height, 0.949074074*width, 0.763888889*height);
+	BlueShelf_back.set_clue(room_name, position_num, "BlueShelf_back", coordinate);
+	ClueBookInside.push_back(BlueShelf_back);
+
+	coordinate = set_coordinate(0.702*width, 0.68*height, 0.743*width, 0.757142*height);
+	book_OK.set_clue(room_name, position_num, "OK_book", coordinate);
+	ClueBookInside.push_back(book_OK);
+
+	coordinate = set_coordinate(0.702*width, 0.571428*height, 0.743*width, 0.647142*height);
+	book_clear.set_clue(room_name, position_num, "clear_book", coordinate);
+	ClueBookInside.push_back(book_clear);
+
+	coordinate = set_coordinate(0.702*width, 0.46*height, 0.743*width, 0.535714*height);
+	book_0.set_clue(room_name, position_num, "0_book", coordinate);
+	ClueBookInside.push_back(book_0);
+
+	coordinate = set_coordinate(0.536*width, 0.46*height, 0.577*width, 0.535714*height);
+	book_1.set_clue(room_name, position_num, "1_book", coordinate);
+	ClueBookInside.push_back(book_1);
+
+	coordinate = set_coordinate(0.593*width, 0.46*height, 0.634*width, 0.535714*height);
+	book_2.set_clue(room_name, position_num, "2_book", coordinate);
+	ClueBookInside.push_back(book_2);
+
+	coordinate = set_coordinate(0.648*width, 0.46*height, 0.687*width, 0.535714*height);
+	book_3.set_clue(room_name, position_num, "3_book", coordinate);
+	ClueBookInside.push_back(book_3);
+
+	coordinate = set_coordinate(0.536*width, 0.571428*height, 0.577*width, 0.647142*height);
+	book_4.set_clue(room_name, position_num, "4_book", coordinate);
+	ClueBookInside.push_back(book_4);
+
+	coordinate = set_coordinate(0.593*width, 0.571428*height, 0.634*width, 0.647142*height);
+	book_5.set_clue(room_name, position_num, "5_book", coordinate);
+	ClueBookInside.push_back(book_5);
+
+	coordinate = set_coordinate(0.648*width, 0.571428*height, 0.687*width, 0.647142*height);
+	book_6.set_clue(room_name, position_num, "6_book", coordinate);
+	ClueBookInside.push_back(book_6);
+
+	coordinate = set_coordinate(0.536*width, 0.68*height, 0.577*width, 0.757142*height);
+	book_7.set_clue(room_name, position_num, "7_book", coordinate);
+	ClueBookInside.push_back(book_7);
+
+	coordinate = set_coordinate(0.593*width, 0.68*height, 0.634*width, 0.757142*height);
+	book_8.set_clue(room_name, position_num, "8_book", coordinate);
+	ClueBookInside.push_back(book_8);
+
+	coordinate = set_coordinate(0.648*width, 0.68*height, 0.687*width, 0.757142*height);
+	book_9.set_clue(room_name, position_num, "9_book", coordinate);
+	ClueBookInside.push_back(book_9);
+
 	//************************************************************
-
-
 	/*Orange*/
 
 	/*OrangeShelfTop		ClueInRoom[11] */
@@ -356,7 +425,7 @@ void clueSetting()
 	Orange_shelf_bottom.set_clue(room_name, position_num, "Orange_shelf_bottom", -1, -1, 30, 83, corner);
 	ClueInRoom.push_back(Orange_shelf_bottom);
 
-	ClueInOrangeShelfBtn.push_back(back);
+	ClueInOrangeShelfBtm.push_back(back);
 	//************************************************************
 
 	/*Green*/
@@ -385,7 +454,7 @@ void clueSetting()
 		, 9.05512, -15.7825, 804563);
 	Green_shelf_bottom.set_clue(room_name, position_num, "Green_shelf_bottom", -1, -1, 35, 98, corner);
 	ClueInRoom.push_back(Green_shelf_bottom);
-	ClueInGreenShelfBtn.push_back(back);
+	ClueInGreenShelfBtm.push_back(back);
 	//************************************************************
 
 	/*Wood*/

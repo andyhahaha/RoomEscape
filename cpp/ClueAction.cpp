@@ -1,9 +1,10 @@
 #include "D:\RoomEscape\h\gameRun.h"
 
 char code[4];
-char bookpage[4];
-int current_book;
-Clue book;
+char bookpage[3];
+int current_book;		//The current book that is chosen (DSP, computer network, math, calculus, probability)
+int book_current_num;	//The current place of the book page number which is going to be filled.(0 or 1 or 2)
+char lastpage[3];
 
 void backAction()
 {
@@ -200,8 +201,8 @@ void Blue_shelf_TopAction(Clue clue)
 {
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Top.JPG");
-	ClueOnScreen.assign(ClueInBlueShelfTop.begin(), ClueInBlueShelfTop.end());
-	
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
 }
 
 void Blue_shelf_MidAction(Clue clue)
@@ -215,6 +216,13 @@ void Blue_shelf_MidAction(Clue clue)
 	else if (!clue.clue_name().compare("DSP"))
 	{
 		mouseState = BOOKINSIDE;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+
+		lastpage[0] = '-';
+		lastpage[1] = '-';
+		lastpage[2] = '-';
 		current_book = ADSP;
 		background = imread(ClueInBlueShelfMid[1].current_2Dimg_path());	//DSP cover
 		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
@@ -222,29 +230,76 @@ void Blue_shelf_MidAction(Clue clue)
 	else if (!clue.clue_name().compare("Computer_Networks"))
 	{
 		mouseState = BOOKINSIDE;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+
+		lastpage[0] = '-';
+		lastpage[1] = '-';
+		lastpage[2] = '-';
 		current_book = COMPUTER;
 		background = imread(ClueInBlueShelfMid[2].current_2Dimg_path());	//computer network cover
 		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
-	}
-	else if (!clue.clue_name().compare("BlueShelfMid_back"))
-	{
-		mouseState = ROOM;
-		ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
 	}
 }
 
 void Blue_shelf_buttonAction(Clue clue)
 {
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Blue_Shelf_Button.JPG");
-	ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
+	if (!clue.clue_name().compare("Blue_shelf_bottom"))
+	{
+		mouseState = NEARSCENE;
+		background = imread(ClueInRoom[INROOM_BLUESHELF3].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfBtm.begin(), ClueInBlueShelfBtm.end());
+	}
+	else if (!clue.clue_name().compare("math"))
+	{
+		mouseState = BOOKINSIDE;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+
+		lastpage[0] = '-';
+		lastpage[1] = '-';
+		lastpage[2] = '-';
+		current_book = MATH;
+		background = imread(ClueInBlueShelfBtm[1].current_2Dimg_path());	//DSP cover
+		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+	}
+	else if (!clue.clue_name().compare("calculus"))
+	{
+		mouseState = BOOKINSIDE;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+
+		lastpage[0] = '-';
+		lastpage[1] = '-';
+		lastpage[2] = '-';
+		current_book = CALCULUS;
+		background = imread(ClueInBlueShelfBtm[2].current_2Dimg_path());	//computer network cover
+		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+	}
+	else if (!clue.clue_name().compare("probability"))
+	{
+		mouseState = BOOKINSIDE;
+		bookpage[0] = '-';
+		bookpage[1] = '-';
+		bookpage[2] = '-';
+
+		lastpage[0] = '-';
+		lastpage[1] = '-';
+		lastpage[2] = '-';
+		current_book = PROBABILITY;
+		background = imread(ClueInBlueShelfBtm[3].current_2Dimg_path());	//computer network cover
+		ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+	}
 }
 
 void Orange_shelf_TopAction()
 {
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Top.JPG");
-	ClueOnScreen.assign(ClueInBlueShelfBtn.begin(), ClueInBlueShelfBtn.end());
+	ClueOnScreen.assign(ClueInOrangeShelfTop.begin(), ClueInOrangeShelfTop.end());
 }
 
 void Orange_shelf_MidAction()
@@ -258,7 +313,7 @@ void Orange_shelf_buttonAction()
 {
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Orange_Shelf_Button.JPG");
-	ClueOnScreen.assign(ClueInOrangeShelfBtn.begin(), ClueInOrangeShelfBtn.end());
+	ClueOnScreen.assign(ClueInOrangeShelfBtm.begin(), ClueInOrangeShelfBtm.end());
 }
 
 
@@ -280,7 +335,7 @@ void Green_shelf_buttonAction()
 {
 	mouseState = NEARSCENE;
 	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Green_Shelf_Button.JPG");
-	ClueOnScreen.assign(ClueInGreenShelfBtn.begin(), ClueInGreenShelfBtn.end());
+	ClueOnScreen.assign(ClueInGreenShelfBtm.begin(), ClueInGreenShelfBtm.end());
 }
 
 
@@ -368,29 +423,32 @@ void DSPAction(Clue clue)
 {
 	cout << "DSPAction" << endl;
 	int current_page = 0;
+	int result;
 
-	if (!clue.clue_name().compare("BlueShelfMid_back"))
+	if (!clue.clue_name().compare("BlueShelf_back"))
 	{
 		mouseState = NEARSCENE;
 		current_book = NOT_CHOOSE;
+		book_current_num = 0;
 		ClueInBlueShelfMid[1].next_2Dimg(0);
 		background = imread(ClueInRoom[INROOM_BLUESHELF2].current_2Dimg_path());
 		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
 	}
 	else
 	{
-		if (bookInside(clue, bookpage,1))			//press OK and page is right
+		result = bookInside(clue, bookpage, 1);
+		if (result == 1)			//press OK and page is right
 		{
 			mouseState = BOOKINSIDE;
 			ClueInBlueShelfMid[1].next_2Dimg(6);
 			background = imread(ClueInBlueShelfMid[1].current_2Dimg_path());
 			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
 		}
-		else if (bookInside(clue, bookpage, 1) == -1)	//press OK but page is not right
+		else if (result == -1)	//press OK but page is not right
 		{
 			mouseState = BOOKINSIDE;
 			current_page = ClueInBlueShelfMid[1].current_2Dimg() + 1;
-			if (current_page >= 5)
+			if (current_page >= 6)
 				current_page = 1;
 
 			ClueInBlueShelfMid[1].next_2Dimg(current_page);
@@ -405,10 +463,11 @@ void Computer_NetworksAction(Clue clue)
 	cout << "Computer_NetworksAction" << endl;
 	int current_page = 0;
 
-	if (!clue.clue_name().compare("BlueShelfMid_back"))
+	if (!clue.clue_name().compare("BlueShelf_back"))
 	{
 		mouseState = NEARSCENE;
 		current_book = NOT_CHOOSE;
+		book_current_num = 0;
 		ClueInBlueShelfMid[2].next_2Dimg(0);
 		background = imread(ClueInRoom[INROOM_BLUESHELF2].current_2Dimg_path());
 		ClueOnScreen.assign(ClueInBlueShelfMid.begin(), ClueInBlueShelfMid.end());
@@ -419,7 +478,7 @@ void Computer_NetworksAction(Clue clue)
 		{
 			mouseState = BOOKINSIDE;
 			current_page = ClueInBlueShelfMid[2].current_2Dimg() + 1;
-			if (current_page >= 5)
+			if (current_page >= 6)
 				current_page = 1;
 
 			ClueInBlueShelfMid[2].next_2Dimg(current_page);
@@ -431,25 +490,92 @@ void Computer_NetworksAction(Clue clue)
 
 void mathAction(Clue clue)
 {
-
-
 	cout << "mathAction" << endl;
+	int current_page = 0;
 
+	if (!clue.clue_name().compare("BlueShelf_back"))
+	{
+		mouseState = NEARSCENE;
+		current_book = NOT_CHOOSE;
+		book_current_num = 0;
+		ClueInBlueShelfBtm[1].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_BLUESHELF3].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfBtm.begin(), ClueInBlueShelfBtm.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage, 0) == -1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			current_page = ClueInBlueShelfBtm[1].current_2Dimg() + 1;
+			if (current_page >= 6)
+				current_page = 1;
+
+			ClueInBlueShelfBtm[1].next_2Dimg(current_page);
+			background = imread(ClueInBlueShelfBtm[1].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
 
 void calculusAction(Clue clue)
 {
-
 	cout << "calculusAction" << endl;
+	int current_page = 0;
 
+	if (!clue.clue_name().compare("BlueShelf_back"))
+	{
+		mouseState = NEARSCENE;
+		current_book = NOT_CHOOSE;
+		book_current_num = 0;
+		ClueInBlueShelfBtm[2].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_BLUESHELF3].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfBtm.begin(), ClueInBlueShelfBtm.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage, 0) == -1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			current_page = ClueInBlueShelfBtm[2].current_2Dimg() + 1;
+			if (current_page >= 6)
+				current_page = 1;
 
+			ClueInBlueShelfBtm[2].next_2Dimg(current_page);
+			background = imread(ClueInBlueShelfBtm[2].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
 
 void probabilityAction(Clue clue)
 {
-
 	cout << "probabilityAction" << endl;
+	int current_page = 0;
 
+	if (!clue.clue_name().compare("BlueShelf_back"))
+	{
+		mouseState = NEARSCENE;
+		current_book = NOT_CHOOSE;
+		book_current_num = 0;
+		ClueInBlueShelfBtm[3].next_2Dimg(0);
+		background = imread(ClueInRoom[INROOM_BLUESHELF3].current_2Dimg_path());
+		ClueOnScreen.assign(ClueInBlueShelfBtm.begin(), ClueInBlueShelfBtm.end());
+	}
+	else
+	{
+		if (bookInside(clue, bookpage, 0) == -1)	//press OK but page is not right
+		{
+			mouseState = BOOKINSIDE;
+			current_page = ClueInBlueShelfBtm[3].current_2Dimg() + 1;
+			if (current_page >= 6)
+				current_page = 1;
+
+			ClueInBlueShelfBtm[3].next_2Dimg(current_page);
+			background = imread(ClueInBlueShelfBtm[3].current_2Dimg_path());
+			ClueOnScreen.assign(ClueBookInside.begin(), ClueBookInside.end());
+		}
+	}
 }
 
 
@@ -463,43 +589,29 @@ void showInCluebox(Clue clue)
 void changeState(Clue clue)
 {
 	vector<Clue>::iterator it_clue;
-	//if (clue.clue_name() = "")
-
 	cout << "clue = " << clue.clue_name() << endl;
 
+
+	/* ---------------------------------------------------- */
 	if (!clue.clue_name().compare("back"))
 		backAction();
-
-	if (!clue.clue_name().compare("safe1"))
+	else if (!clue.clue_name().compare("safe1"))
 		safeAction(clue);
-
-	for (it_clue = ClueSafeTypeCode1.begin(); it_clue != ClueSafeTypeCode1.end(); ++it_clue)
-	{
-		if (!clue.clue_name().compare(it_clue->clue_name()))
-			safeAction(clue);
-	}
-
-	if (!clue.clue_name().compare("key"))
+	else if (!clue.clue_name().compare("key"))
 		keyAction(clue);
 	else if (!clue.clue_name().compare("cardD"))
 		cardDAction(clue);
-	else if (!clue.clue_name().compare("cardS"))
+	else if (!clue.clue_name().compare("cardS") || !clue.clue_name().compare("paint"))
 		PaintAction(clue);
-	else if (!clue.clue_name().compare("cardP"))
+	else if (!clue.clue_name().compare("cardP") || !clue.clue_name().compare("curtain") || !clue.clue_name().compare("curtain_down") || !clue.clue_name().compare("curtain_up"))
 		curtainAction(clue);
 	else if (!clue.clue_name().compare("card_num1"))
 		card_num1Action(clue);
 	else if (!clue.clue_name().compare("card_num2"))
 		card_num2Action(clue);
-	else if (!clue.clue_name().compare("card_num3"))
+	else if (!clue.clue_name().compare("card_num3") || !clue.clue_name().compare("boat"))
 		BoatAction(clue);
-	else if (!clue.clue_name().compare("curtain"))
-		curtainAction(clue);
-	else if (!clue.clue_name().compare("pillow"))
-		pillowAction(clue);
-	else if (!clue.clue_name().compare("pillow_paper"))
-		pillowAction(clue);
-	else if (!clue.clue_name().compare("pillow_nearscene_back"))
+	else if (!clue.clue_name().compare("pillow") || !clue.clue_name().compare("pillow_paper") || !clue.clue_name().compare("pillow_nearscene_back"))
 		pillowAction(clue);
 	else if (!clue.clue_name().compare("closet"))
 		closetAction();
@@ -507,9 +619,9 @@ void changeState(Clue clue)
 		guitarAction();
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
 		Blue_shelf_TopAction(clue);
-	else if (!clue.clue_name().compare("Blue_shelf_Mid") || !clue.clue_name().compare("DSP") || !clue.clue_name().compare("Computer_Networks") || (!clue.clue_name().compare("BlueShelfMid_back") && current_book==NOT_CHOOSE))
+	else if (!clue.clue_name().compare("Blue_shelf_Mid") || !clue.clue_name().compare("DSP") || !clue.clue_name().compare("Computer_Networks"))
 		Blue_shelf_MidAction(clue);
-	else if (!clue.clue_name().compare("Blue_shelf_bottom"))
+	else if (!clue.clue_name().compare("Blue_shelf_bottom") || !clue.clue_name().compare("math") || !clue.clue_name().compare("calculus") || !clue.clue_name().compare("probability"))
 		Blue_shelf_buttonAction(clue);
 	else if (!clue.clue_name().compare("Orange_shelf_Top"))
 		Orange_shelf_TopAction();
@@ -531,22 +643,16 @@ void changeState(Clue clue)
 		Wood_shelf_MidAction();
 	else if (!clue.clue_name().compare("Wood_shelf_button"))
 		Wood_shelf_buttonAction();
-	else if (!clue.clue_name().compare("boat"))
-		BoatAction(clue);
-	else if (!clue.clue_name().compare("paint"))
-		PaintAction(clue);
-	/*else if (!clue.clue_name().compare("DSP"))
-		DSPAction(clue);
-	else if (!clue.clue_name().compare("Computer_Networks"))
-		Computer_NetworksAction();
-	else if (!clue.clue_name().compare("math"))
-		mathAction();
-	else if (!clue.clue_name().compare("calculus"))
-		calculusAction();
-	else if (!clue.clue_name().compare("probability"))
-		probabilityAction();*/
 
 
+	/* safe type code ---------------------------------------------------------------*/
+	for (it_clue = ClueSafeTypeCode1.begin(); it_clue != ClueSafeTypeCode1.end(); ++it_clue)
+	{
+		if (!clue.clue_name().compare(it_clue->clue_name()))
+			safeAction(clue);
+	}
+
+	/* book type page ------------------------------------------------------------------*/
 	for (it_clue = ClueBookInside.begin(); it_clue != ClueBookInside.end(); ++it_clue)
 	{
 		if (!clue.clue_name().compare(it_clue->clue_name()) && current_book == ADSP)
