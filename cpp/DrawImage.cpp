@@ -338,3 +338,37 @@ void DrawWall()
 	glVertex3f(-2.2 * DIST, -2 * DIST + OFFSET, -3.5 * DIST);
 	glEnd();
 }
+
+
+void DrawClueHit(vector<Point3f> corner){
+
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND); //Enable blending.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
+
+	x1 = corner[0].x;
+	y1 = corner[0].y;
+	z1 = corner[0].z;
+
+	x2 = corner[1].x;
+	y2 = corner[1].y;
+	z2 = corner[1].z;
+
+	x3 = corner[2].x;
+	y3 = corner[2].y;
+	z3 = corner[2].z;
+
+	x4 = corner[3].x;
+	y4 = corner[3].y;
+	z4 = corner[3].z;
+	glBegin(GL_QUADS);
+	glColor4f(0.9, 1, 0.0, 0.5);
+
+
+	glVertex3f(x1,y1, z1);
+	glVertex3f(x2, y2, z2);
+	glVertex3f(x3, y3, z3);
+	glVertex3f(x4, y4, z4);
+	glEnd();
+}

@@ -15,4 +15,5 @@ extern void renderBackgroundGL(const Mat& image, GLfloat x1, GLfloat y1, GLfloat
 extern void CoverObject(const Mat& image, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 extern void drawDialog(const char *text, int length, int width, int height);
 extern void DrawWall();
+extern void DrawClueHit(vector<Point3f> corner);
 #endif

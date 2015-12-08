@@ -25,29 +25,29 @@ vector<Clue> ClueOnScreen;
 vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
 vector<Clue> ClueInPillow;
-vector<Clue> ClueInCurtain;
+vector<Clue> ClueInCurtainClosed;
+vector<Clue> ClueInCurtainOpened;
 
 vector<Clue> ClueInDrawer1;
 vector<Clue> ClueInDrawer2;
 vector<Clue> ClueInDrawer3;
 
 vector<Clue> ClueBookInside;
-vector<Clue> ClueInBlueShelfTop;
 vector<Clue> ClueInBlueShelfMid;
-vector<Clue> ClueInBlueShelfBtn;
+vector<Clue> ClueInBlueShelfBtm;
 
 vector<Clue> ClueInOrangeShelfTop;
 vector<Clue> ClueInOrangeShelfMid;
-vector<Clue> ClueInOrangeShelfBtn;
+vector<Clue> ClueInOrangeShelfBtm;
 
 vector<Clue> ClueInGreenShelfTop;
 vector<Clue> ClueInGreenShelfMid;
-vector<Clue> ClueInGreenShelfBtn;
+vector<Clue> ClueInGreenShelfBtm;
 
 vector<Clue> ClueInWoodShelf;
 vector<Clue> ClueInWoodShelfTop;
 vector<Clue> ClueInWoodShelfMid;
-vector<Clue> ClueInWoodShelfBtn;
+vector<Clue> ClueInWoodShelfBtm;
 
 vector<Clue> ClueInPaint;
 vector<Clue> ClueInBoat;
@@ -202,7 +202,8 @@ void mouse(int button, int state, int x, int y)
 	}
 	else if (state == GLUT_UP)	// normal button event
 	{  
-		if (Ismove == 0){
+		if (Ismove == 0)
+		{
 			printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 			//glutPostRedisplay();
 			GLdouble posX, posY, posZ;
@@ -224,9 +225,8 @@ void mouse(int button, int state, int x, int y)
 					ClueHit(x, y, ClueOnScreen);
 					break;
 				case NEARSCENE:
-					ClueHitNearScence(x, y, ClueOnScreen);
-					break;
 				case TYPECODE:
+				case BOOKINSIDE:
 					ClueHitNearScence(x, y, ClueOnScreen);
 					break;
 				}
@@ -447,12 +447,7 @@ void display()
 	cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 	start1 = clock();
-	/* perspective mode*/
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(111, 1, 0.1, 200);	//sight angle, view rate width/height, nearest side, far side
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	
 	
 	/* set camera sight*/
 	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
@@ -466,6 +461,12 @@ void display()
 	
 	if (sight == VERTICAL_CENTRAL)
 	{
+		/* perspective mode*/
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(111, 1, 0.1, 200);	//sight angle, view rate width/height, nearest side, far side
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		gluLookAt(
 			0, 0, 0,
 			x_Component, 0, z_Component,
@@ -476,10 +477,12 @@ void display()
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(106, 1, 0.1, 200);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		gluLookAt(
 			0, 0, 0,
 			x_Component, y_Component, z_Component,
-			/*x_normal, y_normal, z_normal*/0,1,0);
+			x_normal, y_normal, z_normal/*0,1,0*/);
 	}
 	end1 = clock();
 	cout << "set camera time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
@@ -516,6 +519,9 @@ void display()
 				glCallList(list_id[i]);
 		}
 	}
+	DrawClueHit(ClueInRoom[INROOM_CURTAIN].obj_corner());
+	DrawClueHit(ClueInRoom[INROOM_GREENSHELF3].obj_corner());
+
 	cout <<"scence = "<< scene_num << endl;
 	end1 = clock();
 	cout << "clue time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
@@ -535,6 +541,11 @@ void display()
 		drawCode(code);
 		drawDialog(back.data(), back.size(), width, height);
 	}
+	else if (mouseState == BOOKINSIDE)
+	{
+		drawPageNumber(bookpage);
+		drawDialog(back.data(), back.size(), width, height);
+	}
 	else if (mouseState == NEARSCENE)
 	{
 		drawDialog(back.data(), back.size(), width, height);
@@ -546,6 +557,8 @@ void display()
 	}
 	end1 = clock();
 	cout << "draw dialog time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
+
+	
 
 
 	start1 = clock();

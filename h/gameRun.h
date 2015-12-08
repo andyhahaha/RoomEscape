@@ -57,29 +57,29 @@ extern vector<Clue> ClueOnScreen;
 extern vector<Clue> ClueInRoom;
 extern vector<Clue> ClueInCloset;
 extern vector<Clue> ClueInPillow;
-extern vector<Clue> ClueInCurtain;
+extern vector<Clue> ClueInCurtainClosed;
+extern vector<Clue> ClueInCurtainOpened;
 
 extern vector<Clue> ClueInDrawer1;
 extern vector<Clue> ClueInDrawer2;
 extern vector<Clue> ClueInDrawer3;
 
 extern vector<Clue> ClueBookInside;
-extern vector<Clue> ClueInBlueShelfTop;
 extern vector<Clue> ClueInBlueShelfMid;
-extern vector<Clue> ClueInBlueShelfBtn;
+extern vector<Clue> ClueInBlueShelfBtm;
 
 extern vector<Clue> ClueInOrangeShelfTop;
 extern vector<Clue> ClueInOrangeShelfMid;
-extern vector<Clue> ClueInOrangeShelfBtn;
+extern vector<Clue> ClueInOrangeShelfBtm;
 
 extern vector<Clue> ClueInGreenShelfTop;
 extern vector<Clue> ClueInGreenShelfMid;
-extern vector<Clue> ClueInGreenShelfBtn;
+extern vector<Clue> ClueInGreenShelfBtm;
 
 extern vector<Clue> ClueInWoodShelf;
 extern vector<Clue> ClueInWoodShelfTop;
 extern vector<Clue> ClueInWoodShelfMid;
-extern vector<Clue> ClueInWoodShelfBtn;
+extern vector<Clue> ClueInWoodShelfBtm;
 
 extern vector<Clue> ClueInPaint;
 extern vector<Clue> ClueInBoat;
@@ -123,8 +123,11 @@ extern char code[4];	//code of the safe
 int typeCode(Clue clue,char *code);
 void drawCode(char *code);
 
-extern char bookpage[4];	//correct page of DSP
-int bookInside(Clue clue, char *bookpage);
+extern char bookpage[3];	//page of the book
+extern int book_current_num;
+extern char lastpage[3];
+int bookInside(Clue clue, char *bookpage, int correctBook);
+void drawPageNumber(char *bookpage);
 
 void showInCluebox(Clue);
 void changeState(Clue);
