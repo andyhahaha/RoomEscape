@@ -186,9 +186,9 @@ void clueSetting()
 
 	/* curtain		ClueInRoom[4] */
 	corner = set_corner(-5.59876, 15.801, -15.3917
-		, 4.06429, 15.6143, -15.9317
+		, 4.06429, 15.6143, -15.3917
 		, 4.10576, -0.933127, -15.3917
-		, 5.80612, -1.11975, -15.3917);
+		, -5.80612, -1.11975, -15.3917);
 	curtain.set_clue(room_name, position_num, "curtain", 147, 32, 147, 32, corner);
 	curtain.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\Curtain_closed.JPG");
 	curtain.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\Curtain_open_P.JPG");
@@ -443,15 +443,20 @@ void clueSetting()
 		, 15.3917, -11.4464, 14.2665
 		, 15.3917, -15.4277, 14.1006
 		, 15.3917, -15.4277, 10.2022);
-	Green_shelf_Mid.set_clue(room_name, position_num, "Green_shelf_Mid", 40, 91, 179, 62, corner);
+	Green_shelf_Mid.set_clue(room_name, position_num, "Green_shelf_Mid", 40, 91, 40, 91, corner);
 	ClueInRoom.push_back(Green_shelf_Mid);
 	ClueInGreenShelfMid.push_back(back);
 	//************************************************************
 	/*GreenShelfBottom		ClueInRoom[16] */
-	corner = set_corner(10.5117, -13.0342, 8.46035
+	/*corner = set_corner(10.5117, -13.0342, 8.46035
 		, 10.5117, -13.0342, 11.7367
 		, 9.14251, -15.6176, 11.1561
-		, 9.05512, -15.7825, 804563);
+		, 9.05512, -15.7825, 804563);*/
+
+	corner = set_corner(9.77971, -10.5165, 6.77422
+		, 9.06837, -9.51389, 8.44867
+		, 9.075, -12.7223, 8.65759
+		, 9.07612, -13.5244, 6.60855);
 	Green_shelf_bottom.set_clue(room_name, position_num, "Green_shelf_bottom", -1, -1, 35, 98, corner);
 	ClueInRoom.push_back(Green_shelf_bottom);
 	ClueInGreenShelfBtm.push_back(back);

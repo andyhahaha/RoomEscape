@@ -821,13 +821,13 @@ float Clue::scale()
 	return _scale;
 }
 
-Vector<Point2i> Clue::get_2D_coordinate()
+vector<Point2i> Clue::get_2D_coordinate()
 {
 	return _2DCoordinate;
 }
 
 
-Vector<Point3f> Clue::obj_corner()
+vector<Point3f> Clue::obj_corner()
 {
 	return _obj_corner;
 }

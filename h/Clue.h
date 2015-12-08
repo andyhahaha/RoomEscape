@@ -77,8 +77,8 @@ public:
 	int end_scene_up();
 	int start_scene_down();
 	int end_scene_down();
-	Vector<Point3f> obj_corner();
-	Vector<Point2i> get_2D_coordinate();
+	vector<Point3f> obj_corner();
+	vector<Point2i> get_2D_coordinate();
 
 	int show_to_scene(int, int);	//check if the clue is in the current scene
 
