@@ -101,7 +101,7 @@ void card_num1Action(Clue clue)
 	{
 		ClueInRoom[INROOM_CARD7].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
-		list_id_show[3] = SHOW_IN_CLUEBOX;
+		list_id_show[2] = SHOW_IN_CLUEBOX;
 	}
 }
 
@@ -112,7 +112,7 @@ void card_num2Action(Clue clue)
 	{
 		ClueInRoom[INROOM_CARD2].next_state(SHOW_IN_CLUEBOX);
 		showInCluebox(clue);
-		list_id_show[4] = SHOW_IN_CLUEBOX;
+		list_id_show[3] = SHOW_IN_CLUEBOX;
 	}
 }
 
@@ -120,7 +120,7 @@ void card_num2Action(Clue clue)
 void curtainAction(Clue clue)
 {
 	cout << "---------- hit curtain ----------\n" << endl;
-	if (!clue.clue_name().compare("curtain"))
+	if (!clue.clue_name().compare("curtain1") || !clue.clue_name().compare("curtain2") || !clue.clue_name().compare("curtain3"))
 	{
 		mouseState = NEARSCENE;
 		ClueInRoom[INROOM_CURTAIN].next_2Dimg(0);
@@ -403,12 +403,31 @@ void PaintAction(Clue clue)
 	}
 }
 
-void closetAction()
+void closetAction(Clue clue)
 {
-	mouseState = NEARSCENE;
-	background = imread("D:\\image\\finalroom\\position1\\near_scene\\closet_closed.JPG");
-	ClueOnScreen.clear();
-	ClueOnScreen.push_back(back);
+	
+	if (!clue.clue_name().compare("closet"))
+	{
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Closet_closed.JPG");
+		ClueOnScreen.assign(ClueInClosetClosed.begin(), ClueInClosetClosed.end());
+	}
+	else if (!clue.clue_name().compare("open_closet"))
+	{
+
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Closet_open.JPG");
+		ClueOnScreen.assign(ClueInClosetOpen.begin(), ClueInClosetOpen.end());
+	}
+	else if (!clue.clue_name().compare("inside_closet"))
+	{
+
+		mouseState = NEARSCENE;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Closet_inside.JPG");
+		ClueOnScreen.clear();
+		ClueOnScreen.push_back(back);
+	}
+	
 }
 
 void guitarAction()
@@ -577,7 +596,31 @@ void probabilityAction(Clue clue)
 		}
 	}
 }
+void LampAction(){
 
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Lamp.JPG");
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
+
+}
+
+
+void MemoAction(){
+
+	mouseState = NEARSCENE;
+	background = imread("D:\\image\\finalroom\\position1\\near_scene\\Memo.JPG");
+	ClueOnScreen.clear();
+	ClueOnScreen.push_back(back);
+
+
+}
+
+void StartAction(){
+	mouseState = ROOM;
+	ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
+
+}
 
 void showInCluebox(Clue clue)
 {
@@ -603,7 +646,7 @@ void changeState(Clue clue)
 		cardDAction(clue);
 	else if (!clue.clue_name().compare("cardS") || !clue.clue_name().compare("paint"))
 		PaintAction(clue);
-	else if (!clue.clue_name().compare("cardP") || !clue.clue_name().compare("curtain") || !clue.clue_name().compare("curtain_down") || !clue.clue_name().compare("curtain_up"))
+	else if (!clue.clue_name().compare("cardP") || !clue.clue_name().compare("curtain1") || !clue.clue_name().compare("curtain2") || !clue.clue_name().compare("curtain3") || !clue.clue_name().compare("curtain_down") || !clue.clue_name().compare("curtain_up"))
 		curtainAction(clue);
 	else if (!clue.clue_name().compare("card_num1"))
 		card_num1Action(clue);
@@ -613,8 +656,8 @@ void changeState(Clue clue)
 		BoatAction(clue);
 	else if (!clue.clue_name().compare("pillow") || !clue.clue_name().compare("pillow_paper") || !clue.clue_name().compare("pillow_nearscene_back"))
 		pillowAction(clue);
-	else if (!clue.clue_name().compare("closet"))
-		closetAction();
+	else if (!clue.clue_name().compare("closet") || !clue.clue_name().compare("open_closet") || !clue.clue_name().compare("inside_closet")  )
+		closetAction(clue);
 	else if (!clue.clue_name().compare("guitar"))
 		guitarAction();
 	else if (!clue.clue_name().compare("Blue_shelf_Top"))
@@ -643,7 +686,12 @@ void changeState(Clue clue)
 		Wood_shelf_MidAction();
 	else if (!clue.clue_name().compare("Wood_shelf_button"))
 		Wood_shelf_buttonAction();
-
+	else if (!clue.clue_name().compare("lamp"))
+		LampAction();
+	else if (!clue.clue_name().compare("memo"))
+		MemoAction();
+	else if (!clue.clue_name().compare("start"))
+		StartAction();
 
 	/* safe type code ---------------------------------------------------------------*/
 	for (it_clue = ClueSafeTypeCode1.begin(); it_clue != ClueSafeTypeCode1.end(); ++it_clue)
@@ -730,8 +778,11 @@ void ClueHitNearScence(int x, int y, vector<Clue> _onScreenClue)
 	vector<Clue>::iterator it_clue;
 	for (it_clue = _onScreenClue.begin(); it_clue != _onScreenClue.end(); ++it_clue) 
 	{
-		if (x > it_clue->get_2D_coordinate()[0].x && x<it_clue->get_2D_coordinate()[1].x && y>it_clue->get_2D_coordinate()[0].y && y < it_clue->get_2D_coordinate()[1].y)
+		if (x > it_clue->get_2D_coordinate()[0].x*width && x<it_clue->get_2D_coordinate()[1].x*width && y>it_clue->get_2D_coordinate()[0].y*height && y < it_clue->get_2D_coordinate()[1].y*height){
 			changeState(*it_clue);
+			break;
+		}
+
 	}
 }
 

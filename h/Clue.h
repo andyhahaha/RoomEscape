@@ -15,12 +15,12 @@ public:
 	Clue();
 	Clue(string, int, string, int, int, int, int, float, float, float, float, float, float, float);	//room name, position number, clue name, start_scene_up, end_scene_up, start_scene_down, end_scene_down
 	Clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner);
-	Clue(string, int, string, vector<Point2i>);
+	Clue(string, int, string, vector<Point2f>);
 	Clue(string);	//read clue initial file
 
 	void set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, float trans_x, float trans_y, float trans_z, float rot_x, float rot_y, float rot_z, float scale);
 	void set_clue(string room_name, int position_num, string clue_name, int start_scene_up, int end_scene_up, int start_scene_down, int end_scene_down, vector<Point3f> obj_corner);
-	void set_clue(string, int, string, vector<Point2i>);
+	void set_clue(string, int, string, vector<Point2f>);
 	int set_clue(string);
 
 	void set_room_name(string);
@@ -33,7 +33,7 @@ public:
 	void set_start_scene_down(int);			//設定俯視第幾個scene會出現(0~179)
 	void set_end_scene_down(int);			//設定俯視最後一個出現的scene(0~179)
 	void set_obj_corner(Vector<Point3f>);
-	void set_2D_coordinate(Vector<Point2i>);
+	void set_2D_coordinate(Vector<Point2f>);
 
 	int current_state();		//return _current_state
 	void next_state(int);		//assign _current_state
@@ -78,7 +78,7 @@ public:
 	int start_scene_down();
 	int end_scene_down();
 	vector<Point3f> obj_corner();
-	vector<Point2i> get_2D_coordinate();
+	vector<Point2f> get_2D_coordinate();
 
 	int show_to_scene(int, int);	//check if the clue is in the current scene
 
@@ -109,7 +109,7 @@ private:
 	//線索所在位置   某個視角的圖  還沒有轉角度時的位置
 	//左上角的座標
 	vector<Point3f> _obj_corner;
-	vector<Point2i> _2DCoordinate;
+	vector<Point2f> _2DCoordinate;
 
 
 	int _current_dialog; 		//目前使用到哪一個對話

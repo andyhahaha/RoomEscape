@@ -22,8 +22,12 @@ ClueBox clueBox(0, width, 100, 100, 100);
 
 
 vector<Clue> ClueOnScreen;
+
+vector<Clue> ClueInStory;
 vector<Clue> ClueInRoom;
 vector<Clue> ClueInCloset;
+vector<Clue> ClueInClosetClosed;
+vector<Clue> ClueInClosetOpen;
 vector<Clue> ClueInPillow;
 vector<Clue> ClueInCurtainClosed;
 vector<Clue> ClueInCurtainOpened;
@@ -76,7 +80,7 @@ GLdouble projection[16];
 
 int sight = VERTICAL_CENTRAL;
 
-int mouseState = ROOM;
+int mouseState = NEARSCENE;
 int Ismove = 0;
 
 void display();
@@ -441,6 +445,7 @@ void display()
 		else
 			background = imread(finalroom_2_path);
 	}
+	
 
 	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
 	end1 = clock();
@@ -519,15 +524,18 @@ void display()
 				glCallList(list_id[i]);
 		}
 	}
-	DrawClueHit(ClueInRoom[INROOM_CURTAIN].obj_corner());
-	DrawClueHit(ClueInRoom[INROOM_GREENSHELF3].obj_corner());
+	int i;
+	for (i = 0; i < ClueInRoom.size();i++){
 
-	cout <<"scence = "<< scene_num << endl;
+		DrawClueHit(ClueInRoom[i].obj_corner());
+	}
+
+
+
 	end1 = clock();
 	cout << "clue time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 	/*draw other game interface view*/
-	//DrawClueHit();
 	//DrawWall();
 
 
@@ -608,6 +616,8 @@ void initializeOpenGL()
 	// Set light
 	prepare_lighting();
 
+
+	background = imread("D:\\resource\\2D\\story.jpg");
 	//clue setting
 	clueSetting();
 }
