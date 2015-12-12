@@ -106,7 +106,7 @@ Clue::Clue(string room_name, int position_num, string clue_name, int start_scene
 }
 
 /*near scence clue*/
-Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
+Clue::Clue(string room_name, int position_num, string clue_name, vector<Point2f> coordinate){
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
@@ -280,7 +280,7 @@ void Clue::set_clue(string room_name, int position_num, string clue_name, int st
 *
 *  coordinate - screen coordinate
 */
-void Clue::set_clue(string room_name, int position_num, string clue_name, vector<Point2i> coordinate){
+void Clue::set_clue(string room_name, int position_num, string clue_name, vector<Point2f> coordinate){
 	_room_name = room_name;
 	_position_num = position_num;
 	_clue_name = clue_name;
@@ -506,7 +506,7 @@ void Clue::set_obj_corner(Vector<Point3f> obj_corner)
 	_obj_corner.assign(obj_corner.begin(), obj_corner.end());
 }
 
-void Clue::set_2D_coordinate(Vector<Point2i> coordinate){
+void Clue::set_2D_coordinate(Vector<Point2f> coordinate){
 	_2DCoordinate.assign( coordinate.begin(),coordinate.end());
 }
 
@@ -821,7 +821,7 @@ float Clue::scale()
 	return _scale;
 }
 
-vector<Point2i> Clue::get_2D_coordinate()
+vector<Point2f> Clue::get_2D_coordinate()
 {
 	return _2DCoordinate;
 }
