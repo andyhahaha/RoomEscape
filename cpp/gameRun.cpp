@@ -458,12 +458,15 @@ void display()
 	float angle_theta = float(scene_num) * 2 / 180 * G_PI;
 	float x_Component = sinf(angle_theta);
 	float z_Component = -cosf(angle_theta);
-	float y_Component = -0.53;
-	float angle_phi = atan2f(1, -y_Component);
+	float y_Component = -0.53;	//-0.53
+	float angle_phi = atan2f(-y_Component,1);//0.36397023
 	float x_normal = sinf(angle_theta)*sinf(angle_phi);
 	float z_normal = -cosf(angle_theta)*sinf(angle_phi);
 	float y_normal = cosf(angle_phi);
-	
+	float y_offset = 0;
+	cout << "angle_phi = " << angle_phi << endl;
+	cout << "x_Component = " << x_Component << "z_Component = " << z_Component << endl;
+	cout << "x_normal = " << x_normal << "y_normal = " << y_normal << "z_normal = " << z_normal << endl;
 	if (sight == VERTICAL_CENTRAL)
 	{
 		/* perspective mode*/
@@ -481,12 +484,12 @@ void display()
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective(106, 1, 0.1, 200);
+		gluPerspective(106, 1, 0.1, 200);  //¶V¤j¶V±×
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		gluLookAt(
-			0, 0, 0,
-			x_Component, y_Component, z_Component,
+			0, 0 + y_offset, 0,
+			x_Component, y_Component + y_offset, z_Component,
 			x_normal, y_normal, z_normal/*0,1,0*/);
 	}
 	end1 = clock();
@@ -536,7 +539,7 @@ void display()
 	cout << "clue time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
 	/*draw other game interface view*/
-	//DrawWall();
+	DrawWall();
 
 
 	start1 = clock();
