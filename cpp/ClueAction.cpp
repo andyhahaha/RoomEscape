@@ -41,9 +41,10 @@ void safeAction(Clue clue)
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());
 		}
 	}
-	else if (!clue.clue_name().compare("safe1_key"))
+	else if (!clue.clue_name().compare("key"))
 	{
 		mouseState = NEARSCENE;
+		showInCluebox(clue);
 		ClueInRoom[INROOM_SAFE].next_2Dimg(2);	//near scene change to opened safe1 (empty)
 		background = imread(ClueInRoom[INROOM_SAFE].current_2Dimg_path());	//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open_empty.jpg"
 		ClueOnScreen.clear();
@@ -55,7 +56,7 @@ void safeAction(Clue clue)
 		{
 			mouseState = NEARSCENE;
 			ClueInRoom[INROOM_SAFE].next_2Dimg(1);	//near scene change to opened safe1 with a key inside
-			ClueInRoom[INROOM_SAFE].next_3Dobj(1);	//opened safe1 3D object
+			//ClueInRoom[INROOM_SAFE].next_3Dobj(1);	//opened safe1 3D object
 			background = imread(ClueInRoom[INROOM_SAFE].current_2Dimg_path());		//"D:\\image\\finalroom\\position1\\near_scene\\safe1_open.jpg"
 			ClueOnScreen.assign(ClueSafeOpen1.begin(), ClueSafeOpen1.end());		//¥u³Ñ¤Uback©Mkey
 
@@ -638,10 +639,8 @@ void changeState(Clue clue)
 	/* ---------------------------------------------------- */
 	if (!clue.clue_name().compare("back"))
 		backAction();
-	else if (!clue.clue_name().compare("safe1"))
+	else if (!clue.clue_name().compare("safe1") || !clue.clue_name().compare("key"))
 		safeAction(clue);
-	else if (!clue.clue_name().compare("key"))
-		keyAction(clue);
 	else if (!clue.clue_name().compare("cardD"))
 		cardDAction(clue);
 	else if (!clue.clue_name().compare("cardS") || !clue.clue_name().compare("paint"))

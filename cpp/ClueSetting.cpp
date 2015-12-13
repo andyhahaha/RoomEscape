@@ -76,7 +76,7 @@ void clueSetting()
 	
 	
 	/* safe		ClueInRoom[0] */
-	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -3.00133, 2.017423, 0, 180, 0, 2.0);
+	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -3.00133, 2.017423, 0, 180, 0, 1.5);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_typecode_small.jpg");
@@ -142,9 +142,11 @@ void clueSetting()
 
 
 	/* key */
-	key.set_clue(room_name, position_num, "key", 133, 14, 133, 14, -2 * DIST, 3 * DIST, -3 * DIST, 0, 0, 0, 1.0);
-	key.next_state(NOT_SHOW);
-	key.add_3Dobj_path("D:\\resource\\3D\\key.obj");
+	coordinate = set_coordinate(0.443, 0.68, 0.575, 0.70167);
+	key.set_clue(room_name, position_num, "key", coordinate);
+	//key.next_state(NOT_SHOW);
+	key.set_cluebox_img("D:\\resource\\2D\\key.jpg");
+	ClueSafeOpen1.push_back(key);
 	//list_id.push_back(drawObject(glm_model, key, 0));
 	//list_id_show.push_back(key.current_state());
 	//ClueInRoom.push_back(key);
