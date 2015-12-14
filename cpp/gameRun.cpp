@@ -198,7 +198,7 @@ void mouse(int button, int state, int x, int y)
 		if ((button == 0 && state == GLUT_DOWN) || (button == 2 && state == GLUT_DOWN))
 		{
 			mouseState = NEARSCENE;
-			background = imread("D:\\image\\finalroom\\position1\\near_scene\\stitch0_special3.JPG");
+			background = imread("D:\\image\\finalroom\\position1\\near_scene\\stitch0_special.JPG");
 			ClueOnScreen.clear();
 			ClueOnScreen.push_back(back);
 			storybegin = 0;
