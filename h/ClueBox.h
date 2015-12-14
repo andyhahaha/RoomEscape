@@ -39,6 +39,7 @@ public:
 	int get_item_width();
 	int get_item_height();
 	int get_item_selected();
+	string get_item_name(int);
 
 	friend ostream& operator<<(ostream&, const ClueBox&);
 

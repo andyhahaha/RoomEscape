@@ -76,7 +76,7 @@ void clueSetting()
 	
 	
 	/* safe		ClueInRoom[0] */
-	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -3.00133, 2.017423, 0, 180, 0, 1.5);
+	safe1.set_clue(room_name, position_num, "safe1", 22, 73, 22, 73, 15.3917, -4.00133, 2.017423, 0, 180, 0, 1);
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_closed.obj");
 	safe1.add_3Dobj_path("D:\\resource\\3D\\safe_open.obj");
 	safe1.add_2Dimg_path("D:\\image\\finalroom\\position1\\near_scene\\safe1_typecode_small.jpg");
@@ -184,7 +184,7 @@ void clueSetting()
 	Clue pillow, pillow_papper, pillow_nearscene_back;
 	Clue guitar;
 	Clue lamp;
-	Clue closet, open_closet, inside_closet;
+	Clue closet, open_closet, inside_closet, present;
 	Clue boat;
 	Clue paint;
 	Clue Blue_shelf_Top, Blue_shelf_Mid, Blue_shelf_bottom;
@@ -255,7 +255,7 @@ void clueSetting()
 	corner = set_corner(-3.60809, 8.58477, 15.3917
 		, -9.746, 8.52256, 15.3917
 		, -9.58011, -2.9861, 15.3917
-		, -3.64957, 8.64698, 15.3917);
+		, -3.64957, -2.9861, 15.3917);
 	closet.set_clue(room_name, position_num, "closet", 70, 132, 69, 130, corner);
 	ClueInRoom.push_back(closet);
 
@@ -268,6 +268,11 @@ void clueSetting()
 	inside_closet.set_clue(room_name, position_num, "inside_closet", coordinate);
 	ClueInClosetOpen.push_back(inside_closet);
 	ClueInClosetOpen.push_back(back);
+
+	coordinate = set_coordinate(0.236111111, 0.652777778, 0.282407407, 0.720833333);
+	present.set_clue(room_name, position_num, "present", coordinate);
+	ClueInClosetInside.push_back(present);
+	ClueInClosetInside.push_back(back);
 
 
 	/*guitar		ClueInRoom[7] */

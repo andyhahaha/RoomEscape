@@ -14,7 +14,7 @@ ClueBox::ClueBox(int number, int width, int height, int item_width, int item_hei
 	_box_height = height;
 	_item_width = item_width;
 	_item_height = item_height;
-	_item_selected = 0;
+	_item_selected = -1;
 }
 
 
@@ -75,6 +75,10 @@ int ClueBox::get_item_selected()
 	return _item_selected;
 }
 
+string ClueBox::get_item_name(int index){
+	return _clue_vector[index].clue_name();
+}
+
 
 void ClueBox::show_clue_box(Mat image)	//用clue array裡面存的clue選圖出來show
 {
@@ -99,6 +103,58 @@ void ClueBox::DelItem(int index)
 }
 
 
+void selectItem(int index,int width,int height){
+	float horizon_space = SPACE*height / width;
+	float item_w = ITEM_WIDTH*height / width;
+	float vertical_space = SPACE;
+	float item_h = ITEM_WIDTH;
+	float x1, x2, y1, y2;
+	Mat image = imread("D:\\resource\\paper_texture_small.png");
+	x1 = ARROW_WIDTH + index*horizon_space + (index - 1)*item_w;
+	y1 = vertical_space;
+	x2 = ARROW_WIDTH + index*horizon_space + index*item_w;
+	y2 = vertical_space + item_h;
+	
+	// Make sure that the polygon mode is set so we draw the polygons filled
+	// (save the state first so we can restore it).
+
+	GLint polygonMode[2];
+	glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_BACK, GL_FILL);
+
+	// Set up the virtual camera, projecting using simple ortho so we can draw the background image.
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0, 1.0, 0.0, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Draw the image.
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND);								//Enable blending.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+
+	glBegin(GL_QUADS);
+	glColor4f(0, 0, 0, 0.3);
+
+		glVertex3f(x1, y1, 0.0);
+		glVertex3f(x1 , y2, 0.0);
+		glVertex3f(x2 , y2, 0.0);
+		glVertex3f(x2, y1, 0.0);
+	
+	glEnd();
+
+	// Clear the depth buffer so the texture forms the background.
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// Restore the polygon mode state.
+	glPolygonMode(GL_FRONT, polygonMode[0]);
+	glPolygonMode(GL_BACK, polygonMode[1]);
+}
+
+
 void ClueBox::show_clue(int width, int height)
 {
 	vector<Clue>::iterator it_i;
@@ -106,12 +162,19 @@ void ClueBox::show_clue(int width, int height)
 	float item_w = ITEM_WIDTH*height / width;
 	float vertical_space = SPACE;
 	float item_h = ITEM_WIDTH;
-
+	Mat image = imread("D:\\resource\\paper_texture_small.png");
 	int i = 1;
 	for (it_i = _clue_vector.begin(); it_i != _clue_vector.end() && (ARROW_WIDTH + i*horizon_space + i*item_w)<0.98; ++it_i){
 		renderBackgroundGL(it_i->get_cluebox_img(), ARROW_WIDTH + i*horizon_space + (i - 1)*item_w, vertical_space, ARROW_WIDTH + i*horizon_space + i*item_w, vertical_space + item_h);
+
 		//change the cluebox_on_the_screen vector here
 		i++;
+	}
+	i = 1;
+	//renderBackgroundGL(image, ARROW_WIDTH + i*horizon_space + (i - 1)*item_w, vertical_space, ARROW_WIDTH + i*horizon_space + i*item_w, vertical_space + item_h);
+
+	if (_item_selected != -1){
+		selectItem(_item_selected+1,width,height);
 	}
 	set_item_show_last(i - 1);
 }
