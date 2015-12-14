@@ -596,6 +596,7 @@ void probabilityAction(Clue clue)
 		}
 	}
 }
+
 void LampAction(){
 
 	mouseState = NEARSCENE;
@@ -616,19 +617,20 @@ void MemoAction(){
 
 }
 
-void StartAction(){
+void StartAction()
+{
 	mouseState = ROOM;
-	ClueOnScreen.assign(ClueInRoom.begin(), ClueInRoom.end());
-
+	ClueOnScreen.clear();
 }
 
-void PresentAction(){
-
-
-	if (clueBox.get_item_selected() != -1 && !clueBox.get_item_name(clueBox.get_item_selected()).compare("key")){
+void PresentAction()
+{
+	if (clueBox.get_item_selected() != -1 && !clueBox.get_item_name(clueBox.get_item_selected()).compare("key"))
+	{
 		cout << "Happy Birthday !!!" << endl;
+		mouseState = STORYEND;
 		background = imread("D:\\image\\finalroom\\position1\\near_scene\\happybirthday.JPG");
-
+		ClueOnScreen.clear();
 	}
 
 	cout << "nothing happend" << endl;

@@ -80,7 +80,8 @@
 #define NEARSCENE			1
 #define TYPECODE			2
 #define BOOKINSIDE			3
-#define STORY				4
+#define STORYBEGIN			4
+#define STORYEND			5
 /*#define DRAWER_ST			1
 #define DRAWER_ED			2
 #define DRAWER_RD			3
