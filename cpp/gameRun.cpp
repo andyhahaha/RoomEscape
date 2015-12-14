@@ -81,8 +81,10 @@ GLdouble projection[16];
 
 int sight = VERTICAL_CENTRAL;
 
-int mouseState = NEARSCENE;
+int mouseState = STORYBEGIN;
 int Ismove = 0;
+
+int storybegin = 1;
 
 void display();
 
@@ -191,6 +193,19 @@ void WindowSize(int w, int h)
 
 void mouse(int button, int state, int x, int y)
 {
+	if (mouseState==ROOM && storybegin)
+	{
+		if ((button == 0 && state == GLUT_DOWN) || (button == 2 && state == GLUT_DOWN))
+		{
+			mouseState = NEARSCENE;
+			background = imread("D:\\image\\finalroom\\position1\\near_scene\\stitch0_special3.JPG");
+			ClueOnScreen.clear();
+			ClueOnScreen.push_back(back);
+			storybegin = 0;
+		}
+	}
+
+
 	// Wheel reports as button 3(scroll up) and button 4(scroll down)
 	if ((button == 3) || (button == 4)) // It's a wheel event
 	{
@@ -209,7 +224,7 @@ void mouse(int button, int state, int x, int y)
 			glutPostRedisplay();
 		}
 	}
-	else if (button == 0&& state == GLUT_UP)	// normal button event
+	else if (button == 0 && state == GLUT_UP)	// normal button event
 	{  
 		if (Ismove == 0)
 		{
@@ -233,17 +248,23 @@ void mouse(int button, int state, int x, int y)
 				case ROOM:
 					ClueHit(x, y, ClueOnScreen);
 					break;
+				case STORYBEGIN:
 				case NEARSCENE:
 				case TYPECODE:
 				case BOOKINSIDE:
 					ClueHitNearScence(x, y, ClueOnScreen);
 					break;
+				case STORYEND:
+					background = imread("D:\\image\\finalroom\\position1\\near_scene\\happybirthday2.JPG");
+					break;
 				}
 			}
 		}
 	}
-	else if (button == 2 && state == GLUT_UP){
-		if (Ismove == 0 && mouseState==ROOM){
+	else if (button == 2 && state == GLUT_UP)
+	{
+		if (Ismove == 0 && mouseState==ROOM)
+		{
 			if (sight == VERTICAL_CENTRAL)
 				sight = VERTICAL_DOWN_20;
 			else
@@ -559,9 +580,13 @@ void display()
 	start1 = clock();
 	/* Draw dialog */
 	string text;
-	string back = "back";
+	string back = "back", start = "start";
 
-	if (mouseState == TYPECODE)
+	if (mouseState == STORYBEGIN)
+	{
+		drawDialog(start.data(), start.size(), width, height);
+	}
+	else if (mouseState == TYPECODE)
 	{
 		drawCode(code);
 		drawDialog(back.data(), back.size(), width, height);

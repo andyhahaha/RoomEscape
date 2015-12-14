@@ -233,6 +233,8 @@ void drawDialog(const char *text, int length,int width,int height)
 
 	if (text[0]=='b' && text[1]=='a' && text[2]=='c' && text[3]=='k')
 		glRasterPos2i(width*0.9, height*0.25);
+	else if (text[0] == 's' && text[1] == 't' && text[2] == 'a' && text[3] == 'r' && text[4] == 't')
+		glRasterPos2i(width*0.9, height*0.25);
 	else
 		glRasterPos2i(width*0.065, height*0.29);		// raster position in 2D, the beging position of the dialog
 
@@ -267,6 +269,13 @@ void drawDialog(const char *text, int length,int width,int height)
 
 
 	if (text[0] == 'b' && text[1] == 'a' && text[2] == 'c' && text[3] == 'k')
+	{
+		glVertex3f(0.885, 0.23, 0.0);
+		glVertex3f(0.885 + (length + 2)*(12.0 / width), 0.23, 0.0);
+		glVertex3f(0.885 + (length + 2)*(12.0 / width), 0.23 + (50.0 / height), 0.0);
+		glVertex3f(0.885, 0.23 + (50.0 / height), 0.0);
+	}
+	else if (text[0] == 's' && text[1] == 't' && text[2] == 'a' && text[3] == 'r' && text[4] == 't')
 	{
 		glVertex3f(0.885, 0.23, 0.0);
 		glVertex3f(0.885 + (length + 2)*(12.0 / width), 0.23, 0.0);
