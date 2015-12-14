@@ -44,7 +44,7 @@ void SetAllSceneImg()
 
 	string path = "D:\\image\\" + room_final + "\\position1" + "\\";
 	//PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 11, 179, METHOD1);
-	PosSet1.StitchSceneRange(VERTICAL_DOWN_20, 75, 179, METHOD1);
+	PosSet1.StitchSceneRange(VERTICAL_CENTRAL, 114, 114, METHOD1);
 	//PosSet1.StitchSceneAll(METHOD2);
 
 	tm.stop();
@@ -53,6 +53,6 @@ void SetAllSceneImg()
 
 void gameBuild()
 {
-	SetResourceImg();
-	//SetAllSceneImg();
+	//SetResourceImg();
+	SetAllSceneImg();
 }

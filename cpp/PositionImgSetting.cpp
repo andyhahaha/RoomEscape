@@ -481,6 +481,9 @@ Mat PositionImgSetting::stitch2(Mat img_1, Mat img_2, int method, int direction,
 		img2.set_image(img_2);
 	}
 
+	imwrite("D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\Good Matches\\capture1.jpg", img1.mat());
+	imwrite("D:\\image\\" + _room_name + "\\position" + to_string(_number) + "\\Good Matches\\capture2.jpg", img2.mat());
+
 	FlannBasedMatcher matcher;
 	vector<DMatch> matches1, matches2, good_matches;
 
