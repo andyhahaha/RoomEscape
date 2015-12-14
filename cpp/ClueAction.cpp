@@ -425,8 +425,7 @@ void closetAction(Clue clue)
 
 		mouseState = NEARSCENE;
 		background = imread("D:\\image\\finalroom\\position1\\near_scene\\Closet_inside.JPG");
-		ClueOnScreen.clear();
-		ClueOnScreen.push_back(back);
+		ClueOnScreen.assign(ClueInClosetInside.begin(), ClueInClosetInside.end());
 	}
 	
 }
@@ -623,6 +622,18 @@ void StartAction(){
 
 }
 
+void PresentAction(){
+
+
+	if (clueBox.get_item_selected() != -1 && !clueBox.get_item_name(clueBox.get_item_selected()).compare("key")){
+		cout << "Happy Birthday !!!" << endl;
+		background = imread("D:\\image\\finalroom\\position1\\near_scene\\happybirthday.JPG");
+
+	}
+
+	cout << "nothing happend" << endl;
+}
+
 void showInCluebox(Clue clue)
 {
 	clueBox.InsertItem(clue);
@@ -691,6 +702,8 @@ void changeState(Clue clue)
 		MemoAction();
 	else if (!clue.clue_name().compare("start"))
 		StartAction();
+	else if (!clue.clue_name().compare("present"))
+		PresentAction();
 
 	/* safe type code ---------------------------------------------------------------*/
 	for (it_clue = ClueSafeTypeCode1.begin(); it_clue != ClueSafeTypeCode1.end(); ++it_clue)

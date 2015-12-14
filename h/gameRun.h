@@ -59,6 +59,7 @@ extern vector<Clue> ClueInStory;
 extern vector<Clue> ClueInRoom;
 extern vector<Clue> ClueInClosetClosed;
 extern vector<Clue> ClueInClosetOpen;
+extern vector<Clue> ClueInClosetInside;
 extern vector<Clue> ClueInPillow;
 
 extern vector<Clue> ClueInCurtainClosed;
