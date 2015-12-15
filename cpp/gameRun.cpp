@@ -274,8 +274,8 @@ void mouse(int button, int state, int x, int y)
 	}
 
 	Ismove = 0;
-	if (mouseState == ROOM)
-	{
+	//if (mouseState == ROOM)
+	//{
 		if (state == GLUT_UP)
 		{
 			rot_x = 0;   //沒有歸零會有不理想的結果 
@@ -288,7 +288,7 @@ void mouse(int button, int state, int x, int y)
 			old_rot_y = y;
 			scene_temp = scene_num;
 		}
-	}
+	//}
 	//glutPostRedisplay();
 }
 
@@ -301,8 +301,21 @@ void mouse(int button, int state, int x, int y)
 
 void MotionMouse(int x, int y)
 {
+	int distance_x = x - old_rot_x;
+	int distance_y = y - old_rot_y;
 
-	Ismove = 1;
+	if (x - old_rot_x < 0)
+		distance_x = -distance_x;
+
+	if (y - old_rot_y < 0)
+		distance_y = -distance_y;
+
+
+	if (distance_x > width*0.01 || distance_y > width*0.01)
+		Ismove = 1;
+	cout << "x - old_rot_x = " << x - old_rot_x << endl << "width*0.01 = " << width*0.01 << endl;
+	cout << "old_rot_x = " << old_rot_x << endl;
+
 	if (mouseState == ROOM)
 	{
 		rot_x = x - old_rot_x;
@@ -481,8 +494,11 @@ void display()
 			background = imread(finalroom_2_path);
 	}
 	
+	if (mouseState == STORYBEGIN || mouseState == STORYEND)
+		renderBackgroundGL(background, 0, 0, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
+	else
+		renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
 
-	renderBackgroundGL(background, 0, 0.15, 1, 1); //左下做標(x1,y1)，右上座標(x2,y2)
 	end1 = clock();
 	cout << "background time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
@@ -612,8 +628,12 @@ void display()
 
 
 	start1 = clock();
-	clueBox.show_clue_box(clueBox_texture);
-	clueBox.show_clue(width, height);
+	if (mouseState != STORYBEGIN && mouseState != STORYEND)
+	{
+		clueBox.show_clue_box(clueBox_texture);
+		clueBox.show_clue(width, height);
+	}
+	
 	end1 = clock();
 	cout << "cluebox time = " << ((double)(end1 - start1) / CLOCKS_PER_SEC) << "s" << endl;
 
